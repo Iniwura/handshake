@@ -4,8 +4,8 @@
 
 Handshake is a contract-first GenLayer semantic negotiation primitive. The Portal entry point is the public frontend at the Vercel URL recorded here after deployment.
 
-- Repository: to be filled after the authorized GitHub push
-- Frontend: to be filled after the authorized Vercel deployment
+- Repository: https://github.com/Iniwura/handshake
+- Frontend: https://handshake-lake.vercel.app
 - Network: GenLayer Studio Devnet
 - Chain ID: 61997
 - Contract: 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18
@@ -33,7 +33,7 @@ The frontend is a reader and transaction surface. The contract remains authorita
 
 ## Manual submission checklist
 
-- [ ] Paste the final public GitHub repository URL.
-- [ ] Paste the final Vercel URL.
+- [x] Public GitHub repository URL recorded.
+- [x] Public Vercel URL recorded.
 - [ ] Confirm the Portal accepts the project links.
 - [ ] Mention Studio Dev only; no mainnet or alternate deployment is claimed.
