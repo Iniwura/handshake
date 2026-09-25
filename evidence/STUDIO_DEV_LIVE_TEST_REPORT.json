@@ -1,0 +1,291 @@
+{
+  "network": {
+    "name": "GenLayer Studio Devnet",
+    "chain_id": 61997,
+    "rpc": "https://studio-dev.genlayer.com/api"
+  },
+  "contract": "0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18",
+  "accounts": {
+    "party_a": "0xA35dc047f9937BF668743efBDF8Ea93B31A55888",
+    "party_b": "0x30fd7e8539a8462591e62894739c6864e9b81fa2",
+    "outsider": "0x01feebafdfddd4ba23f69b43f0b501bba7aa7cff"
+  },
+  "started_at": "2026-09-25T20:36:09.053158+00:00",
+  "writes": [
+    {
+      "label": "compatible:create-resumed",
+      "account": "dissent-studio",
+      "method": "create_negotiation",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  fingerprint: 'beb34c8f81ba53912925e275a5ec06c22b2610f5513f2931d7fd99ccfa43cf7d',\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: 'af5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 21 days.',\n      term_id: 'delivery-cap'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers milestone payments.',\n      term_id: 'milestone-preference'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $2,500.',\n      term_id: 'payment-cap'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'At least two revisions are required.',\n      term_id: 'revision-minimum'\n    }\n  ],\n  party_b_position_fingerprint: '3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027',\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:submit-a-resumed",
+      "account": "dissent-studio",
+      "method": "submit_position",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\naf5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_position_fingerprint on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:submit-b-resumed",
+      "account": "dissent-deployer",
+      "method": "submit_position",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_position_fingerprint on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:synthesize-resumed",
+      "account": "dissent-studio",
+      "method": "synthesize",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n{\n  compatibility: 'PARTIAL',\n  conflicts: [],\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  proposed_terms: [\n    {\n      agreement: \"Delivery must occur within 14 days, satisfying both Party A's hard requirement of delivery within 14 days and Party B's hard cap of delivery within 21 days.\",\n      category: 'delivery',\n      source_terms: [\n        { party: 'A', term_id: 'delivery-window' },\n        { party: 'B', term_id: 'delivery-cap' }\n      ],\n      synthesis_id: 'syn-001'\n    },\n    {\n      agreement: 'Payment must be at least $2,000 and no more than $2,500, establishing an agreed payment range of $2,000 to $2,500.',\n      category: 'payment',\n      source_terms: [\n        { party: 'A', term_id: 'payment-floor' },\n        { party: 'B', term_id: 'payment-cap' }\n      ],\n      synthesis_id: 'syn-002'\n    },\n    {\n      agreement: \"At least two revision rounds are required, satisfying both Party A's hard requirement of two revision rounds and Party B's hard minimum of at least two revisions.\",\n      category: 'revisions',\n      source_terms: [\n        { party: 'A', term_id: 'revision-rounds' },\n        { party: 'B', term_id: 'revision-minimum' }\n      ],\n      synthesis_id: 'syn-003'\n    }\n  ],\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33',\n  unresolved_items: [\n    {\n      description: 'Party A prefers 50% upfront payment while Party B prefers milestone-based payments. Both are preferences and no hard requirement governs the payment schedule structure, so the specific payment schedule arrangement remains unresolved and requires further negotiation between the parties.',\n      source_terms: [\n        { party: 'A', term_id: 'upfront-preference' },\n        { party: 'B', term_id: 'milestone-preference' }\n      ],\n      synthesis_id: 'unres-001'\n    }\n  ]\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_synthesis on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:outsider-accept",
+      "account": "recall-deployer",
+      "method": "accept_synthesis",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0xd4447bfce4c8a73ab3f680fec514b46bb2b174afc04e0773f021b8032d5c3622",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0xd4447bfce4c8a73ab3f680fec514b46bb2b174afc04e0773f021b8032d5c3622\n\nError:\nError: Write 0xd4447bfce4c8a73ab3f680fec514b46bb2b174afc04e0773f021b8032d5c3622 transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method accept_synthesis on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "compatible:accept-a-resumed",
+      "account": "dissent-studio",
+      "method": "accept_synthesis",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "accepted_a: true"
+    },
+    {
+      "label": "compatible:duplicate-accept-a",
+      "account": "dissent-studio",
+      "method": "accept_synthesis",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0xf1f0fc25f1762f32beb1afadcf0013e687dc1bbf73489862379f7fa5b5c7dfeb",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0xf1f0fc25f1762f32beb1afadcf0013e687dc1bbf73489862379f7fa5b5c7dfeb\n\nError:\nError: Write 0xf1f0fc25f1762f32beb1afadcf0013e687dc1bbf73489862379f7fa5b5c7dfeb transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method accept_synthesis on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "compatible:accept-b-resumed",
+      "account": "dissent-deployer",
+      "method": "accept_synthesis",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "accepted_b: true"
+    },
+    {
+      "label": "compatible:post-seal-submit",
+      "account": "dissent-studio",
+      "method": "submit_position",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0xcdb2b5d12ce12fabda2b586b39dedd347c507045491293f99a8962fb8d2eacaa",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0xcdb2b5d12ce12fabda2b586b39dedd347c507045491293f99a8962fb8d2eacaa\n\nError:\nError: Write 0xcdb2b5d12ce12fabda2b586b39dedd347c507045491293f99a8962fb8d2eacaa transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "outsider-submit:create-resumed",
+      "account": "dissent-studio",
+      "method": "create_negotiation",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n{\n  accepted_a: false,\n  accepted_b: false,\n  fingerprint: '68acb55146adb2c3a622716ac6eff4acf160b14576f8f51952af79fda841ece7',\n  negotiation_id: 'handshake-live-outsider-20260925-r8',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [],\n  party_a_position_fingerprint: '',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [],\n  party_b_position_fingerprint: '',\n  state: 'OPEN',\n  synthesis_fingerprint: ''\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "outsider-submit:rejected",
+      "account": "recall-deployer",
+      "method": "submit_position",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0xae587f042d44300526fd0941e4ee77db3ddd7fa302e1d90c74f46767e7b12657",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0xae587f042d44300526fd0941e4ee77db3ddd7fa302e1d90c74f46767e7b12657\n\nError:\nError: Write 0xae587f042d44300526fd0941e4ee77db3ddd7fa302e1d90c74f46767e7b12657 transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "duplicate-position:create-resumed",
+      "account": "dissent-studio",
+      "method": "create_negotiation",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n{\n  accepted_a: false,\n  accepted_b: false,\n  fingerprint: '00cfff6e5def915ad029181391dac35efc222861885792ea44cfa94f8a10c634',\n  negotiation_id: 'handshake-live-duplicate-20260925-r8',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: '82cd7d0aef41b4965477d981886802ccd096df962477acd9c46d3e39d231422b',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [],\n  party_b_position_fingerprint: '',\n  state: 'OPEN',\n  synthesis_fingerprint: ''\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "duplicate-position:first-resumed",
+      "account": "dissent-studio",
+      "method": "submit_position",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n82cd7d0aef41b4965477d981886802ccd096df962477acd9c46d3e39d231422b\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_position_fingerprint on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "duplicate-position:second",
+      "account": "dissent-studio",
+      "method": "submit_position",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0x2dbc4e3e668e2c02d5d2681d8c552a827d79b0905ebe979751a964f748f07400",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0x2dbc4e3e668e2c02d5d2681d8c552a827d79b0905ebe979751a964f748f07400\n\nError:\nError: Write 0x2dbc4e3e668e2c02d5d2681d8c552a827d79b0905ebe979751a964f748f07400 transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "pre-synthesis:create-resumed",
+      "account": "dissent-studio",
+      "method": "create_negotiation",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "Result:\n{\n  accepted_a: false,\n  accepted_b: false,\n  fingerprint: '68329449b1e5a6d1e8fbda969ca3b1a5ef08c4b1452b59e99b45de4cd5dc153c',\n  negotiation_id: 'handshake-live-presynthesis-20260925-r8',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [],\n  party_a_position_fingerprint: '',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [],\n  party_b_position_fingerprint: '',\n  state: 'OPEN',\n  synthesis_fingerprint: ''\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "pre-synthesis:rejected",
+      "account": "dissent-studio",
+      "method": "synthesize",
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "tx_hash": "0x26f4cd9b935cc55e3a40f575e8cbd6c65185550f8376ff545695f6e2baf5d9ed",
+      "fee_value": "378506400010352",
+      "output_tail": "Fee deposit: 378506400010352 wei (~0.000378506400010352 GEN)\n\nWrite Transaction Hash:\n0x26f4cd9b935cc55e3a40f575e8cbd6c65185550f8376ff545695f6e2baf5d9ed\n\nError:\nError: Write 0x26f4cd9b935cc55e3a40f575e8cbd6c65185550f8376ff545695f6e2baf5d9ed transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method synthesize on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✖ Error during write operation"
+    },
+    {
+      "label": "incompatible:create-resumed",
+      "account": "dissent-studio",
+      "method": "create_negotiation",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "authoritatively committed"
+    },
+    {
+      "label": "incompatible:submit-a-resumed",
+      "account": "dissent-studio",
+      "method": "submit_position",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "authoritatively committed"
+    },
+    {
+      "label": "incompatible:submit-b-resumed",
+      "account": "dissent-deployer",
+      "method": "submit_position",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": null,
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "authoritatively committed"
+    },
+    {
+      "label": "incompatible:synthesize-resumed",
+      "account": "dissent-studio",
+      "method": "synthesize",
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "tx_hash": "0x083b1cbd50015a66e59ecf9df0fdbe388706e81e0434d654a91664b50b7958f9",
+      "fee_value": null,
+      "resumed": true,
+      "output_tail": "compatibility: INCOMPATIBLE"
+    }
+  ],
+  "views": [
+    {
+      "label": "compatible:after-create",
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  fingerprint: 'beb34c8f81ba53912925e275a5ec06c22b2610f5513f2931d7fd99ccfa43cf7d',\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: 'af5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 21 days.',\n      term_id: 'delivery-cap'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers milestone payments.',\n      term_id: 'milestone-preference'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $2,500.',\n      term_id: 'payment-cap'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'At least two revisions are required.',\n      term_id: 'revision-minimum'\n    }\n  ],\n  party_b_position_fingerprint: '3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027',\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:ready",
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  fingerprint: 'beb34c8f81ba53912925e275a5ec06c22b2610f5513f2931d7fd99ccfa43cf7d',\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: 'af5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 21 days.',\n      term_id: 'delivery-cap'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers milestone payments.',\n      term_id: 'milestone-preference'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $2,500.',\n      term_id: 'payment-cap'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'At least two revisions are required.',\n      term_id: 'revision-minimum'\n    }\n  ],\n  party_b_position_fingerprint: '3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027',\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:synthesis",
+      "value": "Result:\n{\n  compatibility: 'PARTIAL',\n  conflicts: [],\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  proposed_terms: [\n    {\n      agreement: \"Delivery must occur within 14 days, satisfying both Party A's hard requirement of delivery within 14 days and Party B's hard cap of delivery within 21 days.\",\n      category: 'delivery',\n      source_terms: [\n        { party: 'A', term_id: 'delivery-window' },\n        { party: 'B', term_id: 'delivery-cap' }\n      ],\n      synthesis_id: 'syn-001'\n    },\n    {\n      agreement: 'Payment must be at least $2,000 and no more than $2,500, establishing an agreed payment range of $2,000 to $2,500.',\n      category: 'payment',\n      source_terms: [\n        { party: 'A', term_id: 'payment-floor' },\n        { party: 'B', term_id: 'payment-cap' }\n      ],\n      synthesis_id: 'syn-002'\n    },\n    {\n      agreement: \"At least two revision rounds are required, satisfying both Party A's hard requirement of two revision rounds and Party B's hard minimum of at least two revisions.\",\n      category: 'revisions',\n      source_terms: [\n        { party: 'A', term_id: 'revision-rounds' },\n        { party: 'B', term_id: 'revision-minimum' }\n      ],\n      synthesis_id: 'syn-003'\n    }\n  ],\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33',\n  unresolved_items: [\n    {\n      description: 'Party A prefers 50% upfront payment while Party B prefers milestone-based payments. Both are preferences and no hard requirement governs the payment schedule structure, so the specific payment schedule arrangement remains unresolved and requires further negotiation between the parties.',\n      source_terms: [\n        { party: 'A', term_id: 'upfront-preference' },\n        { party: 'B', term_id: 'milestone-preference' }\n      ],\n      synthesis_id: 'unres-001'\n    }\n  ]\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_synthesis on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:fingerprint",
+      "value": "Result:\ndbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_synthesis_fingerprint on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:after-first-acceptance",
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  fingerprint: 'beb34c8f81ba53912925e275a5ec06c22b2610f5513f2931d7fd99ccfa43cf7d',\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: 'af5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 21 days.',\n      term_id: 'delivery-cap'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers milestone payments.',\n      term_id: 'milestone-preference'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $2,500.',\n      term_id: 'payment-cap'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'At least two revisions are required.',\n      term_id: 'revision-minimum'\n    }\n  ],\n  party_b_position_fingerprint: '3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027',\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:sealed",
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  fingerprint: 'beb34c8f81ba53912925e275a5ec06c22b2610f5513f2931d7fd99ccfa43cf7d',\n  negotiation_id: 'handshake-live-compatible-20260925-r5',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 14 days.',\n      term_id: 'delivery-window'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $2,000.',\n      term_id: 'payment-floor'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'Two revision rounds are required.',\n      term_id: 'revision-rounds'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers 50% upfront.',\n      term_id: 'upfront-preference'\n    }\n  ],\n  party_a_position_fingerprint: 'af5b7460fb376c88f4af0c77babfe5d4879825ebd1eae13f7dc3a4f1e0ea7d33',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'delivery',\n      importance: 'HARD',\n      requirement: 'Delivery must occur within 21 days.',\n      term_id: 'delivery-cap'\n    },\n    {\n      category: 'payment_schedule',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers milestone payments.',\n      term_id: 'milestone-preference'\n    },\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $2,500.',\n      term_id: 'payment-cap'\n    },\n    {\n      category: 'revisions',\n      importance: 'HARD',\n      requirement: 'At least two revisions are required.',\n      term_id: 'revision-minimum'\n    }\n  ],\n  party_b_position_fingerprint: '3e673f583bdb0f9538267d7cc14c0ec31e75e5a5b66b36a0b0d0b657e7246027',\n  state: 'SEALED',\n  synthesis_fingerprint: 'dbcabf399895b0ea0390c9e3e2a0dd342c3300a7d90cace04ff61e7c6c981b33'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "incompatible:terminal-state",
+      "value": "authoritative state: INCOMPATIBLE"
+    },
+    {
+      "label": "incompatible:synthesis",
+      "value": "authoritative synthesis: compatibility INCOMPATIBLE"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "compatible synthesis fingerprint extracted",
+      "passed": true
+    }
+  ],
+  "finished_at": "2026-09-25T20:40:05.917911+00:00"
+}

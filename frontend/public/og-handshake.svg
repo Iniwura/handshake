@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#efeae2"/>
+  <path d="M0 510H1200" stroke="#c9c1b6" stroke-width="2"/>
+  <text x="72" y="172" fill="#a34731" font-family="monospace" font-size="18" letter-spacing="3">GENLAYER / STUDIO DEV</text>
+  <text x="72" y="370" fill="#181716" font-family="Georgia, serif" font-size="170" letter-spacing="-15">A &amp; B</text>
+  <text x="76" y="455" fill="#756f68" font-family="monospace" font-size="20" letter-spacing="4">HANDSHAKE / SEMANTIC AGREEMENT</text>
+  <circle cx="1088" cy="112" r="42" fill="none" stroke="#a34731" stroke-width="3"/>
+  <path d="M1067 112h42" stroke="#a34731" stroke-width="3"/>
+</svg>

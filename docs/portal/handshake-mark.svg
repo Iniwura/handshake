@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" role="img" aria-labelledby="title desc">
+  <title id="title">Handshake mark</title>
+  <desc id="desc">Two letterforms converge into an intersection symbol.</desc>
+  <rect width="400" height="220" fill="#efeae2"/>
+  <text x="28" y="144" fill="#181716" font-family="Georgia, serif" font-size="132" letter-spacing="-18">A</text>
+  <text x="151" y="146" fill="#a34731" font-family="Georgia, serif" font-size="108">&#8745;</text>
+  <text x="260" y="144" fill="#181716" font-family="Georgia, serif" font-size="132" letter-spacing="-18">B</text>
+  <path d="M28 177H372" stroke="#c9c1b6" stroke-width="2"/>
+  <text x="28" y="201" fill="#756f68" font-family="monospace" font-size="10" letter-spacing="2">SEMANTIC AGREEMENT PROTOCOL</text>
+</svg>
