@@ -2,7 +2,7 @@
 
 ## Public project
 
-Handshake is a contract-first GenLayer semantic negotiation primitive. The Portal entry point is the public frontend at the Vercel URL recorded here after deployment.
+Handshake is a contract-first GenLayer semantic negotiation primitive. The Portal entry point is the public frontend at the verified Vercel URL recorded below.
 
 - Repository: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
@@ -36,4 +36,4 @@ The frontend is a reader and transaction surface. The contract remains authorita
 - [x] Public GitHub repository URL recorded.
 - [x] Public Vercel URL recorded.
 - [ ] Confirm the Portal accepts the project links.
-- [ ] Mention Studio Dev only; no mainnet or alternate deployment is claimed.
+- [x] Studio Dev only; no mainnet or alternate deployment is claimed.
