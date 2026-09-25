@@ -1,5 +1,10 @@
 # Handshake submission record
 
+## Public links
+
+- GitHub: https://github.com/Iniwura/handshake
+- Portal frontend: https://handshake-lake.vercel.app
+
 ## Verified deployment
 
 | Fact | Value |
@@ -38,4 +43,4 @@ Transaction IDs are recorded in evidence/STUDIO_DEV_LIVE_TEST_REPORT.json where 
 
 ## Final status
 
-Ready for Portal submission after replacing the repository and frontend placeholders in PORTAL.md with the final public links. No deployment was made outside Studio Dev.
+Ready for manual Portal submission; the public repository and frontend links are recorded in PORTAL.md. No deployment was made outside Studio Dev.

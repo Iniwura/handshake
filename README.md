@@ -98,6 +98,11 @@ npm run build
 
 If the npm registry is unavailable, use the already-installed matching local genlayer-js dependency set only for local verification. Do not commit node_modules or dist.
 
+## Public links
+
+- GitHub: https://github.com/Iniwura/handshake
+- Portal frontend: https://handshake-lake.vercel.app
+
 ## Deployment facts
 
 - Network: GenLayer Studio Devnet, chain 61997.
