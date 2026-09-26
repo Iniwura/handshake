@@ -4,6 +4,8 @@
 
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
+- Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
+- Final production deployment: dpl_BRSJosakWM8eYh645DpeemY5tW8B
 
 ## Verified contract deployment
 
@@ -41,7 +43,7 @@ INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumptio
 - Frontend npm run typecheck: passed.
 - Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
-The v2 frontend is committed and locally verified, but the public Vercel alias still serves the historical pre-v2 bundle. The linked Vercel deployment attempt returned Not authorized and produced an Error deployment. Historical ready deployment ID dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL is retained only as historical evidence; no v2 deployment ID is claimed.
+The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_BRSJosakWM8eYh645DpeemY5tW8B reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
 
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
@@ -71,4 +73,4 @@ The negotiation detail view shows the bound capability ID, action, resource, mod
 
 ## Submission status
 
-The repository is public and the Studio Dev v2 contract facts are recorded. The public frontend still needs Vercel re-authentication and a successful v2 publish. Portal submission was not performed automatically and is not yet the only remaining action.
+The repository is public, the Studio Dev v2 contract facts are recorded, and the public v2 frontend is verified. Portal submission was not performed automatically; manual Portal submission is the only remaining action.

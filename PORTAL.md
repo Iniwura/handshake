@@ -5,7 +5,9 @@
 Handshake is a semantic agreement and authorization primitive for GenLayer. It makes two independent positions, their grounded semantic intersection, dual acceptance and deterministic downstream authorization legible.
 
 - Repository: https://github.com/Iniwura/handshake
-- Frontend: https://handshake-lake.vercel.app (currently historical pre-v2 bundle)
+- Frontend: https://handshake-lake.vercel.app (final v2 production alias)
+- Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
+- Vercel deployment ID: dpl_BRSJosakWM8eYh645DpeemY5tW8B
 - Network: GenLayer Studio Devnet
 - Chain ID: 61997
 - Contract: 0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE
@@ -35,9 +37,9 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 - Incompatible negotiation: handshake-v2-incompatible-20260926-r1
 - Incompatible result: INCOMPATIBLE, empty capability fingerprint, active: false.
 
-## Vercel status
+## Vercel verification
 
-The v2 frontend passes local typecheck/build, but publishing to the existing Vercel project returned Not authorized. The current public alias therefore must not be submitted as the v2 frontend until re-authentication produces a ready deployment. Historical ready deployment ID dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL is not a v2 final.
+The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl_BRSJosakWM8eYh645DpeemY5tW8B` is READY and aliased at https://handshake-lake.vercel.app. Anonymous HTTP checks returned 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, both position routes, and the SPA fallback. The served production bundle contains the canonical v2 contract address and no historical Handshake contract address.
 
 ## Assets
 
@@ -53,5 +55,5 @@ The v2 frontend passes local typecheck/build, but publishing to the existing Ver
 - [x] Studio Dev only; no mainnet or alternate deployment is claimed.
 - [x] v2 contract address, deployment transaction and source SHA recorded.
 - [x] Compatible active-capability and incompatible fail-closed evidence recorded.
-- [ ] Re-authenticate and publish the v2 frontend to the existing Vercel project.
+- [x] Public routes, production bundle markers and stale-v1 address checks verified.
 - [ ] Submit the Portal entry manually.

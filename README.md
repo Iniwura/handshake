@@ -111,9 +111,15 @@ The live scenarios use two configured Studio Dev party wallets and a separate co
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 
-## Vercel status
+## Final Vercel deployment
 
-The v2 frontend bundle is committed and passes local typecheck/build. The existing public alias currently serves the historical pre-v2 deployment. A v2 publish attempt reached the linked project but returned Not authorized and produced an Error deployment; no v2 Vercel deployment ID is claimed. The historical ready deployment ID is dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL and must not be treated as the v2 final. Re-authentication of the existing Vercel project is the only remaining infrastructure step.
+- Existing project: handshake.
+- Project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd.
+- Production URL: https://handshake-lake.vercel.app.
+- Deployment ID: dpl_BRSJosakWM8eYh645DpeemY5tW8B.
+- Deployment state: READY, production, aliased to the public URL.
+- Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, and both live negotiation detail routes.
+- The served production bundle contains the v2 contract address exactly and no historical Handshake contract address.
 
 The frontend is an editorial reader and transaction surface; the contract remains authoritative. Routes include /, /app, /app/new, /app/negotiations/:id, /app/negotiations/:id/position, /app/demo, /compare, /synthesis, and /contract.
 
