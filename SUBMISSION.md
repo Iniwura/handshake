@@ -41,6 +41,8 @@ INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumptio
 - Frontend npm run typecheck: passed.
 - Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
+The v2 frontend is committed and locally verified, but the public Vercel alias still serves the historical pre-v2 bundle. The linked Vercel deployment attempt returned Not authorized and produced an Error deployment. Historical ready deployment ID dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL is retained only as historical evidence; no v2 deployment ID is claimed.
+
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
 ## Fresh Studio Dev lifecycle proof
@@ -69,6 +71,4 @@ The negotiation detail view shows the bound capability ID, action, resource, mod
 
 ## Submission status
 
-The repository and frontend are public and the Studio Dev v2 deployment facts are recorded. Portal submission remains manual and was not performed automatically.
-
-Handshake v2 is Portal-submission ready.
+The repository is public and the Studio Dev v2 contract facts are recorded. The public frontend still needs Vercel re-authentication and a successful v2 publish. Portal submission was not performed automatically and is not yet the only remaining action.

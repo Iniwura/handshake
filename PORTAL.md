@@ -5,7 +5,7 @@
 Handshake is a semantic agreement and authorization primitive for GenLayer. It makes two independent positions, their grounded semantic intersection, dual acceptance and deterministic downstream authorization legible.
 
 - Repository: https://github.com/Iniwura/handshake
-- Frontend: https://handshake-lake.vercel.app
+- Frontend: https://handshake-lake.vercel.app (currently historical pre-v2 bundle)
 - Network: GenLayer Studio Devnet
 - Chain ID: 61997
 - Contract: 0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE
@@ -35,6 +35,10 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 - Incompatible negotiation: handshake-v2-incompatible-20260926-r1
 - Incompatible result: INCOMPATIBLE, empty capability fingerprint, active: false.
 
+## Vercel status
+
+The v2 frontend passes local typecheck/build, but publishing to the existing Vercel project returned Not authorized. The current public alias therefore must not be submitted as the v2 frontend until re-authentication produces a ready deployment. Historical ready deployment ID dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL is not a v2 final.
+
 ## Assets
 
 - docs/portal/handshake-mark.svg: original A-intersection-B mark.
@@ -49,4 +53,5 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 - [x] Studio Dev only; no mainnet or alternate deployment is claimed.
 - [x] v2 contract address, deployment transaction and source SHA recorded.
 - [x] Compatible active-capability and incompatible fail-closed evidence recorded.
+- [ ] Re-authenticate and publish the v2 frontend to the existing Vercel project.
 - [ ] Submit the Portal entry manually.

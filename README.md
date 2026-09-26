@@ -111,6 +111,10 @@ The live scenarios use two configured Studio Dev party wallets and a separate co
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 
+## Vercel status
+
+The v2 frontend bundle is committed and passes local typecheck/build. The existing public alias currently serves the historical pre-v2 deployment. A v2 publish attempt reached the linked project but returned Not authorized and produced an Error deployment; no v2 Vercel deployment ID is claimed. The historical ready deployment ID is dpl_2UYRNAvHDCYkQNjXEuBTRhCAXciL and must not be treated as the v2 final. Re-authentication of the existing Vercel project is the only remaining infrastructure step.
+
 The frontend is an editorial reader and transaction surface; the contract remains authoritative. Routes include /, /app, /app/new, /app/negotiations/:id, /app/negotiations/:id/position, /app/demo, /compare, /synthesis, and /contract.
 
 No Portal submission was made automatically. No deployment or file change was made for Converge.
