@@ -22,7 +22,9 @@ OPEN = "OPEN"
 READY = "READY"
 PENDING_ACCEPTANCE = "PENDING_ACCEPTANCE"
 INCOMPATIBLE_STATE = "INCOMPATIBLE"
-SEALED = "SEALED"
+ACTIVE = "ACTIVE"
+CONSUMED = "CONSUMED"
+INACTIVE = "INACTIVE"
 
 PARTY_A = "A"
 PARTY_B = "B"
@@ -44,10 +46,15 @@ MAX_AGREEMENT = 1024
 MAX_DESCRIPTION = 1024
 MAX_SYNTHESIS_ITEMS = 32
 MAX_SOURCE_REFS = 2
+MAX_CAPABILITY_ID = 96
+MAX_ACTION = 128
+MAX_RESOURCE = 256
+MAX_SCOPE = 512
 
 IMPORTANCE_VALUES = {HARD, PREFERENCE}
 COMPATIBILITY_VALUES = {COMPATIBLE, PARTIAL, INCOMPATIBLE}
 PARTY_VALUES = {PARTY_A, PARTY_B}
+MODE_VALUES = {"SINGLE_USE", "REUSABLE"}
 
 POSITION_TERM_KEYS = {"term_id", "category", "requirement", "importance"}
 SYNTHESIS_KEYS = {
@@ -68,6 +75,12 @@ class NegotiationRecord:
     negotiation_id: str
     party_a: str
     party_b: str
+    capability_id: str
+    action: str
+    resource: str
+    scope: str
+    mode: str
+    consumer: str
     fingerprint: str
     state: str
     party_a_position_json: str
@@ -76,6 +89,9 @@ class NegotiationRecord:
     party_b_position_fingerprint: str
     synthesis_json: str
     synthesis_fingerprint: str
+    capability_fingerprint: str
+    capability_state: str
+    consumed: bool
     accepted_a: bool
     accepted_b: bool
 
@@ -124,6 +140,33 @@ def _assert_party(party: Any, field: str) -> str:
     if type(party) is not str or party not in PARTY_VALUES:
         _error(field + " must be A or B.")
     return party
+
+
+def _normalize_mode(mode: Any) -> str:
+    if type(mode) is not str or mode not in MODE_VALUES:
+        _error("mode must be SINGLE_USE or REUSABLE.")
+    return mode
+
+
+def _normalize_capability_definition(
+    capability_id: Any,
+    action: Any,
+    resource: Any,
+    scope: Any,
+    mode: Any,
+    consumer: Address,
+) -> dict[str, str]:
+    consumer_key = _address_key(consumer)
+    if consumer_key == "0x" + "00" * 20:
+        _error("consumer must be a non-zero address.")
+    return {
+        "capability_id": _identifier(capability_id, "capability_id", MAX_CAPABILITY_ID),
+        "action": _identifier(action, "action", MAX_ACTION),
+        "resource": _text(resource, "resource", MAX_RESOURCE),
+        "scope": _text(scope, "scope", MAX_SCOPE),
+        "mode": _normalize_mode(mode),
+        "consumer": consumer_key,
+    }
 
 
 def _normalize_source_party(party: Any, field: str) -> str:
@@ -607,9 +650,10 @@ def _consensus_synthesis(
 
 
 class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
-    """Bounded two-party semantic negotiation with immutable acceptance."""
+    """Two-party semantic negotiation with deterministic capability activation."""
 
     negotiations: gl.storage.TreeMap[str, NegotiationRecord]
+    capability_ids: gl.storage.TreeMap[str, str]
 
     def __init__(self):
         pass
@@ -620,6 +664,12 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
         negotiation_id: str,
         party_a: Address,
         party_b: Address,
+        capability_id: str,
+        action: str,
+        resource: str,
+        scope: str,
+        mode: str,
+        consumer: Address,
     ) -> str:
         negotiation_id = _identifier(
             negotiation_id,
@@ -634,19 +684,31 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             _error("parties must be non-zero addresses.")
         if self.negotiations.get(negotiation_id, None) is not None:
             _error("negotiation ID is already registered.")
+        authorization = _normalize_capability_definition(
+            capability_id, action, resource, scope, mode, consumer
+        )
+        if self.capability_ids.get(authorization["capability_id"], None) is not None:
+            _error("capability ID is already registered.")
 
         fingerprint = _digest(
-            "HANDSHAKE-NEGOTIATION-V1",
+            "HANDSHAKE-NEGOTIATION-V2",
             {
                 "negotiation_id": negotiation_id,
                 "party_a": party_a_key,
                 "party_b": party_b_key,
+                "authorization": authorization,
             },
         )
         self.negotiations[negotiation_id] = NegotiationRecord(
             negotiation_id=negotiation_id,
             party_a=party_a_key,
             party_b=party_b_key,
+            capability_id=authorization["capability_id"],
+            action=authorization["action"],
+            resource=authorization["resource"],
+            scope=authorization["scope"],
+            mode=authorization["mode"],
+            consumer=authorization["consumer"],
             fingerprint=fingerprint,
             state=OPEN,
             party_a_position_json="",
@@ -655,9 +717,13 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             party_b_position_fingerprint="",
             synthesis_json="",
             synthesis_fingerprint="",
+            capability_fingerprint="",
+            capability_state=INACTIVE,
+            consumed=False,
             accepted_a=False,
             accepted_b=False,
         )
+        self.capability_ids[authorization["capability_id"]] = negotiation_id
         return fingerprint
 
     @gl.public.write
@@ -684,9 +750,10 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
 
         normalized = _normalize_position(terms)
         position_fingerprint = _digest(
-            "HANDSHAKE-POSITION-V1",
+            "HANDSHAKE-POSITION-V2",
             {
                 "negotiation_id": record.negotiation_id,
+                "negotiation_fingerprint": record.fingerprint,
                 "party": party,
                 "party_address": sender,
                 "terms": normalized,
@@ -714,7 +781,7 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
         }
         synthesis = _consensus_synthesis(positions)
         synthesis_fingerprint = _digest(
-            "HANDSHAKE-SYNTHESIS-V1",
+            "HANDSHAKE-SYNTHESIS-V2",
             {
                 "negotiation_id": record.negotiation_id,
                 "negotiation_fingerprint": record.fingerprint,
@@ -758,9 +825,38 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             _error("only a declared party may accept the synthesis.")
 
         if record.accepted_a and record.accepted_b:
-            record.state = SEALED
+            synthesis = json.loads(record.synthesis_json)
+            record.capability_fingerprint = _digest(
+                "HANDSHAKE-CAPABILITY-V1",
+                {
+                    "negotiation_id": record.negotiation_id,
+                    "negotiation_fingerprint": record.fingerprint,
+                    "capability": self._authorization(record),
+                    "party_a_position_fingerprint": record.party_a_position_fingerprint,
+                    "party_b_position_fingerprint": record.party_b_position_fingerprint,
+                    "synthesis_fingerprint": record.synthesis_fingerprint,
+                    "synthesis": synthesis,
+                },
+            )
+            record.capability_state = ACTIVE
+            record.state = ACTIVE
         self.negotiations[record.negotiation_id] = record
         return record.state
+
+    @gl.public.write
+    def consume_capability(self, negotiation_id: str) -> str:
+        record = self._get_negotiation(negotiation_id)
+        if record.state != ACTIVE or record.capability_state != ACTIVE:
+            _error("only an active capability can be consumed.")
+        if _address_key(gl.message.sender_address) != record.consumer:
+            _error("only the configured capability consumer may consume it.")
+        if record.mode == "SINGLE_USE":
+            record.consumed = True
+            record.capability_state = CONSUMED
+            record.state = CONSUMED
+            self.negotiations[record.negotiation_id] = record
+            return CONSUMED
+        return ACTIVE
 
     @gl.public.view
     def get_negotiation(self, negotiation_id: str) -> dict[str, Any]:
@@ -769,6 +865,12 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             "negotiation_id": record.negotiation_id,
             "party_a": record.party_a,
             "party_b": record.party_b,
+            "capability_id": record.capability_id,
+            "action": record.action,
+            "resource": record.resource,
+            "scope": record.scope,
+            "mode": record.mode,
+            "consumer": record.consumer,
             "fingerprint": record.fingerprint,
             "state": record.state,
             "party_a_position": json.loads(record.party_a_position_json)
@@ -780,6 +882,9 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             "party_a_position_fingerprint": record.party_a_position_fingerprint,
             "party_b_position_fingerprint": record.party_b_position_fingerprint,
             "synthesis_fingerprint": record.synthesis_fingerprint,
+            "capability_fingerprint": record.capability_fingerprint,
+            "capability_state": record.capability_state,
+            "consumed": record.consumed,
             "accepted_a": record.accepted_a,
             "accepted_b": record.accepted_b,
         }
@@ -808,6 +913,41 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             _error("negotiation has no persisted synthesis.")
         return record.synthesis_fingerprint
 
+    @gl.public.view
+    def get_capability(self, negotiation_id: str) -> dict[str, Any]:
+        record = self._get_negotiation(negotiation_id)
+        return {
+            "negotiation_id": record.negotiation_id,
+            "capability_id": record.capability_id,
+            "party_a": record.party_a,
+            "party_b": record.party_b,
+            "synthesis_fingerprint": record.synthesis_fingerprint,
+            "capability_fingerprint": record.capability_fingerprint,
+            "action": record.action,
+            "resource": record.resource,
+            "scope": record.scope,
+            "mode": record.mode,
+            "consumer": record.consumer,
+            "activation_state": record.capability_state,
+            "active": record.capability_state == ACTIVE,
+            "consumed": record.consumed,
+        }
+
+    @gl.public.view
+    def is_capability_active(self, negotiation_id: str) -> bool:
+        record = self._get_negotiation(negotiation_id)
+        return record.capability_state == ACTIVE
+
+    def _authorization(self, record: NegotiationRecord) -> dict[str, str]:
+        return {
+            "capability_id": record.capability_id,
+            "action": record.action,
+            "resource": record.resource,
+            "scope": record.scope,
+            "mode": record.mode,
+            "consumer": record.consumer,
+        }
+
     def _get_negotiation(self, negotiation_id: str) -> NegotiationRecord:
         negotiation_id = _identifier(
             negotiation_id,
@@ -833,6 +973,5 @@ class Handshake(_contract_base):  # pyright: ignore[reportGeneralTypeIssues]
             "conflicts": synthesis["conflicts"],
             "unresolved_items": synthesis["unresolved_items"],
         }
-
 
 del _contract_base

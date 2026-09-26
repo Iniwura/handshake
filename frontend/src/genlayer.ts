@@ -2,11 +2,11 @@ import { createClient, isSuccessful } from "genlayer-js";
 import { studioDevnet } from "genlayer-js/chains";
 import { TransactionHashVariant, type CalldataEncodable } from "genlayer-js/types";
 
-export const CONTRACT_ADDRESS = String(import.meta.env.VITE_CONTRACT_ADDRESS || "0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18");
+export const CONTRACT_ADDRESS = String(import.meta.env.VITE_CONTRACT_ADDRESS || "0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE");
 export const CHAIN_ID = 61997;
 export const CHAIN_HEX = "0x" + CHAIN_ID.toString(16);
-export const DEPLOYMENT_TX = "0xcd9f2c30e2970fd7012e17432ae7fa1f812768cbbc7ab54e40c1bfd34cfd2d9e";
-export const SOURCE_SHA = "d9d916a276ac00b2d37420727917fe0ebc15b182d23eedc751a989cc388c231f";
+export const DEPLOYMENT_TX = "0x9896fa2a9231a014c27370f20a98dab0d6d0d5f81be33ebc27da507b4e00506";
+export const SOURCE_SHA = "2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7";
 export const RUNNER_HASH = "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng";
 export const RPC_URL = "https://studio-dev.genlayer.com/api";
 
@@ -57,6 +57,10 @@ export async function readSynthesis(id: string): Promise<Synthesis> {
   return readMethod<Synthesis>("get_synthesis", [id]);
 }
 
+export async function readCapability(id: string): Promise<Capability> {
+  return readMethod<Capability>("get_capability", [id]);
+}
+
 export async function readPositionFingerprint(id: string, party: Party): Promise<string> {
   return String(await readMethod<unknown>("get_position_fingerprint", [id, party]));
 }
@@ -69,6 +73,7 @@ export type SourceRef = { party: Party; term_id: string };
 export type ProposedTerm = { synthesis_id: string; category: string; agreement: string; source_terms: SourceRef[] };
 export type Issue = { synthesis_id: string; description: string; source_terms: SourceRef[] };
 export type Synthesis = { compatibility: Compatibility; proposed_terms: ProposedTerm[]; conflicts: Issue[]; unresolved_items: Issue[] };
+export type Capability = { negotiation_id: string; capability_id: string; party_a: string; party_b: string; synthesis_fingerprint: string; capability_fingerprint: string; action: string; resource: string; scope: string; mode: "SINGLE_USE" | "REUSABLE"; consumer: string; activation_state: "INACTIVE" | "ACTIVE" | "CONSUMED"; active: boolean; consumed: boolean };
 export type Negotiation = {
   negotiation_id: string;
   party_a: string;
@@ -81,6 +86,15 @@ export type Negotiation = {
   party_b_position_fingerprint: string;
   synthesis_json: string;
   synthesis_fingerprint: string;
+  capability_id: string;
+  action: string;
+  resource: string;
+  scope: string;
+  mode: "SINGLE_USE" | "REUSABLE";
+  consumer: string;
+  capability_fingerprint: string;
+  capability_state: "INACTIVE" | "ACTIVE" | "CONSUMED";
+  consumed: boolean;
   accepted_a: boolean;
   accepted_b: boolean;
 };

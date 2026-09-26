@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Run Handshake's real Studio Dev multi-wallet verification.
-
-This driver never reads, stores, or echoes private keys or wallet passwords.
-It uses only already-configured GenLayer CLI accounts and writes a public
-evidence report containing transaction hashes and contract-call output.
-"""
+"""Fresh Studio Dev v2 lifecycle and adversarial verification for Handshake."""
 
 from __future__ import annotations
 
@@ -18,11 +13,7 @@ from typing import Any
 
 CLI = "/home/ini/.local/bin/genlayer"
 RPC = "https://studio-dev.genlayer.com/api"
-CONTRACT = "0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18"
-PRECREATED_COMPATIBLE_CREATE_TX = None
-COMPATIBLE_ALREADY_SEALED = True
-INCOMPATIBLE_ALREADY_PERSISTED = True
-INCOMPATIBLE_SYNTHESIS_TX = "0x083b1cbd50015a66e59ecf9df0fdbe388706e81e0434d654a91664b50b7958f9"
+CONTRACT = "0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE"
 PARTY_A = "0xA35dc047f9937BF668743efBDF8Ea93B31A55888"
 PARTY_B = "0x30fd7e8539a8462591e62894739c6864e9b81fa2"
 OUTSIDER = "0x01feebafdfddd4ba23f69b43f0b501bba7aa7cff"
@@ -31,27 +22,31 @@ REPORT = ROOT / "evidence" / "STUDIO_DEV_LIVE_TEST_REPORT.json"
 HASH_RE = re.compile(r"0x[0-9a-fA-F]{64}")
 FP_RE = re.compile(r"(?<![0-9a-fA-F])[0-9a-fA-F]{64}(?![0-9a-fA-F])")
 
-A_REALISTIC = [
-    {"term_id": "payment-floor", "category": "payment", "requirement": "Party A requires a minimum payment of $2,000.", "importance": "HARD"},
-    {"term_id": "delivery-window", "category": "delivery", "requirement": "Delivery must occur within 14 days.", "importance": "HARD"},
-    {"term_id": "revision-rounds", "category": "revisions", "requirement": "Two revision rounds are required.", "importance": "HARD"},
-    {"term_id": "upfront-preference", "category": "payment_schedule", "requirement": "Party A prefers 50% upfront.", "importance": "PREFERENCE"},
-]
+COMPATIBLE_ID = "handshake-v2-compatible-20260926-r1"
+INCOMPATIBLE_ID = "handshake-v2-incompatible-20260926-r1"
+OUTSIDER_ID = "handshake-v2-outsider-20260926-r1"
+DUPLICATE_ID = "handshake-v2-duplicate-20260926-r1"
+PRESYNTHESIS_ID = "handshake-v2-presynthesis-20260926-r1"
+CAPABILITY_ID = "docs-migration-authorization"
+INCOMPATIBLE_CAPABILITY_ID = "billing-authorization"
 
-B_REALISTIC = [
-    {"term_id": "payment-cap", "category": "payment", "requirement": "Party B requires a maximum payment of $2,500.", "importance": "HARD"},
-    {"term_id": "delivery-cap", "category": "delivery", "requirement": "Delivery must occur within 21 days.", "importance": "HARD"},
-    {"term_id": "revision-minimum", "category": "revisions", "requirement": "At least two revisions are required.", "importance": "HARD"},
-    {"term_id": "milestone-preference", "category": "payment_schedule", "requirement": "Party B prefers milestone payments.", "importance": "PREFERENCE"},
+A_MIGRATION = [
+    {"term_id": "downtime-limit", "category": "downtime", "requirement": "Migration downtime must not exceed 10 minutes.", "importance": "HARD"},
+    {"term_id": "rollback-checkpoint", "category": "rollback", "requirement": "A rollback checkpoint is required before cutover.", "importance": "HARD"},
+    {"term_id": "preserve-urls", "category": "data_integrity", "requirement": "Existing documentation URLs must be preserved.", "importance": "HARD"},
+    {"term_id": "blue-green-preference", "category": "rollout", "requirement": "Party A prefers a blue-green rollout.", "importance": "PREFERENCE"},
 ]
-
-INCOMPATIBLE_A = [
-    {"term_id": "payment-floor", "category": "payment", "requirement": "Party A requires a minimum payment of $5,000.", "importance": "HARD"},
-    {"term_id": "delivery-window", "category": "delivery", "requirement": "Delivery must occur within 30 days.", "importance": "HARD"},
+B_MIGRATION = [
+    {"term_id": "maintenance-window", "category": "schedule", "requirement": "Migration must complete within the agreed maintenance window.", "importance": "HARD"},
+    {"term_id": "rollback-tested", "category": "rollback", "requirement": "The rollback path must be tested.", "importance": "HARD"},
+    {"term_id": "history-preserved", "category": "data_integrity", "requirement": "No documentation data-history may be lost.", "importance": "HARD"},
+    {"term_id": "canary-preference", "category": "rollout", "requirement": "Party B prefers a canary rollout.", "importance": "PREFERENCE"},
 ]
-INCOMPATIBLE_B = [
-    {"term_id": "payment-cap", "category": "payment", "requirement": "Party B requires a maximum payment of $3,000.", "importance": "HARD"},
-    {"term_id": "delivery-cap", "category": "delivery", "requirement": "Delivery must occur within 14 days.", "importance": "HARD"},
+A_CONFLICT = [
+    {"term_id": "price-floor", "category": "payment", "requirement": "Party A requires a minimum payment of $5,000.", "importance": "HARD"},
+]
+B_CONFLICT = [
+    {"term_id": "price-cap", "category": "payment", "requirement": "Party B requires a maximum payment of $3,000.", "importance": "HARD"},
 ]
 
 
@@ -62,7 +57,18 @@ def run(args: list[str], timeout: int = 420) -> subprocess.CompletedProcess[str]
 def use(account: str) -> None:
     result = run([CLI, "account", "use", account], timeout=30)
     if result.returncode != 0:
-        raise RuntimeError(f"could not select configured account {account}: {result.stderr[-1000:]}")
+        raise RuntimeError(f"account selection failed for {account}: {result.stderr[-1000:]}")
+
+
+def json_arg(value: Any) -> str:
+    return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
+
+
+def redact(value: str) -> str:
+    def replace(match: re.Match[str]) -> str:
+        context = value[max(0, match.start() - 64):match.start()].lower()
+        return "[REDACTED]" if "private_key" in context else match.group(0)
+    return re.sub(r"0x[0-9a-fA-F]{64}", replace, value)
 
 
 def last_json(text: str) -> dict[str, Any]:
@@ -75,98 +81,7 @@ def last_json(text: str) -> dict[str, Any]:
                 continue
             if isinstance(value, dict):
                 return value
-    raise RuntimeError(f"fee estimate JSON was not found: {text[-1000:]}")
-
-
-def estimate(method: str, args: list[str]) -> dict[str, Any]:
-    result = None
-    for attempt in range(3):
-        result = run(
-            [CLI, "estimate-fees", CONTRACT, method, "--rpc", RPC, "--json", "--args", *args],
-            timeout=420,
-        )
-        if result.returncode == 0:
-            return last_json(result.stdout)
-        if attempt < 2:
-            time.sleep(2)
-    if method == "create_negotiation":
-        return {
-            "distribution": {
-                "leaderTimeunitsAllocation": "100",
-                "validatorTimeunitsAllocation": "200",
-                "appealRounds": "0",
-                "executionBudgetPerRound": "94626600000000",
-                "executionConsumed": "0",
-                "totalMessageFees": "0",
-                "rotations": ["3"],
-                "maxPriceGenPerTimeUnit": "2",
-                "storageFeeMaxGasPrice": "300000000",
-                "receiptFeeMaxGasPrice": "300000000",
-            },
-            "feeValue": "378506400010352",
-            "messageAllocations": [],
-        }
-    raise RuntimeError(f"fee estimation failed for {method}: {result.stderr[-1500:]}")
-
-
-def redact(text: str) -> str:
-    def replace(match: re.Match[str]) -> str:
-        context = text[max(0, match.start() - 48):match.start()].lower()
-        return "[REDACTED]" if "private_key" in context else match.group(0)
-    return re.sub(r"0x[0-9a-fA-F]{64}", replace, text)
-
-
-def call(method: str, args: list[str]) -> str:
-    result = None
-    text = ""
-    transient = False
-    for attempt in range(3):
-        try:
-            result = run([CLI, "call", CONTRACT, method, "--rpc", RPC, "--args", *args], timeout=120)
-            text = (result.stdout + chr(10) + result.stderr).strip()
-        except subprocess.TimeoutExpired:
-            result = None
-            text = "call timeout"
-        transient = result is None or any(marker in text for marker in (
-            "fetch failed",
-            "ETIMEDOUT",
-            "ENETUNREACH",
-            "Unexpected token '<'",
-            "unknown RPC error",
-            "Server busy",
-            "Unable to read the Studio chain id",
-            "ECONNRESET",
-        ))
-        if result is not None and result.returncode == 0:
-            break
-        if not transient or attempt == 2:
-            break
-        time.sleep(5)
-    if result is None:
-        raise RuntimeError(f"transport failure reading {method}: {text}")
-    if result.returncode != 0:
-        if transient:
-            raise RuntimeError(f"transport failure reading {method}: {redact(text[-3000:])}")
-        return f"CALL_FAILED exit={result.returncode} output={redact(text[-3000:])}"
-    return redact(text[-6000:])
-
-
-
-def safe_call(method: str, args: list[str]) -> str:
-    try:
-        return call(method, args)
-    except RuntimeError as exc:
-        return "READ_FAILED: " + redact(str(exc)[-2000:])
-
-
-def hash_from(text: str) -> str | None:
-    matches = HASH_RE.findall(text)
-    return matches[0] if matches else None
-
-
-def fingerprint_from(text: str) -> str | None:
-    matches = FP_RE.findall(text)
-    return matches[-1] if matches else None
+    raise RuntimeError(f"fee estimate JSON missing: {redact(text[-1000:])}")
 
 
 def fallback_fee() -> dict[str, Any]:
@@ -188,7 +103,20 @@ def fallback_fee() -> dict[str, Any]:
     }
 
 
-def write(account: str, label: str, method: str, args: list[str], expected_success: bool) -> dict[str, Any]:
+def estimate(method: str, args: list[str]) -> dict[str, Any]:
+    last: subprocess.CompletedProcess[str] | None = None
+    for attempt in range(3):
+        last = run([CLI, "estimate-fees", CONTRACT, method, "--rpc", RPC, "--json", "--args", *args], timeout=420)
+        if last.returncode == 0:
+            return last_json(last.stdout)
+        if attempt < 2:
+            time.sleep(3)
+    if method in {"create_negotiation", "consume_capability"}:
+        return fallback_fee()
+    raise RuntimeError(f"fee estimation failed: {redact((last.stderr if last else '')[-1500:])}")
+
+
+def write(report: dict[str, Any], account: str, label: str, method: str, args: list[str], expected_success: bool) -> str:
     use(account)
     try:
         fee = estimate(method, args)
@@ -197,216 +125,201 @@ def write(account: str, label: str, method: str, args: list[str], expected_succe
             raise
         fee = fallback_fee()
     fees = json.dumps({"distribution": fee["distribution"], "messageAllocations": fee.get("messageAllocations", [])}, separators=(",", ":"))
-    fee_value = str(fee["feeValue"])
-    command = [
+    result = run([
         CLI, "write", CONTRACT, method, "--rpc", RPC, "--wallet", "keystore",
-        "--fees", fees, "--fee-value", fee_value, "--args", *args,
-    ]
-    result = None
-    text = ""
-    tx_hash = None
-    for attempt in range(3):
-        result = run(command, timeout=900 if method == "synthesize" else 420)
-        text = (result.stdout + chr(10) + result.stderr).strip()
-        tx_hash = hash_from(text)
-        transient = any(marker in text for marker in (
-            "fetch failed",
-            "ETIMEDOUT",
-            "ENETUNREACH",
-            "Unexpected token '<'",
-            "eth_gasPrice",
-            "unknown RPC error",
-            "Server busy",
-            "Unable to read the Studio chain id",
-            "ECONNRESET",
-        ))
-        if result.returncode == 0 or tx_hash is not None or not transient or attempt == 2:
-            break
-        time.sleep(5)
-    success = result.returncode == 0 and "successfully executed" in text.lower()
-    record = {
+        "--fees", fees, "--fee-value", str(fee["feeValue"]), "--args", *args,
+    ], timeout=900 if method == "synthesize" else 420)
+    output = (result.stdout + "\n" + result.stderr).strip()
+    success = result.returncode == 0 and "successfully executed" in output.lower()
+    tx_hash = HASH_RE.search(output)
+    entry = {
         "label": label,
         "account": account,
         "method": method,
         "expected_success": expected_success,
         "success": success,
         "exit_code": result.returncode,
-        "tx_hash": tx_hash,
-        "fee_value": fee_value,
-        "output_tail": redact(text[-2500:]),
+        "tx_hash": tx_hash.group(0) if tx_hash else None,
+        "output_tail": redact(output[-2400:]),
     }
-    if expected_success != success:
-        raise RuntimeError(f"unexpected result for {label}: {json.dumps(record)}")
-    return record
+    report["writes"].append(entry)
+    if success != expected_success:
+        raise RuntimeError(f"unexpected live result for {label}: {json.dumps(entry)}")
+    return output
 
 
-
-def ensure_position(report: dict[str, Any], label: str, account: str, negotiation_id: str, party: str, terms: list[dict[str, str]]) -> None:
-    existing = call("get_position_fingerprint", [negotiation_id, party])
-    args = [negotiation_id, json_arg(terms)]
-    if existing.startswith("CALL_FAILED") or fingerprint_from(existing) is None:
-        report["writes"].append(write(account, label, "submit_position", args, True))
-    else:
-        report["writes"].append(resumed_write(label + "-resumed", account, "submit_position", existing))
+def call(method: str, args: list[str]) -> str:
+    result = run([CLI, "call", CONTRACT, method, "--rpc", RPC, "--args", *args], timeout=180)
+    output = (result.stdout + "\n" + result.stderr).strip()
+    if result.returncode != 0:
+        raise RuntimeError(f"call failed for {method}: {redact(output[-1800:])}")
+    return redact(output[-7000:])
 
 
-def ensure_create(report: dict[str, Any], label: str, account: str, negotiation_id: str) -> None:
-    existing = call("get_negotiation", [negotiation_id])
-    args = [negotiation_id, address_arg(PARTY_A), address_arg(PARTY_B)]
-    if existing.startswith("CALL_FAILED"):
-        report["writes"].append(write(account, label, "create_negotiation", args, True))
-    else:
-        report["writes"].append(resumed_write(label + "-resumed", account, "create_negotiation", existing))
+def record_view(report: dict[str, Any], label: str, method: str, args: list[str]) -> str:
+    value = call(method, args)
+    report["views"].append({"label": label, "method": method, "value": value})
+    return value
 
 
-def resumed_write(label: str, account: str, method: str, output: str, tx_hash: str | None = None) -> dict[str, Any]:
-    return {
+def fingerprint_from(text: str) -> str:
+    matches = FP_RE.findall(text)
+    if not matches:
+        raise RuntimeError(f"fingerprint missing from {redact(text[-1000:])}")
+    return matches[-1]
+
+
+def assert_contains(report: dict[str, Any], name: str, text: str, expected: str) -> None:
+    passed = expected in text
+    report["assertions"].append({"name": name, "passed": passed, "expected": expected})
+    if not passed:
+        raise AssertionError(f"{name}: expected {expected!r} in {text[-1200:]}")
+
+
+def assert_contains_any(report: dict[str, Any], name: str, text: str, expected: list[str]) -> None:
+    passed = any(item in text for item in expected)
+    report["assertions"].append({"name": name, "passed": passed, "expected_any": expected})
+    if not passed:
+        raise AssertionError(f"{name}: expected one of {expected!r} in {text[-1200:]}")
+
+
+def create_args(negotiation_id: str, capability_id: str, action: str, resource: str) -> list[str]:
+    return [
+        negotiation_id, PARTY_A, PARTY_B, capability_id, action, resource,
+        "two-party authorization for the declared operation", "SINGLE_USE", OUTSIDER,
+    ]
+
+
+def resumed(report: dict[str, Any], account: str, label: str, method: str, output: str) -> None:
+    report["writes"].append({
         "label": label,
         "account": account,
         "method": method,
         "expected_success": True,
         "success": True,
         "exit_code": 0,
-        "tx_hash": tx_hash,
-        "fee_value": None,
+        "tx_hash": None,
         "resumed": True,
-        "output_tail": redact(output[-2500:]),
-    }
+        "output_tail": redact(output[-2400:]),
+    })
 
 
-def address_arg(address: str) -> str:
-    return address
+def ensure_create(report: dict[str, Any], account: str, label: str, args: list[str]) -> None:
+    try:
+        existing = call("get_negotiation", [args[0]])
+    except RuntimeError:
+        write(report, account, label, "create_negotiation", args, True)
+    else:
+        resumed(report, account, label + "-resumed", "create_negotiation", existing)
 
 
-def json_arg(value: Any) -> str:
-    return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
+def ensure_position(report: dict[str, Any], account: str, label: str, negotiation_id: str, terms: list[dict[str, str]]) -> None:
+    try:
+        existing = call("get_position_fingerprint", [negotiation_id, "A" if account == "dissent-studio" else "B"])
+    except RuntimeError:
+        submit(report, account, label, negotiation_id, terms)
+    else:
+        if FP_RE.search(existing):
+            resumed(report, account, label + "-resumed", "submit_position", existing)
+        else:
+            submit(report, account, label, negotiation_id, terms)
+
+
+def ensure_synthesis(report: dict[str, Any], account: str, label: str, negotiation_id: str) -> None:
+    try:
+        existing = call("get_synthesis", [negotiation_id])
+    except RuntimeError:
+        write(report, account, label, "synthesize", [negotiation_id], True)
+    else:
+        resumed(report, account, label + "-resumed", "synthesize", existing)
+
+
+def submit(report: dict[str, Any], account: str, label: str, negotiation_id: str, terms: list[dict[str, str]]) -> None:
+    write(report, account, label, "submit_position", [negotiation_id, json_arg(terms)], True)
 
 
 def main() -> int:
+    if CONTRACT == "REPLACE_AFTER_DEPLOYMENT":
+        raise RuntimeError("set CONTRACT to the newly deployed v2 address before running live tests")
     report: dict[str, Any] = {
+        "version": "Handshake v2",
         "network": {"name": "GenLayer Studio Devnet", "chain_id": 61997, "rpc": RPC},
         "contract": CONTRACT,
-        "accounts": {"party_a": PARTY_A, "party_b": PARTY_B, "outsider": OUTSIDER},
+        "accounts": {"party_a": PARTY_A, "party_b": PARTY_B, "configured_consumer": OUTSIDER, "outsider": "not disclosed"},
         "started_at": datetime.now(timezone.utc).isoformat(),
         "writes": [],
         "views": [],
         "assertions": [],
     }
 
-    compatible_id = "handshake-live-compatible-20260925-r5"
-    incompatible_id = "handshake-live-incompatible-20260925-r7"
-    outsider_id = "handshake-live-outsider-20260925-r8"
-    duplicate_id = "handshake-live-duplicate-20260925-r8"
-    pre_synthesis_id = "handshake-live-presynthesis-20260925-r8"
+    compatible_create = create_args(COMPATIBLE_ID, CAPABILITY_ID, "AUTHORIZE_MIGRATION", "docs-production")
+    ensure_create(report, "dissent-studio", "compatible:create", compatible_create)
+    ensure_position(report, "dissent-studio", "compatible:submit-a", COMPATIBLE_ID, A_MIGRATION)
+    ensure_position(report, "dissent-deployer", "compatible:submit-b", COMPATIBLE_ID, B_MIGRATION)
+    ready = record_view(report, "compatible:ready", "get_negotiation", [COMPATIBLE_ID])
+    assert_contains_any(report, "compatible reaches ready or resumes at pending acceptance", ready, ["state: 'READY'", "state: 'PENDING_ACCEPTANCE'"])
+    ensure_synthesis(report, "dissent-studio", "compatible:synthesize", COMPATIBLE_ID)
+    synthesis = record_view(report, "compatible:synthesis", "get_synthesis", [COMPATIBLE_ID])
+    assert_contains(report, "compatible synthesis reaches acceptance stage", synthesis, "state: 'PENDING_ACCEPTANCE'")
+    synthesis_fp = fingerprint_from(record_view(report, "compatible:synthesis-fingerprint", "get_synthesis_fingerprint", [COMPATIBLE_ID]))
+    write(report, "recall-deployer", "compatible:outsider-accept", "accept_synthesis", [COMPATIBLE_ID, synthesis_fp], False)
+    write(report, "dissent-studio", "compatible:accept-a", "accept_synthesis", [COMPATIBLE_ID, synthesis_fp], True)
+    pending = record_view(report, "compatible:after-first-acceptance", "get_negotiation", [COMPATIBLE_ID])
+    assert_contains(report, "one acceptance remains pending", pending, "state: 'PENDING_ACCEPTANCE'")
+    capability_pending = record_view(report, "compatible:capability-before-dual-acceptance", "get_capability", [COMPATIBLE_ID])
+    assert_contains(report, "capability inactive before second acceptance", capability_pending, "active: false")
+    write(report, "dissent-studio", "compatible:duplicate-accept-a", "accept_synthesis", [COMPATIBLE_ID, synthesis_fp], False)
+    write(report, "dissent-studio", "compatible:preactivation-consume", "consume_capability", [COMPATIBLE_ID], False)
+    write(report, "dissent-deployer", "compatible:accept-b", "accept_synthesis", [COMPATIBLE_ID, synthesis_fp], True)
+    active = record_view(report, "compatible:active-negotiation", "get_negotiation", [COMPATIBLE_ID])
+    assert_contains(report, "dual acceptance activates", active, "state: 'ACTIVE'")
+    capability_active = record_view(report, "compatible:active-capability", "get_capability", [COMPATIBLE_ID])
+    assert_contains(report, "capability is active", capability_active, "active: true")
+    assert_contains(report, "capability id is bound", capability_active, "capability_id: 'docs-migration-authorization'")
+    assert_contains(report, "capability action is bound", capability_active, "action: 'AUTHORIZE_MIGRATION'")
+    assert_contains(report, "capability resource is bound", capability_active, "resource: 'docs-production'")
+    write(report, "recall-deployer", "compatible:authorized-consume", "consume_capability", [COMPATIBLE_ID], True)
+    consumed = record_view(report, "compatible:downstream-action-proof", "get_capability", [COMPATIBLE_ID])
+    assert_contains(report, "single-use downstream action consumed", consumed, "activation_state: 'CONSUMED'")
+    write(report, "recall-deployer", "compatible:replay-consume", "consume_capability", [COMPATIBLE_ID], False)
+    write(report, "dissent-studio", "compatible:post-activation-submit", "submit_position", [COMPATIBLE_ID, json_arg(A_MIGRATION)], False)
 
-    compatible_create_args = [compatible_id, address_arg(PARTY_A), address_arg(PARTY_B)]
-    existing = call("get_negotiation", [compatible_id])
-    if existing.startswith("CALL_FAILED"):
-        report["writes"].append(write("dissent-studio", "compatible:create", "create_negotiation", compatible_create_args, True))
-    else:
-        report["writes"].append({
-            "label": "compatible:create-resumed",
-            "account": "dissent-studio",
-            "method": "create_negotiation",
-            "expected_success": True,
-            "success": True,
-            "exit_code": 0,
-            "tx_hash": PRECREATED_COMPATIBLE_CREATE_TX,
-            "fee_value": None,
-            "resumed": True,
-            "output_tail": existing,
-        })
-    report["views"].append({"label": "compatible:after-create", "value": safe_call("get_negotiation", [compatible_id])})
-    position_a = call("get_position_fingerprint", [compatible_id, "A"])
-    if position_a.startswith("CALL_FAILED") or fingerprint_from(position_a) is None:
-        report["writes"].append(write("dissent-studio", "compatible:submit-a", "submit_position", [compatible_id, json_arg(A_REALISTIC)], True))
-    else:
-        report["writes"].append(resumed_write("compatible:submit-a-resumed", "dissent-studio", "submit_position", position_a))
-    position_b = call("get_position_fingerprint", [compatible_id, "B"])
-    if position_b.startswith("CALL_FAILED") or fingerprint_from(position_b) is None:
-        report["writes"].append(write("dissent-deployer", "compatible:submit-b", "submit_position", [compatible_id, json_arg(B_REALISTIC)], True))
-    else:
-        report["writes"].append(resumed_write("compatible:submit-b-resumed", "dissent-deployer", "submit_position", position_b))
-    report["views"].append({"label": "compatible:ready", "value": safe_call("get_negotiation", [compatible_id])})
-    existing_synthesis = call("get_synthesis", [compatible_id])
-    if existing_synthesis.startswith("CALL_FAILED"):
-        report["writes"].append(write("dissent-studio", "compatible:synthesize", "synthesize", [compatible_id], True))
-    else:
-        report["writes"].append(resumed_write("compatible:synthesize-resumed", "dissent-studio", "synthesize", existing_synthesis))
-    report["views"].append({"label": "compatible:synthesis", "value": safe_call("get_synthesis", [compatible_id])})
-    fp_text = call("get_synthesis_fingerprint", [compatible_id])
-    report["views"].append({"label": "compatible:fingerprint", "value": fp_text})
-    fingerprint = fingerprint_from(fp_text)
-    if fingerprint is None:
-        raise RuntimeError("could not extract compatible synthesis fingerprint")
-    report["assertions"].append({"name": "compatible synthesis fingerprint extracted", "passed": True})
+    incompatible_create = create_args(INCOMPATIBLE_ID, INCOMPATIBLE_CAPABILITY_ID, "AUTHORIZE_BILLING", "billing-production")
+    write(report, "dissent-studio", "incompatible:create", "create_negotiation", incompatible_create, True)
+    submit(report, "dissent-studio", "incompatible:submit-a", INCOMPATIBLE_ID, A_CONFLICT)
+    submit(report, "dissent-deployer", "incompatible:submit-b", INCOMPATIBLE_ID, B_CONFLICT)
+    write(report, "dissent-studio", "incompatible:synthesize", "synthesize", [INCOMPATIBLE_ID], True)
+    incompatible = record_view(report, "incompatible:terminal-state", "get_negotiation", [INCOMPATIBLE_ID])
+    assert_contains(report, "hard conflict is incompatible", incompatible, "state: 'INCOMPATIBLE'")
+    incompatible_synthesis = record_view(report, "incompatible:synthesis", "get_synthesis", [INCOMPATIBLE_ID])
+    assert_contains(report, "incompatible synthesis is explicit", incompatible_synthesis, "compatibility: 'INCOMPATIBLE'")
+    incompatible_capability = record_view(report, "incompatible:no-capability", "get_capability", [INCOMPATIBLE_ID])
+    assert_contains(report, "incompatible capability is inactive", incompatible_capability, "active: false")
+    write(report, "dissent-studio", "incompatible:accept-rejected", "accept_synthesis", [INCOMPATIBLE_ID, fingerprint_from(record_view(report, "incompatible:synthesis-fingerprint", "get_synthesis_fingerprint", [INCOMPATIBLE_ID]))], False)
+    write(report, "recall-deployer", "incompatible:consume-rejected", "consume_capability", [INCOMPATIBLE_ID], False)
 
-    report["writes"].append(write("recall-deployer", "compatible:outsider-accept", "accept_synthesis", [compatible_id, fingerprint], False))
-    state_before_acceptance = "accepted_a: true" if COMPATIBLE_ALREADY_SEALED else call("get_negotiation", [compatible_id])
-    if "accepted_a: true" in state_before_acceptance:
-        report["writes"].append(resumed_write("compatible:accept-a-resumed", "dissent-studio", "accept_synthesis", state_before_acceptance))
-    else:
-        report["writes"].append(write("dissent-studio", "compatible:accept-a", "accept_synthesis", [compatible_id, fingerprint], True))
-    report["views"].append({"label": "compatible:after-first-acceptance", "value": safe_call("get_negotiation", [compatible_id])})
-    report["writes"].append(write("dissent-studio", "compatible:duplicate-accept-a", "accept_synthesis", [compatible_id, fingerprint], False))
-    state_before_b = "accepted_b: true" if COMPATIBLE_ALREADY_SEALED else call("get_negotiation", [compatible_id])
-    if "accepted_b: true" in state_before_b:
-        report["writes"].append(resumed_write("compatible:accept-b-resumed", "dissent-deployer", "accept_synthesis", state_before_b))
-    else:
-        report["writes"].append(write("dissent-deployer", "compatible:accept-b", "accept_synthesis", [compatible_id, fingerprint], True))
-    report["views"].append({"label": "compatible:sealed", "value": safe_call("get_negotiation", [compatible_id])})
-    report["writes"].append(write("dissent-studio", "compatible:post-seal-submit", "submit_position", [compatible_id, json_arg(A_REALISTIC)], False))
+    outsider_create = create_args(OUTSIDER_ID, "outsider-test-capability", "TEST_ACTION", "test-resource")
+    write(report, "dissent-studio", "negative:outsider-create", "create_negotiation", outsider_create, True)
+    write(report, "recall-deployer", "negative:outsider-submit-rejected", "submit_position", [OUTSIDER_ID, json_arg(A_MIGRATION)], False)
 
-    ensure_create(report, "outsider-submit:create", "dissent-studio", outsider_id)
-    report["writes"].append(write("recall-deployer", "outsider-submit:rejected", "submit_position", [outsider_id, json_arg(A_REALISTIC)], False))
+    duplicate_create = create_args(DUPLICATE_ID, "duplicate-position-capability", "TEST_ACTION", "test-resource")
+    write(report, "dissent-studio", "negative:duplicate-create", "create_negotiation", duplicate_create, True)
+    submit(report, "dissent-studio", "negative:duplicate-position-first", DUPLICATE_ID, A_MIGRATION)
+    write(report, "dissent-studio", "negative:duplicate-position-second", "submit_position", [DUPLICATE_ID, json_arg(B_MIGRATION)], False)
 
-    ensure_create(report, "duplicate-position:create", "dissent-studio", duplicate_id)
-    ensure_position(report, "duplicate-position:first", "dissent-studio", duplicate_id, "A", A_REALISTIC)
-    report["writes"].append(write("dissent-studio", "duplicate-position:second", "submit_position", [duplicate_id, json_arg(B_REALISTIC)], False))
-
-    ensure_create(report, "pre-synthesis:create", "dissent-studio", pre_synthesis_id)
-    report["writes"].append(write("dissent-studio", "pre-synthesis:rejected", "synthesize", [pre_synthesis_id], False))
-
-    if INCOMPATIBLE_ALREADY_PERSISTED:
-        report["writes"].append(resumed_write("incompatible:create-resumed", "dissent-studio", "create_negotiation", "authoritatively committed"))
-        report["writes"].append(resumed_write("incompatible:submit-a-resumed", "dissent-studio", "submit_position", "authoritatively committed"))
-        report["writes"].append(resumed_write("incompatible:submit-b-resumed", "dissent-deployer", "submit_position", "authoritatively committed"))
-        report["writes"].append(resumed_write("incompatible:synthesize-resumed", "dissent-studio", "synthesize", "compatibility: INCOMPATIBLE", INCOMPATIBLE_SYNTHESIS_TX))
-        report["views"].append({"label": "incompatible:terminal-state", "value": "authoritative state: INCOMPATIBLE"})
-        report["views"].append({"label": "incompatible:synthesis", "value": "authoritative synthesis: compatibility INCOMPATIBLE"})
-    else:
-        incompatible_existing = call("get_negotiation", [incompatible_id])
-        if incompatible_existing.startswith("CALL_FAILED"):
-            report["writes"].append(write("dissent-studio", "incompatible:create", "create_negotiation", [incompatible_id, address_arg(PARTY_A), address_arg(PARTY_B)], True))
-        else:
-            report["writes"].append(resumed_write("incompatible:create-resumed", "dissent-studio", "create_negotiation", incompatible_existing))
-        incompatible_a = call("get_position_fingerprint", [incompatible_id, "A"])
-        if incompatible_a.startswith("CALL_FAILED") or fingerprint_from(incompatible_a) is None:
-            report["writes"].append(write("dissent-studio", "incompatible:submit-a", "submit_position", [incompatible_id, json_arg(INCOMPATIBLE_A)], True))
-        else:
-            report["writes"].append(resumed_write("incompatible:submit-a-resumed", "dissent-studio", "submit_position", incompatible_a))
-        incompatible_b = call("get_position_fingerprint", [incompatible_id, "B"])
-        if incompatible_b.startswith("CALL_FAILED") or fingerprint_from(incompatible_b) is None:
-            report["writes"].append(write("dissent-deployer", "incompatible:submit-b", "submit_position", [incompatible_id, json_arg(INCOMPATIBLE_B)], True))
-        else:
-            report["writes"].append(resumed_write("incompatible:submit-b-resumed", "dissent-deployer", "submit_position", incompatible_b))
-        incompatible_synthesis = call("get_synthesis", [incompatible_id])
-        if incompatible_synthesis.startswith("CALL_FAILED"):
-            report["writes"].append(write("dissent-studio", "incompatible:synthesize", "synthesize", [incompatible_id], True))
-        else:
-            report["writes"].append(resumed_write("incompatible:synthesize-resumed", "dissent-studio", "synthesize", incompatible_synthesis))
-        report["views"].append({"label": "incompatible:terminal-state", "value": safe_call("get_negotiation", [incompatible_id])})
-        report["views"].append({"label": "incompatible:synthesis", "value": safe_call("get_synthesis", [incompatible_id])})
+    presynthesis_create = create_args(PRESYNTHESIS_ID, "presynthesis-capability", "TEST_ACTION", "test-resource")
+    write(report, "dissent-studio", "negative:presynthesis-create", "create_negotiation", presynthesis_create, True)
+    write(report, "dissent-studio", "negative:presynthesis-rejected", "synthesize", [PRESYNTHESIS_ID], False)
 
     report["finished_at"] = datetime.now(timezone.utc).isoformat()
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "report": str(REPORT),
+        "contract": CONTRACT,
         "writes": len(report["writes"]),
         "successful_writes": sum(1 for item in report["writes"] if item["success"]),
         "expected_failures": sum(1 for item in report["writes"] if not item["expected_success"] and not item["success"]),
-        "compatible_fingerprint": fingerprint,
+        "assertions": len(report["assertions"]),
     }, indent=2))
     return 0
 

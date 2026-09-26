@@ -88,7 +88,7 @@ h1 em,h2 em { font-family:"Instrument Serif",Georgia,serif; font-weight:400; let
 .state-badge { border:1px solid currentColor; padding:7px 9px; font:10px "DM Mono",monospace; letter-spacing:.06em; white-space:nowrap; }
 .state-badge.sealed,.state-badge.compatible { color:var(--green); }
 .state-badge.incompatible { color:var(--accent); }
-.state-rail { border-top:1px solid var(--ink); display:grid; grid-template-columns:repeat(4,1fr); margin-bottom:62px; }
+.state-rail { border-top:1px solid var(--ink); display:grid; grid-template-columns:repeat(5,1fr); margin-bottom:62px; }
 .state-rail>div { position:relative; padding-top:16px; color:var(--muted); font:9px "DM Mono",monospace; }
 .state-rail>div:before { content:""; position:absolute; top:-4px; left:0; width:7px; height:7px; border-radius:50%; background:var(--line); }
 .state-rail>div.past { color:var(--ink); }
@@ -106,7 +106,7 @@ h1 em,h2 em { font-family:"Instrument Serif",Georgia,serif; font-weight:400; let
 .fingerprint { border-top:1px solid var(--line); padding-top:14px; margin-top:4px; display:flex; gap:6px; align-items:flex-start; overflow-wrap:anywhere; }
 .empty-panel { color:var(--muted); min-height:100px; }
 .dossier-actions { display:flex; align-items:center; gap:18px; margin:28px 0 62px; }
-.seal-stamp { display:flex; align-items:center; gap:8px; color:var(--green); font:11px "DM Mono",monospace; }
+.seal-stamp { display:flex; align-items:center; gap:8px; color:var(--green); font:11px "DM Mono",monospace; }\n.seal-stamp.conflict { color:var(--accent); }\n.capability-panel { border-top:2px solid var(--accent); background:#e4ddd3; padding:20px; margin:0 0 20px; }\n.capability-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; border-top:1px solid var(--line); margin-top:15px; padding-top:17px; }\n.capability-grid div { display:grid; gap:7px; min-width:0; }\n.capability-grid span { font:9px "DM Mono",monospace; color:var(--muted); }\n.capability-grid strong { font:12px "DM Mono",monospace; overflow-wrap:anywhere; }
 .synthesis-panel { background:#e4ddd3; margin-top:20px; }
 .synthesis-note { color:var(--muted); font-size:13px; line-height:1.45; max-width:620px; }
 .synthesis-panel h3 { border-top:1px solid var(--line); padding-top:15px; margin-top:25px; color:var(--ink); }
@@ -182,9 +182,9 @@ h1 em,h2 em { font-family:"Instrument Serif",Georgia,serif; font-weight:400; let
   .form-intro h1,.compare-head h1,.route-intro h1,.contract-head h1,.demo-intro h1 { font-size:64px; }
   .dossier-head { display:block; margin-top:50px; }
   .dossier-head .state-badge { display:inline-block; margin-top:25px; }
-  .state-rail { overflow:auto; grid-template-columns:repeat(4,150px); }
+  .state-rail { overflow:auto; grid-template-columns:repeat(5,150px); }
   .party-columns { grid-template-columns:1fr; }
-  .term-row { grid-template-columns:1fr 68px; }
+  .capability-grid { grid-template-columns:1fr 1fr; }\n  .term-row { grid-template-columns:1fr 68px; }
   .term-row p { grid-column:1 / -1; grid-row:2; }
   .synthesis-row,.issue-row { grid-template-columns:1fr; gap:7px; }
   .compare-table { margin-top:55px; overflow-x:auto; }

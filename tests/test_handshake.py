@@ -71,13 +71,31 @@ def address_type(contract):
 
 
 
-def create(contract, direct_vm, alice, bob, negotiation_id="n1"):
+def create(
+    contract,
+    direct_vm,
+    alice,
+    bob,
+    negotiation_id="n1",
+    capability_id=None,
+    action="AUTHORIZE_MIGRATION",
+    resource="docs-production",
+    scope="production documentation migration",
+    mode="SINGLE_USE",
+    consumer=None,
+):
     direct_vm.sender = alice
     Address = address_type(contract)
     return contract.create_negotiation(
         negotiation_id,
         Address(alice),
         Address(bob),
+        capability_id or "capability-" + negotiation_id,
+        action,
+        resource,
+        scope,
+        mode,
+        Address(alice if consumer is None else consumer),
     )
 
 
@@ -90,9 +108,11 @@ def setup_ready(
     negotiation_id="n1",
     party_a_terms=None,
     party_b_terms=None,
+    consumer=None,
+    mode="SINGLE_USE",
 ):
     contract = direct_deploy(CONTRACT)
-    create(contract, direct_vm, alice, bob, negotiation_id)
+    create(contract, direct_vm, alice, bob, negotiation_id, consumer=consumer, mode=mode)
     direct_vm.sender = alice
     contract.submit_position(
         negotiation_id,
@@ -191,7 +211,7 @@ def test_same_wallet_cannot_be_both_parties(
     direct_vm.sender = direct_alice
     Address = address_type(contract)
     with pytest.raises(Exception):
-        contract.create_negotiation("same", Address(direct_alice), Address(direct_alice))
+        contract.create_negotiation("same", Address(direct_alice), Address(direct_alice), "cap-same", "ACTION", "resource", "scope", "SINGLE_USE", Address(direct_alice))
 
 
 
@@ -219,6 +239,12 @@ def test_negotiation_id_bounds_and_schema(
             negotiation_id,
             Address(direct_alice),
             Address(direct_bob),
+            "cap-" + (negotiation_id or "empty").replace(" ", "-").replace("/", "-"),
+            "ACTION",
+            "resource",
+            "scope",
+            "SINGLE_USE",
+            Address(direct_alice),
         )
 
 
@@ -648,7 +674,7 @@ def test_outsider_acceptance_and_wrong_fingerprint_rejected(
 
 
 
-def test_first_acceptance_does_not_seal_and_duplicate_does_not_count_twice(
+def test_first_acceptance_does_not_activate_and_duplicate_does_not_count_twice(
     direct_deploy, direct_vm, direct_alice, direct_bob
 ):
     contract = setup_ready(direct_deploy, direct_vm, direct_alice, direct_bob)
@@ -664,7 +690,7 @@ def test_first_acceptance_does_not_seal_and_duplicate_does_not_count_twice(
 
 
 
-def test_second_distinct_acceptance_seals_and_sealed_is_terminal(
+def test_second_distinct_acceptance_activates_and_active_is_terminal(
     direct_deploy, direct_vm, direct_alice, direct_bob
 ):
     contract = setup_ready(direct_deploy, direct_vm, direct_alice, direct_bob)
@@ -672,11 +698,11 @@ def test_second_distinct_acceptance_seals_and_sealed_is_terminal(
     direct_vm.sender = direct_alice
     contract.accept_synthesis("n1", fingerprint)
     direct_vm.sender = direct_bob
-    assert contract.accept_synthesis("n1", fingerprint) == "SEALED"
+    assert contract.accept_synthesis("n1", fingerprint) == "ACTIVE"
     stored = contract.get_negotiation("n1")
     assert stored["accepted_a"] is True
     assert stored["accepted_b"] is True
-    assert stored["state"] == "SEALED"
+    assert stored["state"] == "ACTIVE"
     with pytest.raises(Exception):
         contract.accept_synthesis("n1", fingerprint)
     with pytest.raises(Exception):
@@ -684,3 +710,252 @@ def test_second_distinct_acceptance_seals_and_sealed_is_terminal(
     direct_vm.sender = direct_alice
     with pytest.raises(Exception):
         contract.submit_position("n1", copy.deepcopy(A_REALISTIC))
+
+
+def test_capability_definition_is_bound_and_inactive_until_activation(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = direct_deploy(CONTRACT)
+    first = create(contract, direct_vm, direct_alice, direct_bob)
+    stored = contract.get_negotiation("n1")
+    capability = contract.get_capability("n1")
+    assert stored["fingerprint"] == first
+    assert stored["capability_id"] == "capability-n1"
+    assert stored["action"] == "AUTHORIZE_MIGRATION"
+    assert stored["resource"] == "docs-production"
+    assert stored["scope"] == "production documentation migration"
+    assert stored["mode"] == "SINGLE_USE"
+    assert stored["capability_state"] == "INACTIVE"
+    assert capability["active"] is False
+    assert capability["capability_fingerprint"] == ""
+    assert contract.is_capability_active("n1") is False
+
+    direct_vm.sender = direct_alice
+    other = contract.create_negotiation(
+        "n2",
+        address_type(contract)(direct_alice),
+        address_type(contract)(direct_bob),
+        "capability-n2",
+        "AUTHORIZE_EXPORT",
+        "docs-staging",
+        "staging export",
+        "REUSABLE",
+        address_type(contract)(direct_alice),
+    )
+    assert other != first
+
+
+def test_duplicate_capability_id_is_rejected(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = direct_deploy(CONTRACT)
+    create(contract, direct_vm, direct_alice, direct_bob, "first", "shared-capability")
+    with pytest.raises(Exception):
+        create(contract, direct_vm, direct_alice, direct_bob, "second", "shared-capability")
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("action", ""),
+        ("resource", ""),
+        ("scope", ""),
+        ("action", "x" * 129),
+        ("resource", "x" * 257),
+        ("scope", "x" * 513),
+        ("mode", "OPTIONAL"),
+    ],
+)
+def test_capability_definition_bounds_and_enums_rejected(
+    direct_deploy, direct_vm, direct_alice, direct_bob, field, value
+):
+    contract = direct_deploy(CONTRACT)
+    values = {
+        "action": "AUTHORIZE_MIGRATION",
+        "resource": "docs-production",
+        "scope": "production documentation migration",
+        "mode": "SINGLE_USE",
+    }
+    values[field] = value
+    direct_vm.sender = direct_alice
+    Address = address_type(contract)
+    with pytest.raises(Exception):
+        contract.create_negotiation(
+            "bad-cap",
+            Address(direct_alice),
+            Address(direct_bob),
+            "cap-bad-cap-" + field,
+            values["action"],
+            values["resource"],
+            values["scope"],
+            values["mode"],
+            Address(direct_alice),
+        )
+
+
+def test_zero_consumer_is_rejected(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = direct_deploy(CONTRACT)
+    direct_vm.sender = direct_alice
+    Address = address_type(contract)
+    with pytest.raises(Exception):
+        contract.create_negotiation(
+            "zero-consumer",
+            Address(direct_alice),
+            Address(direct_bob),
+            "cap-zero-consumer",
+            "ACTION",
+            "resource",
+            "scope",
+            "SINGLE_USE",
+            Address(b"\x00" * 20),
+        )
+
+
+def test_zero_and_one_acceptance_leave_capability_inactive(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = setup_ready(direct_deploy, direct_vm, direct_alice, direct_bob)
+    fingerprint = synthesize(contract, direct_vm, compatible_synthesis())["synthesis_fingerprint"]
+    assert contract.is_capability_active("n1") is False
+    direct_vm.sender = direct_alice
+    assert contract.accept_synthesis("n1", fingerprint) == "PENDING_ACCEPTANCE"
+    assert contract.get_capability("n1")["active"] is False
+    assert contract.get_negotiation("n1")["state"] == "PENDING_ACCEPTANCE"
+
+
+def test_dual_acceptance_activates_grounded_capability(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = setup_ready(direct_deploy, direct_vm, direct_alice, direct_bob)
+    synthesis = synthesize(contract, direct_vm, compatible_synthesis())
+    fingerprint = synthesis["synthesis_fingerprint"]
+    direct_vm.sender = direct_alice
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_bob
+    assert contract.accept_synthesis("n1", fingerprint) == "ACTIVE"
+    capability = contract.get_capability("n1")
+    stored = contract.get_negotiation("n1")
+    assert stored["state"] == "ACTIVE"
+    assert stored["capability_state"] == "ACTIVE"
+    assert stored["capability_fingerprint"] == capability["capability_fingerprint"]
+    assert capability["active"] is True
+    assert capability["synthesis_fingerprint"] == fingerprint
+    assert capability["capability_id"] == "capability-n1"
+    assert capability["action"] == "AUTHORIZE_MIGRATION"
+    assert capability["resource"] == "docs-production"
+    assert capability["mode"] == "SINGLE_USE"
+
+
+def test_single_use_capability_is_consumer_bound_and_replay_protected(
+    direct_deploy, direct_vm, direct_alice, direct_bob, direct_charlie
+):
+    contract = setup_ready(
+        direct_deploy,
+        direct_vm,
+        direct_alice,
+        direct_bob,
+        consumer=direct_charlie,
+    )
+    fingerprint = synthesize(contract, direct_vm, compatible_synthesis())["synthesis_fingerprint"]
+    direct_vm.sender = direct_alice
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_bob
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception):
+        contract.consume_capability("n1")
+    direct_vm.sender = direct_charlie
+    assert contract.consume_capability("n1") == "CONSUMED"
+    assert contract.get_capability("n1")["consumed"] is True
+    assert contract.is_capability_active("n1") is False
+    with pytest.raises(Exception):
+        contract.consume_capability("n1")
+
+
+def test_reusable_capability_stays_active_after_authorized_use(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = setup_ready(
+        direct_deploy,
+        direct_vm,
+        direct_alice,
+        direct_bob,
+        mode="REUSABLE",
+    )
+    fingerprint = synthesize(contract, direct_vm, compatible_synthesis())["synthesis_fingerprint"]
+    direct_vm.sender = direct_alice
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_bob
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_alice
+    assert contract.consume_capability("n1") == "ACTIVE"
+    assert contract.consume_capability("n1") == "ACTIVE"
+    assert contract.get_negotiation("n1")["state"] == "ACTIVE"
+    assert contract.get_capability("n1")["consumed"] is False
+
+
+def test_incompatible_synthesis_never_activates_or_consumes(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    party_a = [{
+        "term_id": "price-floor",
+        "category": "payment",
+        "requirement": "Party A requires a minimum payment of $3,000.",
+        "importance": "HARD",
+    }]
+    party_b = [{
+        "term_id": "price-cap",
+        "category": "payment",
+        "requirement": "Party B requires a maximum payment of $2,500.",
+        "importance": "HARD",
+    }]
+    contract = setup_ready(
+        direct_deploy,
+        direct_vm,
+        direct_alice,
+        direct_bob,
+        party_a_terms=party_a,
+        party_b_terms=party_b,
+    )
+    result = synthesize(
+        contract,
+        direct_vm,
+        {
+            "compatibility": "INCOMPATIBLE",
+            "proposed_terms": [],
+            "conflicts": [{
+                "synthesis_id": "price-conflict",
+                "description": "The minimum exceeds the maximum.",
+                "source_terms": [
+                    {"party": "A", "term_id": "price-floor"},
+                    {"party": "B", "term_id": "price-cap"},
+                ],
+            }],
+            "unresolved_items": [],
+        },
+    )
+    assert result["compatibility"] == "INCOMPATIBLE"
+    assert contract.get_capability("n1")["active"] is False
+    direct_vm.sender = direct_alice
+    with pytest.raises(Exception):
+        contract.consume_capability("n1")
+
+
+def test_capability_definition_and_synthesis_remain_immutable_after_activation(
+    direct_deploy, direct_vm, direct_alice, direct_bob
+):
+    contract = setup_ready(direct_deploy, direct_vm, direct_alice, direct_bob)
+    before = contract.get_capability("n1")
+    fingerprint = synthesize(contract, direct_vm, compatible_synthesis())["synthesis_fingerprint"]
+    direct_vm.sender = direct_alice
+    contract.accept_synthesis("n1", fingerprint)
+    direct_vm.sender = direct_bob
+    contract.accept_synthesis("n1", fingerprint)
+    after = contract.get_capability("n1")
+    for key in ("capability_id", "action", "resource", "scope", "mode", "consumer"):
+        assert after[key] == before[key]
+    assert after["synthesis_fingerprint"] == fingerprint
+    with pytest.raises(Exception):
+        contract.synthesize("n1")

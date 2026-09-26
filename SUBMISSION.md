@@ -1,46 +1,74 @@
-# Handshake submission record
+# Handshake v2 submission record
 
 ## Public links
 
 - GitHub: https://github.com/Iniwura/handshake
-- Portal frontend: https://handshake-lake.vercel.app
+- Frontend: https://handshake-lake.vercel.app
 
-## Verified deployment
+## Verified contract deployment
 
 | Fact | Value |
 | --- | --- |
 | Network | GenLayer Studio Devnet |
 | Chain ID | 61997 |
-| Contract | 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18 |
-| Deployment transaction | 0xcd9f2c30e2970fd7012e17432ae7fa1f812768cbbc7ab54e40c1bfd34cfd2d9e |
-| Contract source SHA-256 | d9d916a276ac00b2d37420727917fe0ebc15b182d23eedc751a989cc388c231f |
-| Runner dependency | py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng |
+| Contract | 0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE |
+| Deployment transaction | 0x9896fa2a9231a014c27370f20a98dab0d6d0d5f81be33ebc27da507b4e00506 |
+| Contract source SHA-256 | 2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7 |
+| Runner | py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng |
+| On-chain schema | 11 methods / 6 views / 5 writes |
+
+The deployment command returned accepted status with the address and transaction hash above. A later receipt lookup returned not-found from the Studio Dev endpoint, so this record does not claim a receipt body beyond the accepted deployment response.
+
+## Architecture and state consequence
+
+Handshake is a semantic agreement and authorization primitive. Two distinct parties submit one immutable structured position each. GenLayer produces a strict, source-grounded synthesis, and an independent validator checks semantic compatibility. The contract deterministically protects schemas, bounds, references, duplicates, HARD constraints and lifecycle transitions.
+
+Creation also binds an immutable authorization definition: capability ID, action, resource, scope, usage mode and configured consumer. The definition is in the negotiation fingerprint. It cannot be changed by either party or by the model. Only both exact party acceptances of the persisted synthesis activate it.
+
+Lifecycle:
+
+OPEN -> READY -> PENDING_ACCEPTANCE -> ACTIVE -> CONSUMED
+
+INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumption is consumer-bound and replay-protected. The current runtime does not expose a proven typed GenLayer-to-GenLayer interface, so the downstream consequence is intentionally implemented as the deterministic in-contract consumer gate rather than an invented companion IC.
 
 ## Contract verification
 
-- Direct Mode: 38 passing tests.
+- Direct Mode: 54 passed.
 - genvm-lint check: passed.
-- genvm-lint validate --json: passed; 8 public methods, 4 view methods and 4 write methods.
-- genvm-lint schema --json: passed using the documented disposable GENVMROOT compatibility shim for genvm-linter 0.11.0.
-- genvm-lint typecheck --json: passed with no diagnostics.
+- genvm-lint validate --json: passed.
+- genvm-lint schema --json: passed.
+- genvm-lint typecheck --json: passed with zero diagnostics.
 - Frontend npm run typecheck: passed.
-- Frontend npm run build: passed.
+- Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
-Tooling limitation: the installed linter requires the compatibility shim because its validator imports legacy genlayer.py while the current Studio Dev SDK exposes the current package layout.
+Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
-## Live Studio Dev evidence
+## Fresh Studio Dev lifecycle proof
 
-The canonical contract was used for the compatible and incompatible lifecycle runs. The committed evidence report contains 20 live write assertions:
+- Compatible/migration ID: handshake-v2-compatible-20260926-r1.
+- Capability: docs-migration-authorization.
+- Action/resource: AUTHORIZE_MIGRATION / docs-production.
+- Dual acceptance reached authoritative ACTIVE.
+- Active capability fingerprint: a38f327a7ba9bfde3d68528811f5e719c3840f7e2bc7f339b077c82b4ddd6900.
+- Configured consumer executed the authorized single-use operation; capability became CONSUMED, and replay was rejected.
+- Incompatible ID: handshake-v2-incompatible-20260926-r1.
+- Incompatible synthesis fingerprint: e9cee5892914283afee43dcb5f18f97c85f574ad197f87afea3e27e88a3148c0.
+- The incompatible negotiation retained an empty capability fingerprint and active: false.
+- Live report: evidence/STUDIO_DEV_LIVE_TEST_REPORT.json.
+- Live run: 25 writes, 15 successful, 10 expected failures, 13 assertions.
 
-- 14 successful or authoritatively resumed writes.
-- 6 expected failed writes for outsider, duplicate, pre-synthesis and post-seal paths.
-- Compatible scenario authoritatively read as SEALED, with both acceptance flags true.
-- Compatible synthesis authoritatively read as PARTIAL, with payment, delivery and revisions grounded in source terms.
-- Irreconcilable scenario authoritatively read as INCOMPATIBLE.
-- No post-seal mutation was accepted.
+Negative live coverage includes outsider submission and acceptance, duplicate acceptance, pre-activation use, single-use replay, post-consumption mutation, duplicate position, pre-synthesis synthesis, and incompatible acceptance/consumption.
 
-Transaction IDs are recorded in evidence/STUDIO_DEV_LIVE_TEST_REPORT.json where the live runner obtained them. Resume records intentionally do not fabricate a transaction hash after a read confirmed the state.
+## Frontend
 
-## Final status
+The frontend keeps the existing warm editorial visual identity and now makes the consequential story explicit:
 
-Ready for manual Portal submission; the public repository and frontend links are recorded in PORTAL.md. No deployment was made outside Studio Dev.
+POSITIONS -> SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE
+
+The negotiation detail view shows the bound capability ID, action, resource, mode, configured consumer, capability fingerprint and activation state. Incompatible negotiations show NO CAPABILITY ISSUED.
+
+## Submission status
+
+The repository and frontend are public and the Studio Dev v2 deployment facts are recorded. Portal submission remains manual and was not performed automatically.
+
+Handshake v2 is Portal-submission ready.

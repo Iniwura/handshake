@@ -1,38 +1,44 @@
-# Handshake
+# Handshake v2
 
-Handshake is a contract-first semantic negotiation primitive:
+Handshake is a contract-first GenLayer semantic agreement and authorization primitive:
 
-PARTY A POSITION + PARTY B POSITION -> GENLAYER SYNTHESIS -> PROPOSED AGREEMENT -> DUAL ACCEPTANCE -> SEALED
+PARTY A POSITION + PARTY B POSITION -> GENLAYER SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE
 
-The project contains the Intelligent Contract, Direct Mode suite, live Studio Dev evidence, and a small editorial frontend. It does not deploy anywhere outside Studio Dev and it does not include a frontend-side source of truth.
+It turns two bounded immutable positions into a provenance-grounded proposal, then issues a deterministic authorization only when both declared parties accept the exact persisted synthesis. An incompatible negotiation issues no active capability.
 
 ## Architecture
 
-- create_negotiation commits exactly two distinct non-zero EVM addresses and a deterministic negotiation fingerprint.
-- submit_position lets only the declared sender submit one bounded, canonical position. A position is an immutable list of unique terms with term_id, category, requirement, and importance (HARD or PREFERENCE).
-- synthesize is available only after both positions exist. A leader synthesis and an independent validator execute in the GenLayer nondeterministic block. The deterministic validator checks schema, enums, bounds, duplicate IDs, source references, complete source coverage, hard-term protection, state binding and numeric/ownership HARD conflicts.
-- The persisted synthesis is immutable and bound into its fingerprint with the negotiation and both position fingerprints.
-- accept_synthesis requires a declared party and the exact persisted synthesis fingerprint. Two distinct acceptance flags are required; SEALED is terminal.
-- Failed synthesis raises before lifecycle mutation, so a READY negotiation remains READY.
+- create_negotiation commits exactly two distinct non-zero addresses and one immutable authorization definition: capability ID, action, resource, scope, usage mode and configured consumer.
+- submit_position lets only the declared sender submit one bounded immutable position. Each term has a unique term_id, category, natural-language requirement, and importance of HARD or PREFERENCE.
+- synthesize is available only after both positions exist. GenLayer runs a leader synthesis and an independent semantic validator in the nondeterministic block.
+- Deterministic contract validation independently checks exact schemas, enums, bounds, duplicate IDs, source references, complete source coverage, hard-term protection, numeric/ownership HARD conflicts and lifecycle binding.
+- Every synthesized item cites real source terms with explicit party and term IDs. A conflicting HARD pair cannot be returned as COMPATIBLE; the model cannot define or alter the capability.
+- accept_synthesis requires a declared party and the exact persisted synthesis fingerprint. Two distinct acceptance flags are required before activation.
+- consume_capability is the concrete downstream consequence. It is restricted to the configured consumer. SINGLE_USE moves to CONSUMED and rejects replay; REUSABLE remains ACTIVE.
+- Failed synthesis raises before persistence, so a READY negotiation remains READY. Persisted synthesis and capability definitions are immutable.
+
+The installed Studio Dev SDK exposes gl.evm.contract_interface for EVM ABI calls, but no proven typed GenLayer-to-GenLayer interface. Handshake therefore keeps the consequential authorization gate in one contract rather than inventing an unsupported companion IC.
 
 ## Lifecycle
 
-OPEN -> READY -> PENDING_ACCEPTANCE -> SEALED
+OPEN -> READY -> PENDING_ACCEPTANCE -> ACTIVE -> CONSUMED
 
-- OPEN: zero or one position.
-- READY: both positions exist and no synthesis is persisted.
-- PENDING_ACCEPTANCE: a synthesis is persisted; parties may accept the exact synthesis fingerprint.
-- SEALED: both distinct parties accepted; terminal.
-- INCOMPATIBLE: terminal result for a persisted incompatible synthesis.
+- OPEN: zero or one position exists.
+- READY: both immutable positions exist and no synthesis is persisted.
+- PENDING_ACCEPTANCE: a non-incompatible synthesis is persisted; both parties may accept its exact fingerprint.
+- ACTIVE: both distinct parties accepted; the bound capability is actionable.
+- CONSUMED: a SINGLE_USE capability was executed once; terminal.
+- INCOMPATIBLE: an incompatible synthesis is persisted; terminal and never activatable.
 
 ## Public methods
 
 Writes:
 
-- create_negotiation(negotiation_id, party_a, party_b) -> negotiation fingerprint
+- create_negotiation(negotiation_id, party_a, party_b, capability_id, action, resource, scope, mode, consumer) -> negotiation fingerprint
 - submit_position(negotiation_id, terms) -> position fingerprint
-- synthesize(negotiation_id) -> structured synthesis
+- synthesize(negotiation_id) -> strict synthesis
 - accept_synthesis(negotiation_id, synthesis_fingerprint) -> state
+- consume_capability(negotiation_id) -> ACTIVE or CONSUMED
 
 Views:
 
@@ -40,93 +46,71 @@ Views:
 - get_position_fingerprint(negotiation_id, party)
 - get_synthesis(negotiation_id)
 - get_synthesis_fingerprint(negotiation_id)
+- get_capability(negotiation_id)
+- is_capability_active(negotiation_id)
 
 ## Synthesis schema
 
-The model must return exactly four top-level keys:
-
-JSON:
-{
-  "compatibility": "COMPATIBLE | PARTIAL | INCOMPATIBLE",
-  "proposed_terms": [
-    {
-      "synthesis_id": "payment",
-      "category": "payment",
-      "agreement": "bounded proposed agreement",
-      "source_terms": [{"party": "A", "term_id": "..."}]
-    }
-  ],
-  "conflicts": [
-    {
-      "synthesis_id": "conflict-1",
-      "description": "bounded conflict",
-      "source_terms": [{"party": "A", "term_id": "..."}, {"party": "B", "term_id": "..."}]
-    }
-  ],
-  "unresolved_items": []
-}
-
-Every source term must be accounted for by an explicit party and term ID. Proposed categories must be present in their source terms. All synthesis IDs are globally unique. COMPATIBLE cannot contain conflicts or unresolved items; INCOMPATIBLE must name a conflict; PARTIAL must identify a conflict or unresolved item. A synthesized item cannot invent a material obligation unsupported by the source positions.
+The model must return exactly four top-level keys: compatibility, proposed_terms, conflicts and unresolved_items. Every source term is accounted for by an explicit party and term ID. Proposed categories must be present in their source terms. All synthesis IDs are globally unique. COMPATIBLE cannot contain conflicts or unresolved items; INCOMPATIBLE must name a conflict; PARTIAL must identify a conflict or unresolved item. A synthesized item cannot invent a material obligation unsupported by the source positions.
 
 ## Fingerprints
 
 Fingerprints are SHA-256 over canonical JSON using sorted keys, compact separators and UTF-8:
 
-- HANDSHAKE-NEGOTIATION-V1: negotiation ID and ordered party address keys.
-- HANDSHAKE-POSITION-V1: negotiation ID, party label/address and canonical sorted terms.
-- HANDSHAKE-SYNTHESIS-V1: negotiation fingerprint, both position fingerprints and normalized synthesis.
+- HANDSHAKE-NEGOTIATION-V2: negotiation ID, ordered party address keys and the immutable authorization definition.
+- HANDSHAKE-POSITION-V2: negotiation ID, negotiation fingerprint, party label/address and canonical sorted terms.
+- HANDSHAKE-SYNTHESIS-V2: negotiation fingerprint, both position fingerprints and normalized synthesis.
+- HANDSHAKE-CAPABILITY-V1: negotiation identity, authorization definition, both position fingerprints, synthesis fingerprint and normalized synthesis.
+
+## Verified v2 deployment
+
+- Network: GenLayer Studio Devnet.
+- Chain ID: 61997.
+- Contract: 0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE.
+- Deployment transaction: 0x9896fa2a9231a014c27370f20a98dab0d6d0d5f81be33ebc27da507b4e00506.
+- Contract source SHA-256: 2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7.
+- Runner dependency: py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng.
+- On-chain schema: 11 methods, 6 views, 5 writes; exact schema is emitted by genlayer schema.
+
+The deployment receipt lookup endpoint did not return the envelope by hash after the accepted deployment response; the CLI deployment response itself recorded the accepted transaction hash and contract address. No other network was used.
 
 ## Local verification
 
 The pinned local Direct Mode dependencies are in requirements.txt. Run:
 
-PYTHONPATH=. .venv/bin/pytest -q
-GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev .venv/bin/genvm-lint check contracts/handshake.py
-GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev .venv/bin/genvm-lint validate --json contracts/handshake.py
-GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev .venv/bin/genvm-lint schema --json contracts/handshake.py
-PATH="$PWD/.venv/bin:$PATH" GENVM_VERSION=vstudio-dev .venv/bin/genvm-lint typecheck contracts/handshake.py --json
+PYTHONPATH=. /home/ini/groundshift/.venv/bin/pytest -q
+GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint check contracts/handshake.py
+GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint validate --json contracts/handshake.py
+GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint schema --json contracts/handshake.py
+PATH="/home/ini/groundshift/.venv/bin:$PATH" GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint typecheck contracts/handshake.py --json
+cd frontend && npm run typecheck && npm run build
 
-The full local suite has 38 tests. It covers bounds, identity, positions, synthesis schema and grounding, hard constraints, failure atomicity, immutability, acceptance and terminal-state behavior.
+Current result: 54 Direct Mode tests passed; lint passed; validation passed; schema extraction passed; typecheck passed with zero diagnostics; frontend typecheck and production build passed. Vite reports only the existing large-main-chunk warning.
 
-The installed genvm-linter 0.11.0 still imports the legacy genlayer.py path for validate/schema. The final gates passed using a disposable GENVMROOT compatibility shim that points the linter at the pinned current Studio Dev SDK and exposes that legacy import; the contract header and deployed runner hash remain unchanged.
+The installed genvm-linter 0.11.0 still imports the legacy genlayer.py path for validation/schema, while the pinned Studio Dev SDK exposes the current package layout. The final validation/schema gates use the documented disposable GENVMROOT compatibility shim. The contract header and deployed runner hash remain the pinned Studio Dev values.
 
-Frontend checks:
+## Fresh live proof
 
-cd frontend
-npm run typecheck
-npm run build
+The committed report is evidence/STUDIO_DEV_LIVE_TEST_REPORT.json and was run against the v2 address.
 
-If the npm registry is unavailable, use the already-installed matching local genlayer-js dependency set only for local verification. Do not commit node_modules or dist.
+- Compatible/migration negotiation: handshake-v2-compatible-20260926-r1.
+- Capability: docs-migration-authorization.
+- Action: AUTHORIZE_MIGRATION.
+- Resource: docs-production.
+- Both exact parties accepted the synthesis; authoritative state reached ACTIVE.
+- Active capability fingerprint: a38f327a7ba9bfde3d68528811f5e719c3840f7e2bc7f339b077c82b4ddd6900.
+- Configured consumer executed the single-use capability; authoritative state then became CONSUMED, and replay was rejected.
+- Incompatible negotiation: handshake-v2-incompatible-20260926-r1.
+- Its authoritative synthesis was INCOMPATIBLE; capability fingerprint stayed empty and active stayed false.
+- The report contains 25 live write assertions: 15 successful and 10 expected failures, plus 13 authoritative assertions.
+
+The live scenarios use two configured Studio Dev party wallets and a separate configured consumer. Private keys and wallet passwords are never stored or printed.
 
 ## Public links
 
 - GitHub: https://github.com/Iniwura/handshake
-- Portal frontend: https://handshake-lake.vercel.app
+- Frontend: https://handshake-lake.vercel.app
 
-## Deployment facts
+The frontend is an editorial reader and transaction surface; the contract remains authoritative. Routes include /, /app, /app/new, /app/negotiations/:id, /app/negotiations/:id/position, /app/demo, /compare, /synthesis, and /contract.
 
-- Network: GenLayer Studio Devnet, chain 61997.
-- Contract: 0x5bF5F1BAE94563ecc64e41C7c28F6A4040A0CA18.
-- Deployment transaction: 0xcd9f2c30e2970fd7012e17432ae7fa1f812768cbbc7ab54e40c1bfd34cfd2d9e.
-- Contract source SHA-256: d9d916a276ac00b2d37420727917fe0ebc15b182d23eedc751a989cc388c231f.
-- Runner dependency: py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng.
-
-## Live evidence
-
-evidence/STUDIO_DEV_LIVE_TEST_REPORT.json records the compatible and incompatible Studio Dev lifecycles plus negative live writes. It intentionally distinguishes transaction-backed writes from resumed authoritative state checks and never fabricates missing transaction IDs.
-
-## Frontend
-
-The Vite/React frontend is in frontend/. It is an editorial interface for creating negotiations, submitting positions, reading synthesis provenance and accepting exact fingerprints. The contract remains authoritative. Routes include:
-
-- /
-- /app
-- /app/new
-- /app/negotiations/:id
-- /app/negotiations/:id/position
-- /app/demo
-- /compare
-- /synthesis
-- /contract
-
-No frontend or deployment was made for Converge.
+No Portal submission was made automatically. No deployment or file change was made for Converge.
