@@ -2,6 +2,7 @@ import { createClient } from "genlayer-js";
 import { studioDevnet } from "genlayer-js/chains";
 import { TransactionHashVariant, type CalldataEncodable } from "genlayer-js/types";
 import { receiptSucceeded, stageForError, type TransactionStage, type TransactionStatus } from "./transaction-model";
+import { contractExplorerUrlFor, deploymentExplorerUrlFor } from "./ux-model";
 
 export const CONTRACT_ADDRESS = String(import.meta.env.VITE_CONTRACT_ADDRESS || "0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE");
 export const CHAIN_ID = 61997;
@@ -208,5 +209,9 @@ export function watchWallet(onAccount: (address: string | null) => void, onChain
 }
 
 export function contractExplorerUrl(): string {
-  return "https://studio-dev.genlayer.com/explorer/address/" + CONTRACT_ADDRESS;
+  return contractExplorerUrlFor(CONTRACT_ADDRESS);
+}
+
+export function deploymentExplorerUrl(): string {
+  return deploymentExplorerUrlFor(DEPLOYMENT_TX);
 }
