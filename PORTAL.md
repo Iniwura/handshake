@@ -7,8 +7,8 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 - Repository: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app (final v2 production alias)
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
-- Vercel deployment ID: dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7
-- Vercel deployment URL: https://handshake-draxafg0f-iniwura-akurus-projects.vercel.app
+- Vercel deployment ID: dpl_G5ugpJ5f1RVGL83AWrXviqv5C8Jg
+- Vercel deployment URL: https://handshake-pq1ioyctz-iniwura-akurus-projects.vercel.app
 - Frontend commit: 1d02c6e
 - Network: GenLayer Studio Devnet
 - Chain ID: 61997
@@ -41,7 +41,7 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 
 ## Vercel verification
 
-The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7` is READY and aliased at https://handshake-lake.vercel.app. Anonymous HTTP checks returned 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, both position routes, and the SPA fallback. `/app/demo` is the primary reviewer walkthrough and reads the canonical compatible and incompatible Studio Dev records. The served production bundle contains the canonical v2 contract address and no historical Handshake contract address. The final UX pass makes Start a new agreement primary, adds the four-step creation wizard with step-by-step validation and review/edit flow, authoritative next-step guidance and a dismissible How It Works tour, and the frontend regression suite is 18 passed. Contract and deployment explorer links use verified official Studio Dev paths.
+The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl_G5ugpJ5f1RVGL83AWrXviqv5C8Jg` is READY and aliased at https://handshake-lake.vercel.app. Anonymous HTTP checks returned 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, both position routes, and the SPA fallback. `/app/demo` is the primary reviewer walkthrough and reads the canonical compatible and incompatible Studio Dev records. The served production bundle contains the canonical v2 contract address and no historical Handshake contract address. The final UX pass makes Start a new agreement primary, adds the four-step creation wizard with step-by-step validation and review/edit flow, authoritative next-step guidance and a dismissible How It Works tour, and the frontend regression suite is 18 passed. Contract and deployment explorer links use verified official Studio Dev paths.
 
 ## Assets
 

@@ -118,8 +118,8 @@ The final UX pass makes Start a new agreement the primary entry point, adds a fo
 - Existing project: handshake.
 - Project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd.
 - Production URL: https://handshake-lake.vercel.app.
-- Deployment ID: dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7.
-- Deployment URL: https://handshake-draxafg0f-iniwura-akurus-projects.vercel.app.
+- Deployment ID: dpl_G5ugpJ5f1RVGL83AWrXviqv5C8Jg.
+- Deployment URL: https://handshake-pq1ioyctz-iniwura-akurus-projects.vercel.app.
 - Frontend commit: 1d02c6e (Build guided agreement creation wizard).
 - Deployment state: READY, production, aliased to the public URL.
 - Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, and both position routes.
