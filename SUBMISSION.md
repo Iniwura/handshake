@@ -5,7 +5,7 @@
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
-- Final production deployment: dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU
+- Final production deployment: dpl_4SLEXP5gairUWfVCpTfyNovsNYtU
 
 ## Verified contract deployment
 
@@ -44,7 +44,7 @@ INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumptio
 - Frontend npm run typecheck: passed.
 - Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
-The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
+The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_4SLEXP5gairUWfVCpTfyNovsNYtU reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
 
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 

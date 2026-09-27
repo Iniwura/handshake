@@ -116,7 +116,7 @@ The live scenarios use two configured Studio Dev party wallets and a separate co
 - Existing project: handshake.
 - Project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd.
 - Production URL: https://handshake-lake.vercel.app.
-- Deployment ID: dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU.
+- Deployment ID: dpl_4SLEXP5gairUWfVCpTfyNovsNYtU.
 - Deployment state: READY, production, aliased to the public URL.
 - Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, and both position routes.
 - `/app/demo` is the primary reviewer walkthrough and reads both canonical Studio Dev negotiations directly.
