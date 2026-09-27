@@ -85,7 +85,7 @@ GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshi
 PATH="/home/ini/groundshift/.venv/bin:$PATH" GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint typecheck contracts/handshake.py --json
 cd frontend && npm test && npm run typecheck && npm run build
 
-Current result: 54 Direct Mode tests passed; lint passed; validation passed; schema extraction passed; typecheck passed with zero diagnostics; frontend regression suite 13 passed; frontend typecheck and production build passed. Vite reports only the existing large-main-chunk warning.
+Current result: 54 Direct Mode tests passed; lint passed; validation passed; schema extraction passed; typecheck passed with zero diagnostics; frontend regression suite 18 passed; frontend typecheck and production build passed. Vite reports only the existing large-main-chunk warning.
 
 The installed genvm-linter 0.11.0 still imports the legacy genlayer.py path for validation/schema, while the pinned Studio Dev SDK exposes the current package layout. The final validation/schema gates use the documented disposable GENVMROOT compatibility shim. The contract header and deployed runner hash remain the pinned Studio Dev values.
 
@@ -111,14 +111,16 @@ The live scenarios use two configured Studio Dev party wallets and a separate co
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 
-The final UX pass makes Start a new agreement the primary entry point, adds state-derived next-step guidance, a dismissible How It Works tour, explicit consumer status, and verified Studio Dev explorer links.
+The final UX pass makes Start a new agreement the primary entry point, adds a four-step Agreement / Parties / Authorization / Review creation wizard with step validation and edit-back flow, state-derived next-step guidance, a dismissible How It Works tour, explicit consumer status, and verified Studio Dev explorer links.
 
 ## Final Vercel deployment
 
 - Existing project: handshake.
 - Project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd.
 - Production URL: https://handshake-lake.vercel.app.
-- Deployment ID: dpl_CdhEc2YzpEkZxv8FR7LX4niuoJMA.
+- Deployment ID: dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7.
+- Deployment URL: https://handshake-draxafg0f-iniwura-akurus-projects.vercel.app.
+- Frontend commit: 1d02c6e (Build guided agreement creation wizard).
 - Deployment state: READY, production, aliased to the public URL.
 - Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, and both position routes.
 - `/app/demo` is the primary reviewer walkthrough and reads both canonical Studio Dev negotiations directly.

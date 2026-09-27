@@ -5,7 +5,9 @@
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
-- Final production deployment: dpl_CdhEc2YzpEkZxv8FR7LX4niuoJMA
+- Final production deployment: dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7
+- Deployment URL: https://handshake-draxafg0f-iniwura-akurus-projects.vercel.app
+- Final frontend commit: 1d02c6e
 
 ## Verified contract deployment
 
@@ -40,12 +42,12 @@ INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumptio
 - genvm-lint validate --json: passed.
 - genvm-lint schema --json: passed.
 - genvm-lint typecheck --json: passed with zero diagnostics.
-- Frontend regression suite: 13 passed.
+- Frontend regression suite: 18 passed.
 - UX regression coverage: tour dismissal/reopen semantics, lifecycle next steps, consumer guidance and explorer URL construction.
 - Frontend npm run typecheck: passed.
 - Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
-The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_CdhEc2YzpEkZxv8FR7LX4niuoJMA reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
+The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_4b7mz14Sozzo6JuWhRqmnaStcyV7 reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
 
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
@@ -71,7 +73,7 @@ The frontend keeps the existing warm editorial visual identity and now makes the
 
 POSITIONS -> SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE -> CONSUMED
 
-`/app/demo` is the primary reviewer walkthrough. It performs anonymous authoritative reads for both canonical live negotiations, shows the migration capability fields, the exact provenance, acceptance flags, fingerprints and the fail-closed incompatible branch. The negotiation detail view exposes the consumer-gated `consume_capability` action only for the exact configured consumer on Studio Dev. It retains the transaction hash through simulation, wallet, submission, consensus, decision, contract confirmation and terminal failure stages. Success requires the expected authoritative state, not only a receipt.
+`/app/demo` is the primary reviewer walkthrough. It performs anonymous authoritative reads for both canonical live negotiations, shows the migration capability fields, the exact provenance, acceptance flags, fingerprints and the fail-closed incompatible branch. The negotiation detail view exposes the consumer-gated `consume_capability` action only for the exact configured consumer on Studio Dev. It retains the transaction hash through simulation, wallet, submission, consensus, decision, contract confirmation and terminal failure stages. The `/app/new` route is a four-step wizard with step-by-step validation, preserved draft values, review groups and edit-back controls. Success requires the expected authoritative state, not only a receipt.
 
 ## Submission status
 
