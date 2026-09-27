@@ -7,6 +7,7 @@ import {
 } from "./genlayer";
 import { authoritativeStateConfirmed, canConsumeCapability, capabilityConsumed, transactionIsOpen, type TransactionStatus } from "./transaction-model";
 import { nextStepFor, TOUR_STORAGE_KEY, tourShouldOpen } from "./ux-model";
+import { isValidWizardStep, validateWizardStep, WIZARD_STEPS, type AgreementDraft } from "./wizard-model";
 
 const COMPATIBLE_ID = "handshake-v2-compatible-20260926-r1";
 const INCOMPATIBLE_ID = "handshake-v2-incompatible-20260926-r1";
@@ -179,37 +180,114 @@ function FormField({ label, help, children }: { label: string; help: string; chi
   return <label className="form-field"><span className="form-field-copy"><strong>{label}</strong><small>{help}</small></span>{children}</label>;
 }
 
+function ReviewGroup({ title, rows, onEdit }: { title: string; rows: Array<[string, string]>; onEdit: () => void }) {
+  return <section className="review-group"><div className="review-group-head"><h2>{title}</h2><button type="button" className="review-edit" onClick={onEdit}>Edit</button></div><div className="review-rows">{rows.map(([label, value]) => <div className="review-row" key={label}><span>{label}</span><strong className={label.includes("ADDRESS") || label === "CONSUMER" ? "mono" : ""}>{value || "—"}</strong></div>)}</div></section>;
+}
+
+const WIZARD_COPY = [
+  { title: "Agreement basics", copy: "Give this agreement a unique name." },
+  { title: "Who is agreeing?", copy: "Choose the two wallets that are part of this agreement." },
+  { title: "What can this agreement authorize?", copy: "Define the permission that only becomes usable if both parties agree." },
+  { title: "Review before creating", copy: "Check the agreement, parties and authorization before creating the base record." },
+] as const;
+
 function NewNegotiation() {
   const wallet = useWallet();
   const navigate = useNavigate();
-  const [id, setId] = useState("project-" + Date.now().toString(36));
-  const [a, setA] = useState(wallet.address || "");
-  const [b, setB] = useState("");
-  const [capabilityId, setCapabilityId] = useState("docs-migration-authorization");
-  const [action, setAction] = useState("AUTHORIZE_MIGRATION");
-  const [resource, setResource] = useState("docs-production");
-  const [scope, setScope] = useState("two-party authorization for the declared operation");
-  const [mode, setMode] = useState<"SINGLE_USE" | "REUSABLE">("SINGLE_USE");
-  const [consumer, setConsumer] = useState(wallet.address || "");
+  const [draft, setDraft] = useState<AgreementDraft>(() => ({
+    id: "project-" + Date.now().toString(36),
+    partyA: wallet.address || "",
+    partyB: "",
+    capabilityId: "docs-migration-authorization",
+    action: "AUTHORIZE_MIGRATION",
+    resource: "docs-production",
+    scope: "two-party authorization for the declared operation",
+    mode: "SINGLE_USE",
+    consumer: wallet.address || "",
+  }));
+  const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [transaction, setTransaction] = useState<TransactionStatus | null>(null);
-  useEffect(() => { if (wallet.address && !a) setA(wallet.address); if (wallet.address && !consumer) setConsumer(wallet.address); }, [wallet.address, a, consumer]);
+
+  useEffect(() => {
+    if (!wallet.address) return;
+    setDraft((current) => ({
+      ...current,
+      partyA: current.partyA || wallet.address || "",
+      consumer: current.consumer || wallet.address || "",
+    }));
+  }, [wallet.address]);
+
+  const update = <K extends keyof AgreementDraft>(key: K, value: AgreementDraft[K]) => {
+    setDraft((current) => ({ ...current, [key]: value }));
+    setError("");
+  };
+  const stepError = validateWizardStep(step, draft);
+  const goNext = () => {
+    const validation = validateWizardStep(step, draft);
+    if (validation) {
+      setError(validation);
+      return;
+    }
+    setError("");
+    setStep((current) => Math.min(WIZARD_STEPS.length - 1, current + 1));
+  };
+  const goBack = () => {
+    setError("");
+    setStep((current) => Math.max(0, current - 1));
+  };
   const create = async (e: FormEvent) => {
-    e.preventDefault(); setError(""); setTransaction(null);
+    e.preventDefault();
+    if (step < WIZARD_STEPS.length - 1) {
+      goNext();
+      return;
+    }
+    const validation = validateWizardStep(2, draft);
+    if (validation) {
+      setStep(2);
+      setError(validation);
+      return;
+    }
+    setError("");
+    setTransaction(null);
     try {
-      const hash = await writeMethod(wallet.address || "", "create_negotiation", [id.trim(), a.trim(), b.trim(), capabilityId.trim(), action.trim(), resource.trim(), scope.trim(), mode, consumer.trim()], { onStatus: setTransaction });
+      const hash = await writeMethod(wallet.address || "", "create_negotiation", [draft.id.trim(), draft.partyA.trim(), draft.partyB.trim(), draft.capabilityId.trim(), draft.action.trim(), draft.resource.trim(), draft.scope.trim(), draft.mode, draft.consumer.trim()], { onStatus: setTransaction });
       setTransaction({ stage: "CONFIRMING CONTRACT STATE", hash, message: "Decision received; rereading authoritative OPEN state." });
-      const record = await readNegotiation(id.trim());
-      if (!authoritativeStateConfirmed(record.state, "OPEN") || record.negotiation_id !== id.trim()) throw new Error("Authoritative OPEN state was not readable after creation.");
+      const record = await readNegotiation(draft.id.trim());
+      if (!authoritativeStateConfirmed(record.state, "OPEN") || record.negotiation_id !== draft.id.trim()) throw new Error("Authoritative OPEN state was not readable after creation.");
       setTransaction({ stage: "CONFIRMED", hash, message: "Authoritative OPEN agreement confirmed." });
-      navigate("/app/negotiations/" + encodeURIComponent(id.trim()));
+      navigate("/app/negotiations/" + encodeURIComponent(draft.id.trim()));
     } catch (value) {
       setError(errorText(value));
       setTransaction((current) => current?.stage === "CONFIRMING CONTRACT STATE" && current.hash ? { stage: "CONSENSUS UNRESOLVED", hash: current.hash, error: errorText(value), message: "The decision was received, but the authoritative OPEN state could not be confirmed." } : current);
     }
   };
+
   const blocked = transactionIsOpen(transaction);
-  return <main className="section form-page"><div className="section-index">START A NEW AGREEMENT / DECLARE PARTIES</div><div className="form-intro"><p className="eyebrow">CREATE AN AGREEMENT BETWEEN TWO PARTIES</p><h1>Start a new<br /><em>agreement.</em></h1><p>Choose two distinct wallets, describe the permission they are agreeing around, then let each party submit its own terms.</p></div><ol className="agreement-steps" aria-label="Agreement steps">{[["01","Choose Party A and Party B"],["02","Define what the agreement authorizes"],["03","Each party submits their terms"],["04","GenLayer finds the valid intersection"],["05","Both parties accept"],["06","The capability becomes usable"]].map(([number, text]) => <li key={number}><span>{number}</span><strong>{text}</strong></li>)}</ol><form className="editorial-form" onSubmit={create}><FormField label="AGREEMENT ID" help="A unique name for this agreement."><input required maxLength={96} placeholder="website-redesign-2026" value={id} onChange={(e) => setId(e.target.value)} /></FormField><fieldset className="field-group" data-tour="parties"><legend>WHO IS AGREEING?</legend><FormField label="PARTY A ADDRESS" help="First person or wallet taking part in the agreement."><input required placeholder="0x... Party A wallet" value={a} onChange={(e) => setA(e.target.value)} /></FormField><FormField label="PARTY B ADDRESS" help="Second person or wallet taking part in the agreement."><input required placeholder="0x... Party B wallet" value={b} onChange={(e) => setB(e.target.value)} /></FormField></fieldset><fieldset className="field-group" data-tour="capability-fields"><legend>WHAT CAN THIS AGREEMENT AUTHORIZE?</legend><FormField label="CAPABILITY ID" help="A unique name for the permission created if both parties agree."><input required maxLength={96} placeholder="docs-migration-authorization" value={capabilityId} onChange={(e) => setCapabilityId(e.target.value)} /></FormField><FormField label="ACTION" help="What the final agreement allows."><input required placeholder="AUTHORIZE_MIGRATION" value={action} onChange={(e) => setAction(e.target.value)} /></FormField><FormField label="RESOURCE" help="What the permission applies to."><input required placeholder="docs-production" value={resource} onChange={(e) => setResource(e.target.value)} /></FormField><FormField label="SCOPE" help="A plain-language description of what is authorized."><input required placeholder="two parties authorize the agreed operation" value={scope} onChange={(e) => setScope(e.target.value)} /></FormField><FormField label="USAGE MODE" help="SINGLE_USE can be used once. REUSABLE stays active after use."><select value={mode} onChange={(e) => setMode(e.target.value as "SINGLE_USE" | "REUSABLE")}><option value="SINGLE_USE">SINGLE USE</option><option value="REUSABLE">REUSABLE</option></select></FormField><FormField label="CONFIGURED CONSUMER" help="The wallet allowed to use the activated capability."><input required placeholder="0x... consumer wallet" value={consumer} onChange={(e) => setConsumer(e.target.value)} /></FormField></fieldset>{error && <p className="form-error">{error}</p>}<Button className="button-ink" disabled={blocked || !wallet.address}>{blocked ? transaction?.stage : "Create agreement"} <ArrowRight size={15} /></Button></form><TransactionStatusPanel status={transaction} /><p className="form-caption">The contract creates the agreement record; later positions, synthesis and acceptance remain authoritative on Studio Dev.</p></main>;
+  const currentStep = WIZARD_STEPS[step];
+  return <main className="section form-page">
+    <div className="section-index">START A NEW AGREEMENT / DECLARE PARTIES</div>
+    <div className="form-intro">
+      <p className="eyebrow">CREATE AN AGREEMENT BETWEEN TWO PARTIES</p>
+      <h1>Start a new<br /><em>agreement.</em></h1>
+      <p>You’re creating the base record. The positions and GenLayer synthesis come after this step.</p>
+    </div>
+    <nav className="wizard-progress" aria-label="Agreement creation progress">
+      {WIZARD_STEPS.map((item, index) => <div className={(index === step ? "current " : "") + (index < step ? "complete" : "")} aria-current={index === step ? "step" : undefined} key={item.label}><span>{item.index + 1} / 4</span><strong>{item.label}</strong></div>)}
+    </nav>
+    <form className="editorial-form wizard-form" onSubmit={create}>
+      <div className="wizard-step-heading"><p className="eyebrow">{currentStep.eyebrow}</p><h2>{WIZARD_COPY[step].title}</h2><p>{WIZARD_COPY[step].copy}</p></div>
+      {step === 0 && <div className="wizard-step-content"><FormField label="AGREEMENT ID" help="Give this agreement a unique name."><input autoFocus required maxLength={96} placeholder="website-redesign-2026" value={draft.id} onChange={(e) => update("id", e.target.value)} /></FormField></div>}
+      {step === 1 && <fieldset className="field-group wizard-step-content" data-tour="parties"><legend>WHO IS AGREEING?</legend><p className="wizard-copy">Choose the two wallets that are part of this agreement.</p><FormField label="PARTY A ADDRESS" help="First person or wallet taking part in the agreement."><input autoFocus required placeholder="0x... Party A wallet" value={draft.partyA} onChange={(e) => update("partyA", e.target.value)} /></FormField><FormField label="PARTY B ADDRESS" help="Second person or wallet taking part in the agreement."><input required placeholder="0x... Party B wallet" value={draft.partyB} onChange={(e) => update("partyB", e.target.value)} /></FormField></fieldset>}
+      {step === 2 && <fieldset className="field-group wizard-step-content" data-tour="capability-fields"><legend>WHAT CAN THIS AGREEMENT AUTHORIZE?</legend><p className="wizard-copy">Define the permission that only becomes usable if both parties agree.</p><FormField label="CAPABILITY ID" help="A unique name for the permission created if both parties agree."><input autoFocus required maxLength={96} placeholder="docs-migration-authorization" value={draft.capabilityId} onChange={(e) => update("capabilityId", e.target.value)} /></FormField><FormField label="ACTION" help="What the final agreement allows."><input required placeholder="AUTHORIZE_MIGRATION" value={draft.action} onChange={(e) => update("action", e.target.value)} /></FormField><FormField label="RESOURCE" help="What the permission applies to."><input required placeholder="docs-production" value={draft.resource} onChange={(e) => update("resource", e.target.value)} /></FormField><FormField label="SCOPE" help="A plain-language description of what is authorized."><input required placeholder="two parties authorize the agreed operation" value={draft.scope} onChange={(e) => update("scope", e.target.value)} /></FormField><FormField label="USAGE MODE" help="SINGLE_USE can be used once. REUSABLE stays active after use."><select value={draft.mode} onChange={(e) => update("mode", e.target.value as AgreementDraft["mode"])}><option value="SINGLE_USE">SINGLE USE</option><option value="REUSABLE">REUSABLE</option></select></FormField><FormField label="CONFIGURED CONSUMER" help="The wallet allowed to use the activated capability."><input required placeholder="0x... consumer wallet" value={draft.consumer} onChange={(e) => update("consumer", e.target.value)} /></FormField></fieldset>}
+      {step === 3 && <div className="wizard-step-content wizard-review"><ReviewGroup title="Agreement" rows={[["AGREEMENT ID", draft.id]]} onEdit={() => setStep(0)} /><ReviewGroup title="Parties" rows={[["PARTY A ADDRESS", draft.partyA], ["PARTY B ADDRESS", draft.partyB]]} onEdit={() => setStep(1)} /><ReviewGroup title="Authorization" rows={[["CAPABILITY ID", draft.capabilityId], ["ACTION", draft.action], ["RESOURCE", draft.resource], ["SCOPE", draft.scope], ["USAGE MODE", draft.mode === "SINGLE_USE" ? "SINGLE USE" : "REUSABLE"], ["CONSUMER", draft.consumer]]} onEdit={() => setStep(2)} /></div>}
+      {stepError && <p className="wizard-validation">{stepError}</p>}
+      {error && <p className="form-error">{error}</p>}
+      <div className="wizard-actions"><Button type="button" className="button-quiet" disabled={step === 0 || blocked} onClick={goBack}>Back</Button>{step < WIZARD_STEPS.length - 1 ? <Button type="submit" className="button-ink" disabled={blocked || !isValidWizardStep(step, draft)}>Next <ArrowRight size={15} /></Button> : <Button type="submit" className="button-ink" disabled={blocked || !wallet.address}>{blocked ? transaction?.stage : "Create agreement"} <ArrowRight size={15} /></Button>}</div>
+    </form>
+    <TransactionStatusPanel status={transaction} />
+    <p className="form-caption">The contract creates the agreement record; later positions, synthesis and acceptance remain authoritative on Studio Dev.</p>
+  </main>;
 }
 
 function PositionPage() {

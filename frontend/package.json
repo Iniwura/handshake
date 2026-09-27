@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "tsc src/transaction-model.ts src/ux-model.ts --target ES2022 --module NodeNext --moduleResolution NodeNext --outDir /tmp/handshake-frontend-test --skipLibCheck && FRONTEND_TEST_BUILD=/tmp/handshake-frontend-test node --test tests/*.test.mjs"
+    "test": "tsc src/transaction-model.ts src/ux-model.ts src/wizard-model.ts --target ES2022 --module NodeNext --moduleResolution NodeNext --outDir /tmp/handshake-frontend-test --skipLibCheck && FRONTEND_TEST_BUILD=/tmp/handshake-frontend-test node --test tests/*.test.mjs"
   },
   "dependencies": {
     "genlayer-js": "2.0.0-rc.1",
