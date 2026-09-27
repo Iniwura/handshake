@@ -1,6 +1,7 @@
-import { createClient, isSuccessful } from "genlayer-js";
+import { createClient } from "genlayer-js";
 import { studioDevnet } from "genlayer-js/chains";
 import { TransactionHashVariant, type CalldataEncodable } from "genlayer-js/types";
+import { receiptSucceeded, stageForError, type TransactionStage, type TransactionStatus } from "./transaction-model";
 
 export const CONTRACT_ADDRESS = String(import.meta.env.VITE_CONTRACT_ADDRESS || "0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE");
 export const CHAIN_ID = 61997;
@@ -10,7 +11,7 @@ export const SOURCE_SHA = "2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa69
 export const RUNNER_HASH = "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng";
 export const RPC_URL = "https://studio-dev.genlayer.com/api";
 
-type Provider = {
+export type Provider = {
   isRabby?: boolean;
   isMetaMask?: boolean;
   providers?: Provider[];
@@ -99,27 +100,72 @@ export type Negotiation = {
   accepted_b: boolean;
 };
 
-export async function writeMethod(address: string, functionName: string, args: unknown[], onSubmitted?: (hash: string) => void): Promise<string> {
+export type WriteStatusHandler = (status: TransactionStatus) => void;
+export type WriteMethodOptions = { onStatus?: WriteStatusHandler };
+
+function emit(handler: WriteStatusHandler | undefined, stage: TransactionStage, fields: Omit<TransactionStatus, "stage"> = {}) {
+  handler?.({ stage, ...fields });
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+export async function writeMethod(address: string, functionName: string, args: unknown[], options: WriteMethodOptions = {}): Promise<string> {
+  const { onStatus } = options;
+  emit(onStatus, "SIMULATING", { message: "Estimating Studio Dev execution fees." });
   const wallet = injected();
-  if (!wallet) throw new Error("No injected wallet detected. Connect Rabby or MetaMask.");
+  if (!wallet) {
+    const error = new Error("No injected wallet detected. Connect Rabby or MetaMask.");
+    emit(onStatus, "EXECUTION FAILED", { error: error.message, message: "A wallet is required for this write." });
+    throw error;
+  }
   const chainId = String(await wallet.request({ method: "eth_chainId" })).toLowerCase();
-  if (chainId !== CHAIN_HEX) throw new Error("Switch the wallet to GenLayer Studio Dev (chain 61997).");
+  if (chainId !== CHAIN_HEX) {
+    const error = new Error("Switch the wallet to GenLayer Studio Dev (chain 61997).");
+    emit(onStatus, "EXECUTION FAILED", { error: error.message, message: "The connected wallet is on the wrong network." });
+    throw error;
+  }
   const client: any = createClient({ chain, account: address as any, provider: wallet as any });
-  const estimate = await client.estimateTransactionFees();
-  if (BigInt(estimate.feeValue || 0) <= 0n) throw new Error("Studio Dev returned a zero fee estimate.");
-  const hash = String(await client.writeContract({
-    address: CONTRACT_ADDRESS,
-    functionName,
-    args: args as CalldataEncodable[],
-    value: 0n,
-    fees: { distribution: estimate.distribution, messageAllocations: estimate.messageAllocations, feeValue: estimate.feeValue },
-  }));
-  onSubmitted?.(hash);
-  const receipt = await client.waitForTransactionReceipt({ hash, waitUntil: "decided", interval: 2500, retries: 120, fullTransaction: true });
-  if (!isSuccessful(receipt)) {
-    const status = receipt.statusName || String(receipt.status || "unknown");
-    const result = receipt.txExecutionResultName || String(receipt.execution_result || "unknown");
-    throw new Error("GenLayer transaction failed: " + status + " / " + result);
+  let estimate: any;
+  try {
+    estimate = await client.estimateTransactionFees();
+    if (BigInt(estimate.feeValue || 0) <= 0n) throw new Error("Studio Dev returned a zero fee estimate.");
+  } catch (error) {
+    const message = errorMessage(error);
+    emit(onStatus, stageForError(error), { error: message, message: "Fee simulation did not complete." });
+    throw error;
+  }
+  emit(onStatus, "AWAITING WALLET", { message: "Review and authorize the Studio Dev transaction." });
+  let hash: string;
+  try {
+    hash = String(await client.writeContract({
+      address: CONTRACT_ADDRESS,
+      functionName,
+      args: args as CalldataEncodable[],
+      value: 0n,
+      fees: { distribution: estimate.distribution, messageAllocations: estimate.messageAllocations, feeValue: estimate.feeValue },
+    }));
+  } catch (error) {
+    const message = errorMessage(error);
+    emit(onStatus, stageForError(error), { error: message, message: "The wallet did not submit a successful transaction." });
+    throw error;
+  }
+  emit(onStatus, "SUBMITTED", { hash, message: "Transaction hash received from the wallet." });
+  emit(onStatus, "CONSENSUS PENDING", { hash, message: "Waiting for the GenLayer decision." });
+  let receipt: unknown;
+  try {
+    receipt = await client.waitForTransactionReceipt({ hash, waitUntil: "decided", interval: 2500, retries: 120, fullTransaction: true });
+  } catch (error) {
+    const message = errorMessage(error);
+    emit(onStatus, stageForError(error), { hash, error: message, message: "The consensus decision was not resolved within the wait window." });
+    throw error;
+  }
+  emit(onStatus, "DECISION RECEIVED", { hash, message: "A GenLayer decision was received; checking execution result." });
+  if (!receiptSucceeded(receipt)) {
+    const error = new Error("GenLayer transaction did not execute successfully.");
+    emit(onStatus, "EXECUTION FAILED", { hash, error: error.message, message: "The decided transaction did not succeed." });
+    throw error;
   }
   return hash;
 }

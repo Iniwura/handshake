@@ -195,3 +195,86 @@ h1 em,h2 em { font-family:"Instrument Serif",Georgia,serif; font-weight:400; let
   .diagram-center { width:110px; height:110px; font-size:45px; flex:0 0 auto; }
   .fact-line { grid-template-columns:100px 1fr 24px; gap:10px; }
 }
+
+
+/* v2 reviewer proof and transaction lifecycle */
+.state-badge.open,.state-badge.ready,.state-badge.pending_acceptance { color:var(--muted); }
+.state-badge.active { color:var(--green); }
+.state-badge.consumed { color:var(--green); background:#dce7d9; }
+.state-badge.incompatible { color:var(--muted); background:var(--soft); }
+.state-map { margin-bottom:62px; }
+.state-rail-upstream { grid-template-columns:repeat(2,1fr); margin-bottom:20px; }
+.state-rail-success { grid-template-columns:repeat(3,1fr); margin:0; border-top:0; }
+.state-rail-success>div { padding-top:16px; }
+.state-rail-success>div:before { top:12px; }
+.state-branch-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.state-branch { border:1px solid var(--line); padding:14px 16px 0; min-height:84px; background:rgba(255,255,255,.18); }
+.state-branch.branch-current { border-color:var(--accent); background:rgba(163,71,49,.06); }
+.incompatible-branch { display:flex; align-items:flex-start; gap:16px; padding-bottom:16px; }
+.incompatible-branch.branch-current { border-color:var(--muted); background:var(--soft); }
+.branch-label { display:block; color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.08em; }
+.incompatible-node { display:grid; grid-template-columns:10px 1fr; gap:7px 10px; align-items:center; padding-top:16px; }
+.incompatible-node i { grid-row:1 / span 2; display:block; width:8px; height:8px; border-radius:50%; background:var(--muted); }
+.incompatible-node strong { font:11px "DM Mono",monospace; letter-spacing:.04em; }
+.incompatible-node small { color:var(--muted); font:9px "DM Mono",monospace; }
+.transaction-status { margin:-35px 0 45px; border:1px solid var(--line); background:var(--soft); padding:16px 18px; max-width:900px; }
+.transaction-status-head,.transaction-hash { display:flex; justify-content:space-between; gap:20px; align-items:baseline; }
+.transaction-status-head span,.transaction-hash span { color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.08em; }
+.transaction-status-head strong { font:11px "DM Mono",monospace; letter-spacing:.04em; }
+.transaction-status p { color:var(--muted); margin:12px 0 0; font-size:13px; line-height:1.45; }
+.transaction-hash { border-top:1px solid var(--line); margin-top:13px; padding-top:12px; align-items:flex-start; }
+.transaction-hash code { color:var(--ink); font:10px "DM Mono",monospace; overflow-wrap:anywhere; text-align:right; }
+.transaction-confirmed { display:block; color:var(--green); font:10px "DM Mono",monospace; margin-top:12px; }
+.transaction-unresolved { display:block; color:var(--accent); font:10px "DM Mono",monospace; margin-top:12px; }
+.transaction-status-confirmed { border-color:var(--green); }
+.transaction-status-execution-failed,.transaction-status-wallet-rejected { border-color:var(--accent); }
+.transaction-status-consensus-unresolved { border-color:var(--muted); }
+.capability-action { margin-top:22px; }
+.consumer-gate { border-top:1px solid var(--line); margin:22px 0 0; padding-top:14px; color:var(--muted); font:11px "DM Mono",monospace; line-height:1.5; }
+.consumed-gate { color:var(--green); display:flex; gap:8px; align-items:flex-start; }
+.consumer-value { word-break:break-all; }
+.no-capability-panel { border:1px solid var(--line); background:var(--soft); padding:24px; margin-top:20px; }
+.no-capability-panel h2 { font-size:clamp(30px,4vw,54px); letter-spacing:-.06em; font-weight:500; margin:25px 0 10px; }
+.no-capability-panel p { color:var(--muted); max-width:620px; line-height:1.5; }
+.no-capability-facts { display:grid; grid-template-columns:180px 1fr; gap:11px 20px; border-top:1px solid var(--line); margin-top:22px; padding-top:17px; }
+.no-capability-facts span { color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.08em; }
+.no-capability-facts strong { font:12px "DM Mono",monospace; overflow-wrap:anywhere; }
+.demo-lede { color:var(--muted); max-width:570px; line-height:1.55; font-size:16px; }
+.demo-contract-mark { border-left:2px solid var(--accent); padding-left:18px; display:grid; gap:8px; min-width:210px; }
+.demo-contract-mark span { color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.08em; }
+.demo-contract-mark strong { font:12px "DM Mono",monospace; }
+.live-case { border-top:2px solid var(--ink); margin:70px 0 90px; padding-top:24px; }
+.live-case-incompatible { border-top-color:var(--muted); }
+.live-case-head { display:flex; justify-content:space-between; gap:24px; align-items:flex-start; margin-bottom:24px; }
+.live-case-head>div { min-width:0; }
+.live-case-head span { color:var(--accent); font:10px "DM Mono",monospace; letter-spacing:.09em; }
+.live-case-head h2 { font-size:clamp(38px,5vw,74px); letter-spacing:-.07em; line-height:.9; font-weight:500; margin:18px 0 18px; }
+.loading-inline { color:var(--muted); font:11px "DM Mono",monospace; padding:40px 0; }
+.lifecycle-proof { border-left:3px solid var(--green); background:#e1e8de; padding:16px 20px; margin:28px 0 24px; }
+.lifecycle-proof-terminal { border-left-color:var(--muted); background:var(--soft); }
+.lifecycle-proof span { display:block; color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.08em; }
+.lifecycle-proof strong { display:block; font:15px "DM Mono",monospace; margin:9px 0; }
+.lifecycle-proof p { color:var(--muted); font-size:13px; line-height:1.45; margin:0; max-width:760px; }
+.live-facts { display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:24px 0; }
+.live-facts>div { min-width:0; padding:15px 14px 16px 0; border-right:1px solid var(--line); margin-right:14px; }
+.live-facts>div:nth-child(4n) { border-right:0; }
+.live-facts span { display:block; color:var(--muted); font:9px "DM Mono",monospace; letter-spacing:.07em; margin-bottom:9px; }
+.live-facts strong { display:block; font:12px "DM Mono",monospace; overflow-wrap:anywhere; }
+.live-proof-footer { border-top:1px solid var(--line); margin-top:24px; padding-top:18px; display:flex; justify-content:space-between; gap:16px; align-items:center; }
+.live-proof-footer>strong { color:var(--green); font:11px "DM Mono",monospace; }
+
+@media (max-width:850px) {
+  .state-branch-grid { grid-template-columns:1fr; }
+  .transaction-status-head,.transaction-hash { display:block; }
+  .transaction-status-head strong,.transaction-hash code { display:block; text-align:left; margin-top:8px; }
+  .demo-intro { display:block; }
+  .demo-contract-mark { margin-top:30px; }
+  .live-case-head { display:block; }
+  .live-case-head .state-badge { display:inline-block; margin-top:14px; }
+  .live-facts { grid-template-columns:1fr 1fr; }
+  .live-facts>div:nth-child(4n) { border-right:1px solid var(--line); }
+  .live-facts>div:nth-child(2n) { border-right:0; }
+  .live-proof-footer { display:block; }
+  .live-proof-footer .text-link { margin-top:17px; }
+  .no-capability-facts { grid-template-columns:1fr; gap:7px; }
+}

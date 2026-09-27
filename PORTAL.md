@@ -7,7 +7,7 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 - Repository: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app (final v2 production alias)
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
-- Vercel deployment ID: dpl_BRSJosakWM8eYh645DpeemY5tW8B
+- Vercel deployment ID: dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU
 - Network: GenLayer Studio Devnet
 - Chain ID: 61997
 - Contract: 0xd0cB30DCd57e2395c4CAb2451fa06Ad574241ACE
@@ -39,7 +39,7 @@ Handshake is a semantic agreement and authorization primitive for GenLayer. It m
 
 ## Vercel verification
 
-The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl_BRSJosakWM8eYh645DpeemY5tW8B` is READY and aliased at https://handshake-lake.vercel.app. Anonymous HTTP checks returned 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, both position routes, and the SPA fallback. The served production bundle contains the canonical v2 contract address and no historical Handshake contract address.
+The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU` is READY and aliased at https://handshake-lake.vercel.app. Anonymous HTTP checks returned 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, both position routes, and the SPA fallback. `/app/demo` is the primary reviewer walkthrough and reads the canonical compatible and incompatible Studio Dev records. The served production bundle contains the canonical v2 contract address and no historical Handshake contract address. The final frontend regression suite is 8 passed.
 
 ## Assets
 
@@ -56,4 +56,5 @@ The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl
 - [x] v2 contract address, deployment transaction and source SHA recorded.
 - [x] Compatible active-capability and incompatible fail-closed evidence recorded.
 - [x] Public routes, production bundle markers and stale-v1 address checks verified.
+- [x] Consumer-gated consume UI and transaction lifecycle states verified in source, regression tests and production bundle.
 - [ ] Submit the Portal entry manually.

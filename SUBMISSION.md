@@ -5,7 +5,7 @@
 - GitHub: https://github.com/Iniwura/handshake
 - Frontend: https://handshake-lake.vercel.app
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
-- Final production deployment: dpl_BRSJosakWM8eYh645DpeemY5tW8B
+- Final production deployment: dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU
 
 ## Verified contract deployment
 
@@ -40,10 +40,11 @@ INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumptio
 - genvm-lint validate --json: passed.
 - genvm-lint schema --json: passed.
 - genvm-lint typecheck --json: passed with zero diagnostics.
+- Frontend regression suite: 8 passed.
 - Frontend npm run typecheck: passed.
 - Frontend npm run build: passed; Vite emitted only a chunk-size warning.
 
-The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_BRSJosakWM8eYh645DpeemY5tW8B reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
+The v2 frontend is committed, locally verified and deployed to the existing Vercel project. Deployment dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU reached READY production state and is aliased at https://handshake-lake.vercel.app. Anonymous checks returned HTTP 200 for every declared public route, and the served bundle contains only the v2 Handshake contract address. The prior failed and historical deployments are not final artifacts.
 
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
@@ -67,10 +68,10 @@ Negative live coverage includes outsider submission and acceptance, duplicate ac
 
 The frontend keeps the existing warm editorial visual identity and now makes the consequential story explicit:
 
-POSITIONS -> SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE
+POSITIONS -> SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE -> CONSUMED
 
-The negotiation detail view shows the bound capability ID, action, resource, mode, configured consumer, capability fingerprint and activation state. Incompatible negotiations show NO CAPABILITY ISSUED.
+`/app/demo` is the primary reviewer walkthrough. It performs anonymous authoritative reads for both canonical live negotiations, shows the migration capability fields, the exact provenance, acceptance flags, fingerprints and the fail-closed incompatible branch. The negotiation detail view exposes the consumer-gated `consume_capability` action only for the exact configured consumer on Studio Dev. It retains the transaction hash through simulation, wallet, submission, consensus, decision, contract confirmation and terminal failure stages. Success requires the expected authoritative state, not only a receipt.
 
 ## Submission status
 
-The repository is public, the Studio Dev v2 contract facts are recorded, and the public v2 frontend is verified. Portal submission was not performed automatically; manual Portal submission is the only remaining action.
+The repository is public, the Studio Dev v2 contract facts are recorded, and the public v2 frontend and reviewer walkthrough are verified. No browser-wallet automation was available for a disposable frontend-originated write; the live CLI multi-wallet suite remains the production transaction proof. Portal submission was not performed automatically; manual Portal submission is the only remaining action.

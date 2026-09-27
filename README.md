@@ -83,9 +83,9 @@ GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshi
 GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint validate --json contracts/handshake.py
 GENVMROOT=/tmp/handshake-genvmroot GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint schema --json contracts/handshake.py
 PATH="/home/ini/groundshift/.venv/bin:$PATH" GENVM_VERSION=vstudio-dev /home/ini/groundshift/.venv/bin/genvm-lint typecheck contracts/handshake.py --json
-cd frontend && npm run typecheck && npm run build
+cd frontend && npm test && npm run typecheck && npm run build
 
-Current result: 54 Direct Mode tests passed; lint passed; validation passed; schema extraction passed; typecheck passed with zero diagnostics; frontend typecheck and production build passed. Vite reports only the existing large-main-chunk warning.
+Current result: 54 Direct Mode tests passed; lint passed; validation passed; schema extraction passed; typecheck passed with zero diagnostics; frontend regression suite 8 passed; frontend typecheck and production build passed. Vite reports only the existing large-main-chunk warning.
 
 The installed genvm-linter 0.11.0 still imports the legacy genlayer.py path for validation/schema, while the pinned Studio Dev SDK exposes the current package layout. The final validation/schema gates use the documented disposable GENVMROOT compatibility shim. The contract header and deployed runner hash remain the pinned Studio Dev values.
 
@@ -116,10 +116,11 @@ The live scenarios use two configured Studio Dev party wallets and a separate co
 - Existing project: handshake.
 - Project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd.
 - Production URL: https://handshake-lake.vercel.app.
-- Deployment ID: dpl_BRSJosakWM8eYh645DpeemY5tW8B.
+- Deployment ID: dpl_DccyawP2UsQujsBUmqL9ZDE2aWQU.
 - Deployment state: READY, production, aliased to the public URL.
-- Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, and both live negotiation detail routes.
-- The served production bundle contains the v2 contract address exactly and no historical Handshake contract address.
+- Anonymous route checks returned HTTP 200 for `/`, `/app`, `/app/new`, `/app/demo`, `/compare`, `/synthesis`, `/contract`, both live negotiation detail routes, and both position routes.
+- `/app/demo` is the primary reviewer walkthrough and reads both canonical Studio Dev negotiations directly.
+- The served production bundle contains the v2 contract address exactly and no historical Handshake contract address. Transaction lifecycle stages and the consumer-gated `consume_capability` control are present.
 
 The frontend is an editorial reader and transaction surface; the contract remains authoritative. Routes include /, /app, /app/new, /app/negotiations/:id, /app/negotiations/:id/position, /app/demo, /compare, /synthesis, and /contract.
 
