@@ -10,3 +10,4 @@ frontend/.vite
 *.pem
 .tsbuildinfo.*
 .vercel
+.env*

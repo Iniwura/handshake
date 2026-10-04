@@ -1,11 +1,11 @@
-# Handshake v2 Portal handoff
+# Handshake v3 cross-contract milestone / Portal handoff
 
 ## Project
 
 Handshake is a semantic agreement and authorization primitive for GenLayer. It makes two independent positions, their grounded semantic intersection, dual acceptance and deterministic downstream authorization legible.
 
 - Repository: https://github.com/Iniwura/handshake
-- Frontend: https://handshake-lake.vercel.app (final v2 production alias)
+- Frontend: https://handshake-lake.vercel.app (v3 milestone production alias; v2 remains available at /app/demo)
 - Vercel project ID: prj_AvPPPLM08qbMTPYgttJF5ZB8gSYd
 - Vercel deployment ID: dpl_G5ugpJ5f1RVGL83AWrXviqv5C8Jg
 - Vercel deployment URL: https://handshake-pq1ioyctz-iniwura-akurus-projects.vercel.app
@@ -60,3 +60,25 @@ The v2 frontend is deployed to the existing `handshake` project. Deployment `dpl
 - [x] Public routes, production bundle markers and stale-v1 address checks verified.
 - [x] Consumer-gated consume UI and transaction lifecycle states verified in source, regression tests and production bundle.
 - [ ] Submit the Portal entry manually.
+
+## v3 milestone delta
+
+The accepted 320-point baseline remains the historical single Handshake IC and is not modified. The milestone adds a fresh Handshake deployment plus reusable HandshakeExecutor, typed IC view/emit, an explicit two-phase asynchronous protocol, an external migration authorization receipt, and two-contract replay protection.
+
+- Fresh Handshake: 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491
+- Executor: 0xe26A7dE75f31C0B111c5098973685DFC89875C9D
+- Compatible: handshake-v3-cross-contract-20261004-r1
+- Incompatible: handshake-v3-incompatible-20261004-r1
+- Capability fingerprint: ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4
+- External execution fingerprint: 59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d
+- Reviewer route: https://handshake-lake.vercel.app/app/milestone
+
+See MILESTONE.md and evidence/STUDIO_DEV_V3_CROSS_CONTRACT_REPORT.json for the complete proof.
+
+## V3 production deployment
+
+- Deployment ID: dpl_ELeuD4BHrFs372Dud9en5DWwyLuL
+- Deployment URL: https://handshake-28m0ywdho-iniwura-akurus-projects.vercel.app
+- Production alias: https://handshake-lake.vercel.app
+- Status: READY / production
+- Anonymous HTTP 200 verified for /app/milestone, the fresh v3 detail route and the existing reviewer routes.

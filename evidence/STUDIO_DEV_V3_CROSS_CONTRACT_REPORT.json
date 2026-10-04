@@ -1,0 +1,661 @@
+{
+  "version": "Handshake v3 cross-contract milestone",
+  "network": {
+    "name": "GenLayer Studio Dev",
+    "chain_id": 61997,
+    "rpc": "https://studio-dev.genlayer.com/api",
+    "explorer": "https://explorer-studio-dev.genlayer.com"
+  },
+  "contracts": {
+    "handshake": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+    "executor": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+    "wrong_consumer_executor": "0x37Ce20770df11028054D0eDcF0fA99F3319FeA45",
+    "handshake_deployment_tx": "0x51ebaa3a9b5a46e38d5d6966c7149846637166c7c538a1b769e9826fa4394fc2",
+    "executor_deployment_tx": "0xa9e6671c2e7ef148834550b09e71ac30454045ffb2db5879e6f7d6f8cda9ed34",
+    "wrong_consumer_executor_deployment_tx": "0x4ff4a25571aa80d550ce252a07a09c8e46d1759d9d351859f230453c3be24fef"
+  },
+  "accounts": {
+    "party_a": "0xA35dc047f9937BF668743efBDF8Ea93B31A55888",
+    "party_b": "0x30fd7e8539a8462591e62894739c6864e9b81fa2",
+    "outsider": "0x01feebafdfddd4ba23f69b43f0b501bba7aa7cff"
+  },
+  "compatible_negotiation_id": "handshake-v3-cross-contract-20261004-r1",
+  "incompatible_negotiation_id": "handshake-v3-incompatible-20261004-r1",
+  "started_at": "2026-10-03T23:13:17.561791+00:00",
+  "writes": [
+    {
+      "label": "compatible:create",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "create_negotiation",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "0xA35dc047f9937BF668743efBDF8Ea93B31A55888",
+        "0x30fd7e8539a8462591e62894739c6864e9b81fa2",
+        "docs-migration-authorization",
+        "AUTHORIZE_MIGRATION",
+        "docs-production",
+        "two parties authorize the agreed documentation migration",
+        "SINGLE_USE",
+        "0xe26A7dE75f31C0B111c5098973685DFC89875C9D"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x62274745214d97d49d12e07ef9daed8bc0337d1172d9e3a8570fc7bb2512ceb7"
+      ],
+      "output_tail": "7da07c8fc5bac67349f6c82a644a4b2b43c3c8d6839d43887be46fc30b7495c41480a0722759b80e3a586b362792f6c56be34f210991e4194c0f31d184849973353fc1'\n  },\n  value_credited: false,\n  current_timestamp: '1791069227',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069213',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x62274745214d97d49d12e07ef9daed8bc0337d1172d9e3a8570fc7bb2512ceb7',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0x8D32eb5D0207f7E230C45e7BF0D14B2ED5DA3028',\n  last_leader: '0x8D32eb5D0207f7E230C45e7BF0D14B2ED5DA3028',\n  tx_slot: '1',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f90110b9010c160094016372656174655f6e65676f74696174696f6e04617267734dbc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723118a35dc047f9937bf668743efbdf8ea93b31a558881830fd7e8539a8462591e62894739c6864e9b81fa2e401646f63732d6d6967726174696f6e2d617574686f72697a6174696f6e9c01415554484f52495a455f4d4947524154494f4e7c646f63732d70726f64756374696f6ec40374776f207061727469657320617574686f72697a65207468652061677265656420646f63756d656e746174696f6e206d6967726174696f6e5453494e474c455f55534518e26a7de75f31c0b111c5098973685dfc89875c9d00',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0x8D32eb5D0207f7E230C45e7BF0D14B2ED5DA3028',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77',\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n      '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810'\n    ],\n    validator_votes_hash: [\n      '0xa7edb73cadf14145bdb427ffe8916b6dcb1bc68c157e6e98905599c0c735a0e4',\n      '0xb83b15ab19e3436eab368e6648b2e75ee07ca4bd11645eeb67d3566b86ffa7f8',\n      '0x7780d213d72167a09707e1ff035c12e65ea8d5dd011f35e8810d2d6fddd1f0f1',\n      '0x9a1979061f929340e65927e846483816461788230d1232a31b13497ca54836ef',\n      '0xf5174542415a1735304f9d39020e3e79c7ae362516dc3ebf4cd68905a25df185'\n    ],\n    validator_votes: [ 1, 1, 3, 1, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'IDLE', 'AGREE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method create_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "compatible:submit-a",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "submit_position",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "[{\"term_id\":\"downtime-limit\",\"category\":\"downtime\",\"requirement\":\"Migration downtime must not exceed 10 minutes.\",\"importance\":\"HARD\"},{\"term_id\":\"rollback-checkpoint\",\"category\":\"rollback\",\"requirement\":\"A rollback checkpoint is required before cutover.\",\"importance\":\"HARD\"},{\"term_id\":\"preserve-urls\",\"category\":\"data_integrity\",\"requirement\":\"Existing documentation URLs must be preserved.\",\"importance\":\"HARD\"},{\"term_id\":\"blue-green-preference\",\"category\":\"rollout\",\"requirement\":\"Party A prefers a blue-green rollout.\",\"importance\":\"PREFERENCE\"}]"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x195f856a9d4f9a05a50aaade554779ef1525f25d8d474de20903359d5c83be6a"
+      ],
+      "output_tail": "ing_block: '0', proposal_block: '0' },\n  activator: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  last_leader: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  tx_slot: '2',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f90230b9022c16007c7375626d69745f706f736974696f6e046172677315bc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723125260863617465676f727944646f776e74696d650a696d706f7274616e636524484152440b726571756972656d656e74f4024d6967726174696f6e20646f776e74696d65206d757374206e6f7420657863656564203130206d696e757465732e077465726d5f696474646f776e74696d652d6c696d6974260863617465676f727944726f6c6c6261636b0a696d706f7274616e636524484152440b726571756972656d656e748c034120726f6c6c6261636b20636865636b706f696e74206973207265717569726564206265666f7265206375746f7665722e077465726d5f69649c01726f6c6c6261636b2d636865636b706f696e74260863617465676f727974646174615f696e746567726974790a696d706f7274616e636524484152440b726571756972656d656e74f4024578697374696e6720646f63756d656e746174696f6e2055524c73206d757374206265207072657365727665642e077465726d5f69646c70726573657276652d75726c73260863617465676f72793c726f6c6c6f75740a696d706f7274616e636554505245464552454e43450b726571756972656d656e74ac02506172747920412070726566657273206120626c75652d677265656e20726f6c6c6f75742e077465726d5f6964ac01626c75652d677265656e2d707265666572656e636500',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n      '0x6760cDeC573cf38568C59872ee48B6fED41F8A4c',\n      '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852'\n    ],\n    validator_votes_hash: [\n      '0x47e7bef3f7e3c1746b958e81e9a43d6800d8da2a2ec11ad9d91c8e89e37a15f9',\n      '0xa3148751719f695f9c7e5a316b720a2daff9f14e10f5e7c9d72407dca5aceaff',\n      '0x0b344daa216aa508d0b4ac2a8bc4ef1ac7440baa7d7a5c9ca8a94454eb7fb7c2',\n      '0x567ce9601005db0964225bfb15904a9f8bfa85b020c9ac86483e2527ad1c3c2d',\n      '0x3bb298980d6329fe419e32d2eae8af7997d38fa5e38f4422ae7762d98c2b57cd'\n    ],\n    validator_votes: [ 1, 1, 3, 1, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'IDLE', 'AGREE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "compatible:submit-b",
+      "account": "dissent-deployer",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "submit_position",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "[{\"term_id\":\"maintenance-window\",\"category\":\"schedule\",\"requirement\":\"Migration must complete within the agreed maintenance window.\",\"importance\":\"HARD\"},{\"term_id\":\"rollback-tested\",\"category\":\"rollback\",\"requirement\":\"The rollback path must be tested.\",\"importance\":\"HARD\"},{\"term_id\":\"history-preserved\",\"category\":\"data_integrity\",\"requirement\":\"No documentation data-history may be lost.\",\"importance\":\"HARD\"},{\"term_id\":\"canary-preference\",\"category\":\"rollout\",\"requirement\":\"Party B prefers a canary rollout.\",\"importance\":\"PREFERENCE\"}]"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0xa16a00e4562d39015e4dcd6f29609bb2c1066f8ecc0e8b0d912ed41269465b19"
+      ],
+      "output_tail": "ck: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  last_leader: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  tx_slot: '3',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f90228b9022416007c7375626d69745f706f736974696f6e046172677315bc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723125260863617465676f7279447363686564756c650a696d706f7274616e636524484152440b726571756972656d656e74ec034d6967726174696f6e206d75737420636f6d706c6574652077697468696e2074686520616772656564206d61696e74656e616e63652077696e646f772e077465726d5f696494016d61696e74656e616e63652d77696e646f77260863617465676f727944726f6c6c6261636b0a696d706f7274616e636524484152440b726571756972656d656e748c0254686520726f6c6c6261636b2070617468206d757374206265207465737465642e077465726d5f69647c726f6c6c6261636b2d746573746564260863617465676f727974646174615f696e746567726974790a696d706f7274616e636524484152440b726571756972656d656e74d4024e6f20646f63756d656e746174696f6e20646174612d686973746f7279206d6179206265206c6f73742e077465726d5f69648c01686973746f72792d707265736572766564260863617465676f72793c726f6c6c6f75740a696d706f7274616e636554505245464552454e43450b726571756972656d656e748c0250617274792042207072656665727320612063616e61727920726f6c6c6f75742e077465726d5f69648c0163616e6172792d707265666572656e636500',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n      '0xcEf1Baa172d0b4D99Dcc505B36332F26D1088025',\n      '0x05d8aFc66B515038712537f99cAAEA73d16f0007',\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e'\n    ],\n    validator_votes_hash: [\n      '0x4708603a16fa5875d3f5eca483cf1a460cca164d889ee2487da451d13f49e799',\n      '0x773b49327b330cb691a56d98610f7541138a4991e4afa1df19291c39cdd97624',\n      '0xaebeb2ba4e1a2eb9e52b4604a9bb90030eb119cb29f0d642e104d5531754a880',\n      '0xc3970bea1083c284efcf2ee8495d87d453188612b4b6c98bb3dc6673c3b69a8c',\n      '0x7369bbb56dc08d5037ccd77ded14947987b8d7235556a927e4f37bc78540063d'\n    ],\n    validator_votes: [ 1, 3, 1, 3, 1 ],\n    validator_votes_name: [ 'AGREE', 'IDLE', 'AGREE', 'IDLE', 'AGREE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "compatible:synthesize",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "synthesize",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x642964e3f3e61930d57b409b2ca8bd6441c1d1712945a1f01eff95d3242029dc"
+      ],
+      "output_tail": "000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000041f83fb83c16005473796e74686573697a6504617267730dbc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d7231000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47ea00fbeb49221211105981d05f0b6f3861315f0f20a30da87fdf0f47d9d8f841606a07d65602fd4b12d2b50669c386baa331b9eb727a07161a37b00fe9dd8f623ac57'\n  },\n  value_credited: false,\n  current_timestamp: '1791069335',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069312',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x642964e3f3e61930d57b409b2ca8bd6441c1d1712945a1f01eff95d3242029dc',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n  last_leader: '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n  tx_slot: '4',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f83fb83c16005473796e74686573697a6504617267730dbc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723100',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n      '0x1dA3a7de8EA65A318bf88Eb63d3dC55295Dd257E',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77'\n    ],\n    validator_votes_hash: [\n      '0x3fda36b429f9a5f4232216e7ee621d16907340ca072599640a7f4af04f368a92',\n      '0x6454480ef57076a9c98dc03e6c905038a09a72959aa1d4516645df4851107108',\n      '0x260436cd6f2f1e831e072c1be86af42c45de34dfc9aa477ee3db6e5d776f115f',\n      '0x0c29405a044938fa760e123d835f31050e30779ec8177940f94c5b90599318af',\n      '0x5c91b18b462fa01618f778ebb3d4230fb8d42751ae70dfe1a6b414bb8108148c'\n    ],\n    validator_votes: [ 1, 4, 3, 1, 1 ],\n    validator_votes_name: [ 'AGREE', 'DISAGREE', 'IDLE', 'AGREE', 'AGREE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method synthesize on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "negative:prepare-before-dual-acceptance",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0xb3c460b8e8735bf94fde143742912391755d863eb26d5192627d50114f21f95b\n\nError:\nError: Write 0xb3c460b8e8735bf94fde143742912391755d863eb26d5192627d50114f21f95b transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    },
+    {
+      "label": "compatible:accept-a",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "accept_synthesis",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x9f67763100547520778d18346b2acdee19265582ff6c9f20d3afa62bd3181d49"
+      ],
+      "output_tail": "63742d32303236313030342d7231840434393730363736353765656261336639386636323063373461646362643538666231376663643035343137336337393465373632623862303534633738303463000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47ea06c791a71244b978e9fe611da990d5d4f186f637f02021d6e6989f7fcf7c6a874a02d81f09912f5ec052b3549d6ae49862290a85de95d7061b5cc52f397537e669c'\n  },\n  value_credited: false,\n  current_timestamp: '1791069378',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069370',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x9f67763100547520778d18346b2acdee19265582ff6c9f20d3afa62bd3181d49',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  last_leader: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  tx_slot: '5',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f888b885160084016163636570745f73796e746865736973046172677315bc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723184043439373036373635376565626133663938663632306337346164636264353866623137666364303534313733633739346537363262386230353463373830346300',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810',\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n      '0x05d8aFc66B515038712537f99cAAEA73d16f0007',\n      '0x6760cDeC573cf38568C59872ee48B6fED41F8A4c'\n    ],\n    validator_votes_hash: [\n      '0x24c672b54629de259aabb1e39e571143580c5983701a66d6e0c0b4588a420d21',\n      '0xf72321e67c3ab95a461058888b4274b8969d9035610ef0ad60c9ff86f244c398',\n      '0x03e7337f072b5cec3fcafe057928ea57ae9710203274c8c0f956f9dd33e66009',\n      '0x0881e1d72eaf90827a7ae1d0c940a1825ddfd01f01f7168b6efd7ec62a593333',\n      '0x6c9e8ddffc9f4573fb4e27c5fb9a0ffda76a6e2867b3c8727f029041a684104c'\n    ],\n    validator_votes: [ 3, 1, 1, 1, 3 ],\n    validator_votes_name: [ 'IDLE', 'AGREE', 'AGREE', 'AGREE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method accept_synthesis on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "compatible:accept-b",
+      "account": "dissent-deployer",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "accept_synthesis",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0xbadbc4e30cddadaf3fbe92dbb462dff91610152ec49ae5c23d0ccb54cc7a753d"
+      ],
+      "output_tail": "63742d32303236313030342d7231840434393730363736353765656261336639386636323063373461646362643538666231376663643035343137336337393465373632623862303534633738303463000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47da0b2801a254e84f52fded218f0c088b1ede06948f77769951c8a6d9de51ba8ca96a0044a233fe84f8dd6ddd08c4f16307def17f30ea2daf3b6b0b32d007159fbd404'\n  },\n  value_credited: false,\n  current_timestamp: '1791069412',\n  sender: '0x30Fd7e8539A8462591e62894739C6864E9B81fa2',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069398',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0xbadbc4e30cddadaf3fbe92dbb462dff91610152ec49ae5c23d0ccb54cc7a753d',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  last_leader: '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n  tx_slot: '6',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f888b885160084016163636570745f73796e746865736973046172677315bc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723184043439373036373635376565626133663938663632306337346164636264353866623137666364303534313733633739346537363262386230353463373830346300',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77',\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n      '0x05d8aFc66B515038712537f99cAAEA73d16f0007',\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e'\n    ],\n    validator_votes_hash: [\n      '0xc2eb16852029b0e82cee145c958f21e0ad0edff7f3969e9eef020e3dea7636f3',\n      '0xcaeb6cfe7732576bccf2ae5722072d52e7e2ad7b10c49d9bfc10bcebb449404f',\n      '0xb78f13f558cc2750390ce10c12944b148c2879410ce71344727df7fa2bf3b477',\n      '0x5d1ea1334e4382feabe699c67bbe9a14548003db8ec3ab6e188b96ed16844cb3',\n      '0x2a27d86079f10b852d5edde0d94b8445493a0eaf238148b058fe01eeeb6808ec'\n    ],\n    validator_votes: [ 1, 1, 3, 1, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'IDLE', 'AGREE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method accept_synthesis on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "negative:wrong-consumer-contract",
+      "account": "dissent-studio",
+      "contract": "0x37Ce20770df11028054D0eDcF0fA99F3319FeA45",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0x40c9e7d15da87bcb6e90bc8e3abc454fef6100ef53086a159fb1419b36cd2ae5\n\nError:\nError: Write 0x40c9e7d15da87bcb6e90bc8e3abc454fef6100ef53086a159fb1419b36cd2ae5 transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0x37Ce20770df11028054D0eDcF0fA99F3319FeA45...\n✖ Error during write operation"
+    },
+    {
+      "label": "negative:outsider-prepare",
+      "account": "recall-deployer",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0xb051f673b4c49fa113bafb0687d640ac3fe11d3accc2059f557c83a248c6353f\n\nError:\nError: Write 0xb051f673b4c49fa113bafb0687d640ac3fe11d3accc2059f557c83a248c6353f transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    },
+    {
+      "label": "compatible:prepare-execution",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x6d98ffb5f5441faf117a76cb8f24008c2c5d9bcfef2dc37bd7ed1023c6959055"
+      ],
+      "output_tail": ": false,\n  current_timestamp: '1791069624',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xe26A7dE75f31C0B111c5098973685DFC89875C9D',\n  created_timestamp: '1791069609',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x6d98ffb5f5441faf117a76cb8f24008c2c5d9bcfef2dc37bd7ed1023c6959055',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  last_leader: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  tx_slot: '3',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f847b84416008c01707265706172655f657865637574696f6e04617267730dbc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723100',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xf8a7f89fc28000f898f896aa307865423136453235466635653561443445383935466436326364393631343239386244373566343931b85c4667435541574e76626e4e31625756665932467759574a7062476c3065515268636d647a44627743614746755a484e6f5957746c4c58597a4c574e7962334e7a4c574e76626e527959574e304c5449774d6a59784d4441304c584978808966696e616c697a65648080c080c5c480c28000',\n  messages: [\n    {\n      messageType: '0',\n      recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n      value: 0,\n      data: 'FgCUAWNvbnN1bWVfY2FwYWJpbGl0eQRhcmdzDbwCaGFuZHNoYWtlLXYzLWNyb3NzLWNvbnRyYWN0LTIwMjYxMDA0LXIx',\n      onAcceptance: false\n    }\n  ],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E'\n    ],\n    validator_votes_hash: [\n      '0x7978509872aaf5e476c3f17d79618d98eff7719f2a7aca5f3892b3a0a65ea8df',\n      '0x1fec815f238b4d380292d42e75dc6e851145a72629280b4639d6c24ae4779772',\n      '0xb86c1ad1ab096a0e69227b9db085f3a4195f6412410f02dc07dcfe6c1ebd189b',\n      '0x218e1a5eadc7dfcf0eaf93d75d19080fa19205bf85751b7e8b15fa517363ca77',\n      '0xa4925fe39464d03f7202f13ccdfcc7ed36862b270dbe597cbeb1368f9477852b'\n    ],\n    validator_votes: [ 1, 1, 1, 3, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'AGREE', 'IDLE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "negative:wrong-fingerprint-finalize",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "finalize_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0x11ab3d7aa71b3cf11138332a480b1ba7d6c36dbd79e23484d0a99d1e51212a1d\n\nError:\nError: Write 0x11ab3d7aa71b3cf11138332a480b1ba7d6c36dbd79e23484d0a99d1e51212a1d transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method finalize_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    },
+    {
+      "label": "compatible:finalize-execution",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "finalize_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0xd323e7e107d3f0439669e70cea5f39f2317ec6b9365843beca81a6a3c609a84b"
+      ],
+      "output_tail": "742d32303236313030342d723184046164363132303665376165326166623131663335653439363837633337373834356565383031323833333339306464623565346566353866376438303666623400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47ea03482c53b480906c74da71d71b64ad7de661766e8c7649af9e745ac0cda8a08c2a036749e7f5c348cdd3cf31fe7ce0f71b4c93cd7e2912dfaec8a03151bea11db17'\n  },\n  value_credited: false,\n  current_timestamp: '1791069793',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xe26A7dE75f31C0B111c5098973685DFC89875C9D',\n  created_timestamp: '1791069785',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0xd323e7e107d3f0439669e70cea5f39f2317ec6b9365843beca81a6a3c609a84b',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0x5cDf4BdDeEDa0e32ED596b94f69AcC0FbB57f264',\n  last_leader: '0x5cDf4BdDeEDa0e32ED596b94f69AcC0FbB57f264',\n  tx_slot: '5',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f88ab8871600940166696e616c697a655f657865637574696f6e046172677315bc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723184046164363132303665376165326166623131663335653439363837633337373834356565383031323833333339306464623565346566353866376438303666623400',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0x5cDf4BdDeEDa0e32ED596b94f69AcC0FbB57f264',\n      '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n      '0xcF5Fd792Df0Dc9d297af75c82B4A0011e8FA1A4A',\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810'\n    ],\n    validator_votes_hash: [\n      '0x20ed7e039b8a8b1bd9cfd8366975c5385f36997aa6a6491790058ef4a55400b3',\n      '0x15fb7265abf35cfe34400847eb4b611428100a23999cd7f58679d300b4c78852',\n      '0xcb0290b9595209384499c6698ba269e16a74649afa7e9d6a38758a3ab7c9f943',\n      '0xc453db53574f9448ae42ef0ef30d673fca9c13f174ae30a213dee58ae637c54f',\n      '0x7c4edb17f923ce50fb9e590edc3f63a1cd2654f9ad275c4ee1761aaf8002ceae'\n    ],\n    validator_votes: [ 1, 3, 3, 1, 1 ],\n    validator_votes_name: [ 'AGREE', 'IDLE', 'IDLE', 'AGREE', 'AGREE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method finalize_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "negative:executor-finalize-replay",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "finalize_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1",
+        "ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0xd2f03edeaaff84ffd226e71338acdfd0347fbc44d859e4f18dcb50c9314fcf55\n\nError:\nError: Write 0xd2f03edeaaff84ffd226e71338acdfd0347fbc44d859e4f18dcb50c9314fcf55 transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method finalize_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    },
+    {
+      "label": "negative:executor-prepare-replay",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0xd9c6abec1cae1a69f679982b8ea7dd82ae743c425c59206002efb1686eebc01a\n\nError:\nError: Write 0xd9c6abec1cae1a69f679982b8ea7dd82ae743c425c59206002efb1686eebc01a transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    },
+    {
+      "label": "negative:handshake-consume-replay",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "consume_capability",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0x44647004de3fc5ad6e2759d6692c174348d21dea14e010dd8ca1f63d27eee2cf\n\nError:\nError: Write 0x44647004de3fc5ad6e2759d6692c174348d21dea14e010dd8ca1f63d27eee2cf transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method consume_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✖ Error during write operation"
+    },
+    {
+      "label": "incompatible:create",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "create_negotiation",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1",
+        "0xA35dc047f9937BF668743efBDF8Ea93B31A55888",
+        "0x30fd7e8539a8462591e62894739c6864e9b81fa2",
+        "billing-authorization",
+        "AUTHORIZE_BILLING",
+        "billing-production",
+        "conflicting hard requirements",
+        "SINGLE_USE",
+        "0xe26A7dE75f31C0B111c5098973685DFC89875C9D"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0xc8243f3ffb0446fb6d8cc911ad2a252e5f5b0da01c58cca39b472795a224dcd3"
+      ],
+      "output_tail": "0000000000000000000000000000000000000000000000000000000000000000008301e47da06cb31cea6cfb1b49f15adcb5cb0ea8719e61ce429666bebec5c5f3f2506c7f2da0584d85136649cd0ec8045cf37012fd1e44fd4a6c78bb544f24288db4617b491e'\n  },\n  value_credited: false,\n  current_timestamp: '1791069882',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069874',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0xc8243f3ffb0446fb6d8cc911ad2a252e5f5b0da01c58cca39b472795a224dcd3',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n  last_leader: '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n  tx_slot: '9',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f8edb8ea160094016372656174655f6e65676f74696174696f6e04617267734dac0268616e647368616b652d76332d696e636f6d70617469626c652d32303236313030342d723118a35dc047f9937bf668743efbdf8ea93b31a558881830fd7e8539a8462591e62894739c6864e9b81fa2ac0162696c6c696e672d617574686f72697a6174696f6e8c01415554484f52495a455f42494c4c494e47940162696c6c696e672d70726f64756374696f6eec01636f6e666c696374696e67206861726420726571756972656d656e74735453494e474c455f55534518e26a7de75f31c0b111c5098973685dfc89875c9d00',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n      '0xE4E106086F167D75E2270fa5f3680f6ac598d179',\n      '0x6760cDeC573cf38568C59872ee48B6fED41F8A4c',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77'\n    ],\n    validator_votes_hash: [\n      '0xe87efac546ae7fd743c2fce0053d2d6816da611243d6efe97107639419f98a35',\n      '0xf2b53309e23ea4086c4f3d6b593ce4fd02838cd6152a6e485433771e33942f13',\n      '0x24e69c08ba93aef64de763865a0e0aca9cf5fd6e488a98eaef24bf4485d99e13',\n      '0x0f2f664d525d77a263e0d4aaa2bee6a53d97615843e86820a59f793f4376b4f4',\n      '0x1560bfcca83a5a1485ca4773ca379b06e498d3795482d2b60373dd8ca6e21b36'\n    ],\n    validator_votes: [ 1, 3, 1, 1, 3 ],\n    validator_votes_name: [ 'AGREE', 'IDLE', 'AGREE', 'AGREE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method create_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "incompatible:submit-a",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "submit_position",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1",
+        "[{\"term_id\":\"price-floor\",\"category\":\"payment\",\"requirement\":\"Party A requires a minimum payment of $5,000.\",\"importance\":\"HARD\"}]"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x23f8c88a2656fc471ebdbe50c0c67730147f1a473112b9860ecf064050260f77"
+      ],
+      "output_tail": "61206d696e696d756d207061796d656e74206f662024352c3030302e077465726d5f69645c70726963652d666c6f6f72000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47ea0c36ba3f5587d9ebb570d39b34817d1f271fcc74c207db9af0ce7f1bd4ea41a85a00a978b33bbec90ca7046a16cb573650738a7c4e43da553f8f2ae70b9afe7c691'\n  },\n  value_credited: false,\n  current_timestamp: '1791069902',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069894',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x23f8c88a2656fc471ebdbe50c0c67730147f1a473112b9860ecf064050260f77',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n  last_leader: '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n  tx_slot: '10',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f8b4b8b116007c7375626d69745f706f736974696f6e046172677315ac0268616e647368616b652d76332d696e636f6d70617469626c652d32303236313030342d72310d260863617465676f72793c7061796d656e740a696d706f7274616e636524484152440b726571756972656d656e74ec02506172747920412072657175697265732061206d696e696d756d207061796d656e74206f662024352c3030302e077465726d5f69645c70726963652d666c6f6f7200',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E',\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0x8D32eb5D0207f7E230C45e7BF0D14B2ED5DA3028',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810',\n      '0xcF5Fd792Df0Dc9d297af75c82B4A0011e8FA1A4A'\n    ],\n    validator_votes_hash: [\n      '0x78a792150239f5802f5f77f5180daadd8e476d91834252d76569fda96057a03b',\n      '0x961265f80ffdc0f1f7d12e5cb5b020acec83fa7296c3942b6dbb0e79e27cb7a8',\n      '0xd1dcaaa5643220b32025565eae6e74ab1bbb95294001a6cdc6c9fd9ce88ae59f',\n      '0x3bd2c2b62d432690893a7902c518eb404b28efc20eb9f940dd2c39cf1ec118d6',\n      '0xcc8da432c78f996bfd9ae8124c2d9c9bde40c436fe89f90d3951ed2c1935614a'\n    ],\n    validator_votes: [ 1, 3, 1, 3, 1 ],\n    validator_votes_name: [ 'AGREE', 'IDLE', 'AGREE', 'IDLE', 'AGREE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "incompatible:submit-b",
+      "account": "dissent-deployer",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "submit_position",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1",
+        "[{\"term_id\":\"price-cap\",\"category\":\"payment\",\"requirement\":\"Party B requires a maximum payment of $3,000.\",\"importance\":\"HARD\"}]"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x25faf60d2cda944f364ab2cb90ab3d85f573a98c9974ff2226d1f2c915f9ff69"
+      ],
+      "output_tail": "732061206d6178696d756d207061796d656e74206f662024332c3030302e077465726d5f69644c70726963652d6361700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008301e47da0f0dbdc994926569af6891572b9b79d30c4446c6d31155b382ca6918ae3bbd4b0a03be839052ea27de8c70e034662c91abb8a56c60b838b33271e275104171c6ff9'\n  },\n  value_credited: false,\n  current_timestamp: '1791069921',\n  sender: '0x30Fd7e8539A8462591e62894739C6864E9B81fa2',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069914',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x25faf60d2cda944f364ab2cb90ab3d85f573a98c9974ff2226d1f2c915f9ff69',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n  last_leader: '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n  tx_slot: '11',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f8b2b8af16007c7375626d69745f706f736974696f6e046172677315ac0268616e647368616b652d76332d696e636f6d70617469626c652d32303236313030342d72310d260863617465676f72793c7061796d656e740a696d706f7274616e636524484152440b726571756972656d656e74ec02506172747920422072657175697265732061206d6178696d756d207061796d656e74206f662024332c3030302e077465726d5f69644c70726963652d63617000',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xE52dDB85587585930b1E5f1Fe88fef21CcA49829',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77',\n      '0x6760cDeC573cf38568C59872ee48B6fED41F8A4c',\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852'\n    ],\n    validator_votes_hash: [\n      '0x1f5fa4f293ec0dadda2b8bdc90e6dfceb1db5c26deba3b68c5dccf0f6a588058',\n      '0xfe950417c4db3d567e2696c77f2cd5ceba8bf7c2adb6ab32d27c21061267698b',\n      '0xac3a264377a538f2a568bcef5469aaf51f94aece8bf8d7da2ee9ddbf1d5e7213',\n      '0x4bb42cd7ed5f9f4053421fc739ac2f90b41b9524283f1f8299dbc6ab91516cfc',\n      '0xefff5ad985369a365dcd4c2b645c926c5c476644dcf48a2e61faf33152331952'\n    ],\n    validator_votes: [ 1, 1, 1, 3, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'AGREE', 'IDLE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method submit_position on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "incompatible:synthesize",
+      "account": "dissent-studio",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "synthesize",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1"
+      ],
+      "expected_success": true,
+      "success": true,
+      "exit_code": 0,
+      "transaction_ids": [
+        "0x07a627c9d5b6f5729ede435494fa3847c0f5c60b62f64926ede6c24f65355647"
+      ],
+      "output_tail": "00000000000000000000000000000000011e1a30000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000003ff83db83a16005473796e74686573697a6504617267730dac0268616e647368616b652d76332d696e636f6d70617469626c652d32303236313030342d7231000000000000000000000000000000000000000000000000000000000000000000008301e47ea0624a65bc1d150aaef90b34500d03d971fc570fc9d0473a366ba5b17f2b088b6ca01039ce3783c2a791a4a4ddaab18ef25500e839c91220e5e98878bf63a79512a3'\n  },\n  value_credited: false,\n  current_timestamp: '1791069955',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n  created_timestamp: '1791069940',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x07a627c9d5b6f5729ede435494fa3847c0f5c60b62f64926ede6c24f65355647',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xE4E106086F167D75E2270fa5f3680f6ac598d179',\n  last_leader: '0xE4E106086F167D75E2270fa5f3680f6ac598d179',\n  tx_slot: '12',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f83db83a16005473796e74686573697a6504617267730dac0268616e647368616b652d76332d696e636f6d70617469626c652d32303236313030342d723100',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xcdc6c28000c0c080c5c480c28000',\n  messages: [],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xE4E106086F167D75E2270fa5f3680f6ac598d179',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n      '0xf13c3DfE38C8E206C33F750C24a1b043b63Cb810',\n      '0xEEcEC5D1E07Ee40f5cb85aF922178Dc01278013C',\n      '0x05d8aFc66B515038712537f99cAAEA73d16f0007'\n    ],\n    validator_votes_hash: [\n      '0x595e9d97dd4e5a7334eb744e4d6c7ca9ddf92b102674c8251b441bd0372f054e',\n      '0x860d717a79d829da43129f5cc654e25cf206ffe2cd998a4eac666edcb56fe2cb',\n      '0xedd44d31e82eadb965c895db9d74c30940fa3bb73608661a8c145b433515aeef',\n      '0xe6d747811b35f20c3325d09e24c639e81ec4842466eed8bfb85f0e17ba8116cc',\n      '0x0f0562b1bfb64d166a14cb076e2ce4cddfa1631f298058dbbaaf24406144f4c7'\n    ],\n    validator_votes: [ 3, 1, 1, 3, 1 ],\n    validator_votes_name: [ 'IDLE', 'AGREE', 'AGREE', 'IDLE', 'AGREE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method synthesize on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Write operation successfully executed"
+    },
+    {
+      "label": "negative:incompatible-prepare",
+      "account": "dissent-studio",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "prepare_execution",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1"
+      ],
+      "expected_success": false,
+      "success": false,
+      "exit_code": 1,
+      "transaction_ids": [],
+      "output_tail": "Fee deposit: 100000000000010352 wei (~0.100000000000010352 GEN)\n\nWrite Transaction Hash:\n0x6b22b87b569e46ea632294ecbc9a463f562b188b283d31c56f8ca10180a4042f\n\nError:\nError: Write 0x6b22b87b569e46ea632294ecbc9a463f562b188b283d31c56f8ca10180a4042f transaction was decided as ACCEPTED; leader execution result: FINISHED_WITH_ERROR.\n    at assertSuccessfulExecution (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60501:9)\n    at WriteAction.write (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:60747:7)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Command.<anonymous> (file:///home/ini/.local/lib/node_modules/genlayer/dist/index.js:61030:5)\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✖ Error during write operation"
+    }
+  ],
+  "views": [
+    {
+      "label": "compatible:ready",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_negotiation",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  accepted_a: false,\n  accepted_b: false,\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: '',\n  capability_id: 'docs-migration-authorization',\n  capability_state: 'INACTIVE',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  fingerprint: '54a0c37e1db6600457f1b76ee60e1d37834ec6b58244dd8037fc394e89c1417e',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers a blue-green rollout.',\n      term_id: 'blue-green-preference'\n    },\n    {\n      category: 'downtime',\n      importance: 'HARD',\n      requirement: 'Migration downtime must not exceed 10 minutes.',\n      term_id: 'downtime-limit'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'Existing documentation URLs must be preserved.',\n      term_id: 'preserve-urls'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'A rollback checkpoint is required before cutover.',\n      term_id: 'rollback-checkpoint'\n    }\n  ],\n  party_a_position_fingerprint: '444f78256c92de00c7af8eac6541cc686347de807bb2cdfd9ab83454d5db7732',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers a canary rollout.',\n      term_id: 'canary-preference'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'No documentation data-history may be lost.',\n      term_id: 'history-preserved'\n    },\n    {\n      category: 'schedule',\n      importance: 'HARD',\n      requirement: 'Migration must complete within the agreed maintenance window.',\n      term_id: 'maintenance-window'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'The rollback path must be tested.',\n      term_id: 'rollback-tested'\n    }\n  ],\n  party_b_position_fingerprint: 'fc832dbd12fe8730d8149006cfed63a379c6ef3385fe0682f80e549a225da27d',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'READY',\n  synthesis_fingerprint: ''\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:synthesis",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_synthesis",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  compatibility: 'COMPATIBLE',\n  conflicts: [],\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  proposed_terms: [\n    {\n      agreement: 'Migration downtime shall not exceed 10 minutes.',\n      category: 'downtime',\n      source_terms: [ { party: 'A', term_id: 'downtime-limit' } ],\n      synthesis_id: 'term1'\n    },\n    {\n      agreement: 'Documentation URLs shall be preserved and no documentation data-history shall be lost.',\n      category: 'data_integrity',\n      source_terms: [\n        { party: 'A', term_id: 'preserve-urls' },\n        { party: 'B', term_id: 'history-preserved' }\n      ],\n      synthesis_id: 'term2'\n    },\n    {\n      agreement: 'A rollback checkpoint shall be established before cutover and the rollback path shall be tested.',\n      category: 'rollback',\n      source_terms: [\n        { party: 'A', term_id: 'rollback-checkpoint' },\n        { party: 'B', term_id: 'rollback-tested' }\n      ],\n      synthesis_id: 'term3'\n    },\n    {\n      agreement: 'Migration shall complete within the agreed maintenance window.',\n      category: 'schedule',\n      source_terms: [ { party: 'B', term_id: 'maintenance-window' } ],\n      synthesis_id: 'term4'\n    },\n    {\n      agreement: 'The rollout shall be executed using a phased approach that incorporates both blue‑green and canary techniques.',\n      category: 'rollout',\n      source_terms: [\n        { party: 'A', term_id: 'blue-green-preference' },\n        { party: 'B', term_id: 'canary-preference' }\n      ],\n      synthesis_id: 'term5'\n    }\n  ],\n  state: 'PENDING_ACCEPTANCE',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c',\n  unresolved_items: []\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_synthesis on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:synthesis-fingerprint",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_synthesis_fingerprint",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_synthesis_fingerprint on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:after-accept-a",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_negotiation",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: false,\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: '',\n  capability_id: 'docs-migration-authorization',\n  capability_state: 'INACTIVE',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  fingerprint: '54a0c37e1db6600457f1b76ee60e1d37834ec6b58244dd8037fc394e89c1417e',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers a blue-green rollout.',\n      term_id: 'blue-green-preference'\n    },\n    {\n      category: 'downtime',\n      importance: 'HARD',\n      requirement: 'Migration downtime must not exceed 10 minutes.',\n      term_id: 'downtime-limit'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'Existing documentation URLs must be preserved.',\n      term_id: 'preserve-urls'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'A rollback checkpoint is required before cutover.',\n      term_id: 'rollback-checkpoint'\n    }\n  ],\n  party_a_position_fingerprint: '444f78256c92de00c7af8eac6541cc686347de807bb2cdfd9ab83454d5db7732',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers a canary rollout.',\n      term_id: 'canary-preference'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'No documentation data-history may be lost.',\n      term_id: 'history-preserved'\n    },\n    {\n      category: 'schedule',\n      importance: 'HARD',\n      requirement: 'Migration must complete within the agreed maintenance window.',\n      term_id: 'maintenance-window'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'The rollback path must be tested.',\n      term_id: 'rollback-tested'\n    }\n  ],\n  party_b_position_fingerprint: 'fc832dbd12fe8730d8149006cfed63a379c6ef3385fe0682f80e549a225da27d',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'PENDING_ACCEPTANCE',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:capability-before-dual-acceptance",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_capability",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  activation_state: 'INACTIVE',\n  active: false,\n  capability_fingerprint: '',\n  capability_id: 'docs-migration-authorization',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:active-negotiation",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_negotiation",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  accepted_a: true,\n  accepted_b: true,\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  capability_state: 'ACTIVE',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  fingerprint: '54a0c37e1db6600457f1b76ee60e1d37834ec6b58244dd8037fc394e89c1417e',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party A prefers a blue-green rollout.',\n      term_id: 'blue-green-preference'\n    },\n    {\n      category: 'downtime',\n      importance: 'HARD',\n      requirement: 'Migration downtime must not exceed 10 minutes.',\n      term_id: 'downtime-limit'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'Existing documentation URLs must be preserved.',\n      term_id: 'preserve-urls'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'A rollback checkpoint is required before cutover.',\n      term_id: 'rollback-checkpoint'\n    }\n  ],\n  party_a_position_fingerprint: '444f78256c92de00c7af8eac6541cc686347de807bb2cdfd9ab83454d5db7732',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'rollout',\n      importance: 'PREFERENCE',\n      requirement: 'Party B prefers a canary rollout.',\n      term_id: 'canary-preference'\n    },\n    {\n      category: 'data_integrity',\n      importance: 'HARD',\n      requirement: 'No documentation data-history may be lost.',\n      term_id: 'history-preserved'\n    },\n    {\n      category: 'schedule',\n      importance: 'HARD',\n      requirement: 'Migration must complete within the agreed maintenance window.',\n      term_id: 'maintenance-window'\n    },\n    {\n      category: 'rollback',\n      importance: 'HARD',\n      requirement: 'The rollback path must be tested.',\n      term_id: 'rollback-tested'\n    }\n  ],\n  party_b_position_fingerprint: 'fc832dbd12fe8730d8149006cfed63a379c6ef3385fe0682f80e549a225da27d',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'ACTIVE',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:active-capability",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_capability",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  activation_state: 'ACTIVE',\n  active: true,\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:executor-pending",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "get_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumption_requested: true,\n  execution_fingerprint: '',\n  execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n  executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  prepared_by: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  receipt: null,\n  replay_protected: false,\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'PENDING_CONSUMPTION'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:handshake-after-prepare",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_capability",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  activation_state: 'CONSUMED',\n  active: false,\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumed: true,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:pending-after-wrong-fingerprint",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "get_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumption_requested: true,\n  execution_fingerprint: '',\n  execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n  executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  prepared_by: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  receipt: null,\n  replay_protected: false,\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'PENDING_CONSUMPTION'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:no-receipt-before-consumption",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "get_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumption_requested: true,\n  execution_fingerprint: '',\n  execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n  executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  prepared_by: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  receipt: null,\n  replay_protected: false,\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'PENDING_CONSUMPTION'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:child-consumption-finalized",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_capability",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  activation_state: 'CONSUMED',\n  active: false,\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumed: true,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:executor-executed",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "get_execution",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumption_requested: true,\n  execution_fingerprint: '59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d',\n  execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n  executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  prepared_by: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  receipt: {\n    action: 'AUTHORIZE_MIGRATION',\n    capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n    capability_id: 'docs-migration-authorization',\n    downstream_action: 'DOCS_MIGRATION_AUTHORIZATION',\n    execution_fingerprint: '59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d',\n    execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n    executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n    final_execution_state: 'EXECUTED',\n    handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n    mode: 'SINGLE_USE',\n    negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n    receipt_type: 'HANDSHAKE_DOWNSTREAM_EXECUTION',\n    resource: 'docs-production',\n    scope: 'two parties authorize the agreed documentation migration'\n  },\n  replay_protected: true,\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  state: 'EXECUTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "compatible:external-execution-receipt",
+      "contract": "0xe26A7dE75f31C0B111c5098973685DFC89875C9D",
+      "method": "get_execution_receipt",
+      "args": [
+        "handshake-v3-cross-contract-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  downstream_action: 'DOCS_MIGRATION_AUTHORIZATION',\n  execution_fingerprint: '59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d',\n  execution_id: '8da9caf590a0673203ee5e39288fd56e524b8919cf6889d81d68ea8d25940c6f',\n  executor_address: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  final_execution_state: 'EXECUTED',\n  handshake_address: '0xeb16e25ff5e5ad4e895fd62cd9614298bd75f491',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  receipt_type: 'HANDSHAKE_DOWNSTREAM_EXECUTION',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_execution_receipt on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "incompatible:terminal-state",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_negotiation",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1"
+      ],
+      "value": "Result:\n{\n  accepted_a: false,\n  accepted_b: false,\n  action: 'AUTHORIZE_BILLING',\n  capability_fingerprint: '',\n  capability_id: 'billing-authorization',\n  capability_state: 'INACTIVE',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  fingerprint: '7c37941ab6fa8f8cdcaddf60073ce1cf18fb3f818cd137de884563adba136b55',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-incompatible-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_a_position: [\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party A requires a minimum payment of $5,000.',\n      term_id: 'price-floor'\n    }\n  ],\n  party_a_position_fingerprint: '616c083f7cd166b4b1e4d7fdb4bbb9e57db57d7b7961754f07e724567b702f1c',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  party_b_position: [\n    {\n      category: 'payment',\n      importance: 'HARD',\n      requirement: 'Party B requires a maximum payment of $3,000.',\n      term_id: 'price-cap'\n    }\n  ],\n  party_b_position_fingerprint: '66c674b5329f98333a28cd4c1bea3eb5c5b8042bae0002ecc2ea5fe315ec0e15',\n  resource: 'billing-production',\n  scope: 'conflicting hard requirements',\n  state: 'INCOMPATIBLE',\n  synthesis_fingerprint: 'ec67d06f66c36b4728773d733adf80e7be600a922e836331f20c60950338c571'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_negotiation on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    },
+    {
+      "label": "incompatible:no-capability",
+      "contract": "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491",
+      "method": "get_capability",
+      "args": [
+        "handshake-v3-incompatible-20261004-r1"
+      ],
+      "value": "Result:\n{\n  action: 'AUTHORIZE_BILLING',\n  activation_state: 'INACTIVE',\n  active: false,\n  capability_fingerprint: '',\n  capability_id: 'billing-authorization',\n  consumed: false,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-incompatible-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'billing-production',\n  scope: 'conflicting hard requirements',\n  synthesis_fingerprint: 'ec67d06f66c36b4728773d733adf80e7be600a922e836331f20c60950338c571'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "fresh negotiation reaches READY",
+      "passed": true,
+      "expected": "state: 'READY'"
+    },
+    {
+      "name": "compatible synthesis reaches pending acceptance",
+      "passed": true,
+      "expected": "compatibility: 'COMPATIBLE'"
+    },
+    {
+      "name": "one exact acceptance remains pending",
+      "passed": true,
+      "expected": "state: 'PENDING_ACCEPTANCE'"
+    },
+    {
+      "name": "capability is inactive before dual acceptance",
+      "passed": true,
+      "expected": "active: false"
+    },
+    {
+      "name": "dual acceptance activates negotiation",
+      "passed": true,
+      "expected": "state: 'ACTIVE'"
+    },
+    {
+      "name": "capability is active",
+      "passed": true,
+      "expected": "active: true"
+    },
+    {
+      "name": "capability action is migration authorization",
+      "passed": true,
+      "expected": "action: 'AUTHORIZE_MIGRATION'"
+    },
+    {
+      "name": "capability resource is docs production",
+      "passed": true,
+      "expected": "resource: 'docs-production'"
+    },
+    {
+      "name": "executor stores pending execution",
+      "passed": true,
+      "expected": "state: 'PENDING_CONSUMPTION'"
+    },
+    {
+      "name": "pending execution queues consumption",
+      "passed": true,
+      "expected": "consumption_requested: true"
+    },
+    {
+      "name": "pending execution has no receipt",
+      "passed": true,
+      "expected": "receipt: null"
+    },
+    {
+      "name": "Handshake reaches consumed after queued child finality",
+      "passed": true,
+      "expected": "activation_state: 'CONSUMED'"
+    },
+    {
+      "name": "wrong fingerprint cannot mutate pending record",
+      "passed": true,
+      "expected": "state: 'PENDING_CONSUMPTION'"
+    },
+    {
+      "name": "external receipt blocked until child finality",
+      "passed": true,
+      "expected": "pending receipt: null before child finality"
+    },
+    {
+      "name": "external receipt blocked until child finality",
+      "passed": true,
+      "expected": "pending receipt: null before child finality"
+    },
+    {
+      "name": "external receipt is absent before child finality",
+      "passed": true,
+      "expected": "receipt: null"
+    },
+    {
+      "name": "child message consumes single-use capability",
+      "passed": true,
+      "expected": "activation_state: 'CONSUMED'"
+    },
+    {
+      "name": "consumed capability is terminal",
+      "passed": true,
+      "expected": "consumed: true"
+    },
+    {
+      "name": "executor reaches executed",
+      "passed": true,
+      "expected": "state: 'EXECUTED'"
+    },
+    {
+      "name": "executor is replay protected",
+      "passed": true,
+      "expected": "replay_protected: true"
+    },
+    {
+      "name": "receipt records concrete downstream action",
+      "passed": true,
+      "expected": "DOCS_MIGRATION_AUTHORIZATION"
+    },
+    {
+      "name": "receipt binds final execution state",
+      "passed": true,
+      "expected": "EXECUTED"
+    },
+    {
+      "name": "receipt binds executor",
+      "passed": true,
+      "expected": "0xe26a7de75f31c0b111c5098973685dfc89875c9d"
+    },
+    {
+      "name": "incompatible branch is terminal",
+      "passed": true,
+      "expected": "state: 'INCOMPATIBLE'"
+    },
+    {
+      "name": "incompatible branch has no active capability",
+      "passed": true,
+      "expected": "active: false"
+    }
+  ],
+  "polls": [
+    {
+      "attempt": 1,
+      "value": "Result:\n{\n  action: 'AUTHORIZE_MIGRATION',\n  activation_state: 'CONSUMED',\n  active: false,\n  capability_fingerprint: 'ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4',\n  capability_id: 'docs-migration-authorization',\n  consumed: true,\n  consumer: '0xe26a7de75f31c0b111c5098973685dfc89875c9d',\n  mode: 'SINGLE_USE',\n  negotiation_id: 'handshake-v3-cross-contract-20261004-r1',\n  party_a: '0xa35dc047f9937bf668743efbdf8ea93b31a55888',\n  party_b: '0x30fd7e8539a8462591e62894739c6864e9b81fa2',\n  resource: 'docs-production',\n  scope: 'two parties authorize the agreed documentation migration',\n  synthesis_fingerprint: '497067657eeba3f98f620c74adcbd58fb17fcd054173c794e762b8b054c7804c'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling method get_capability on contract at 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491...\n✔ Read operation successfully executed"
+    }
+  ],
+  "updated_at": "2026-10-03T23:26:21.907909+00:00",
+  "prepare_output_tail": ": false,\n  current_timestamp: '1791069624',\n  sender: '0xA35dc047f9937BF668743efBDF8Ea93B31A55888',\n  recipient: '0xe26A7dE75f31C0B111c5098973685DFC89875C9D',\n  created_timestamp: '1791069609',\n  random_seed: '0x0000000000000000000000000000000000000000000000000000000000000000',\n  tx_id: '0x6d98ffb5f5441faf117a76cb8f24008c2c5d9bcfef2dc37bd7ed1023c6959055',\n  read_state_block_range: { activation_block: '0', processing_block: '0', proposal_block: '0' },\n  activator: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  last_leader: '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n  tx_slot: '3',\n  result_name: 'MAJORITY_AGREE',\n  tx_data: 'f847b84416008c01707265706172655f657865637574696f6e04617267730dbc0268616e647368616b652d76332d63726f73732d636f6e74726163742d32303236313030342d723100',\n  tx_execution_hash: '',\n  eq_blocks_outputs: '0xf8a7f89fc28000f898f896aa307865423136453235466635653561443445383935466436326364393631343239386244373566343931b85c4667435541574e76626e4e31625756665932467759574a7062476c3065515268636d647a44627743614746755a484e6f5957746c4c58597a4c574e7962334e7a4c574e76626e527959574e304c5449774d6a59784d4441304c584978808966696e616c697a65648080c080c5c480c28000',\n  messages: [\n    {\n      messageType: '0',\n      recipient: '0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491',\n      value: 0,\n      data: 'FgCUAWNvbnN1bWVfY2FwYWJpbGl0eQRhcmdzDbwCaGFuZHNoYWtlLXYzLWNyb3NzLWNvbnRyYWN0LTIwMjYxMDA0LXIx',\n      onAcceptance: false\n    }\n  ],\n  queue_type: '2',\n  queue_position: '0',\n  num_of_rounds: '0',\n  last_round: {\n    round: '0',\n    leader_index: '0',\n    votes_committed: '5',\n    votes_revealed: '5',\n    appeal_bond: '0',\n    rotations_left: '3',\n    result: 1,\n    round_validators: [\n      '0xA793D9dc0ED9edC1f9F732bB68b5D3AFA934F52D',\n      '0xcbC79F96B7A275b23EE64d80a98325107F6E1b77',\n      '0xa0435f618c1F27B254998018AEa8Da5C77187852',\n      '0x5A4230B920b18c4AFD3A28F99Eae669B7F2cdC1e',\n      '0x8142E5D1b04f84c3cD995C25AAe31B31F8e0379E'\n    ],\n    validator_votes_hash: [\n      '0x7978509872aaf5e476c3f17d79618d98eff7719f2a7aca5f3892b3a0a65ea8df',\n      '0x1fec815f238b4d380292d42e75dc6e851145a72629280b4639d6c24ae4779772',\n      '0xb86c1ad1ab096a0e69227b9db085f3a4195f6412410f02dc07dcfe6c1ebd189b',\n      '0x218e1a5eadc7dfcf0eaf93d75d19080fa19205bf85751b7e8b15fa517363ca77',\n      '0xa4925fe39464d03f7202f13ccdfcc7ed36862b270dbe597cbeb1368f9477852b'\n    ],\n    validator_votes: [ 1, 1, 1, 3, 3 ],\n    validator_votes_name: [ 'AGREE', 'AGREE', 'AGREE', 'IDLE', 'IDLE' ]\n  },\n  blockHash: null,\n  blockNumber: null,\n  chainId: undefined,\n  gas: undefined,\n  gasPrice: undefined,\n  maxFeePerBlobGas: undefined,\n  maxFeePerGas: undefined,\n  maxPriorityFeePerGas: undefined,\n  to: null,\n  transactionIndex: null,\n  typeHex: 2,\n  yParity: undefined,\n  statusName: 'ACCEPTED',\n  lifecycle: { state: 'decided', outcome: 'accepted' },\n  consensusStatus: 'ACCEPTED'\n}\n\n\n[genlayer-js] initializeConsensusSmartContract() is deprecated and will be removed in a future release. The consensus contract is now resolved from the static chain definition.\n- Calling write method prepare_execution on contract at 0xe26A7dE75f31C0B111c5098973685DFC89875C9D...\n✔ Write operation successfully executed",
+  "recovered_runner_failures": [
+    {
+      "name": "Handshakes remains active while child is pending",
+      "passed": false,
+      "expected": "activation_state: 'ACTIVE'"
+    },
+    {
+      "name": "external receipt is absent before child finality",
+      "passed": false,
+      "expected": "receipt: None"
+    }
+  ],
+  "timing_notes": [
+    "The child message finalized before the resumed runner could submit the early-finalize call; the recorded pending executor view has receipt: null, and Direct Mode covers the rejected pre-finality finalize path."
+  ],
+  "capability_fingerprint": "ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4",
+  "execution_fingerprint": "59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d",
+  "finished_at": "2026-10-03T23:26:21.907727+00:00",
+  "summary": {
+    "successful_writes": 12,
+    "expected_failures": 8,
+    "assertions_passed": 25,
+    "assertions_total": 25
+  }
+}

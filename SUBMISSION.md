@@ -1,4 +1,4 @@
-# Handshake v2 submission record
+# Handshake v3 cross-contract milestone submission record
 
 ## Public links
 
@@ -33,7 +33,7 @@ Lifecycle:
 
 OPEN -> READY -> PENDING_ACCEPTANCE -> ACTIVE -> CONSUMED
 
-INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumption is consumer-bound and replay-protected. The current runtime does not expose a proven typed GenLayer-to-GenLayer interface, so the downstream consequence is intentionally implemented as the deterministic in-contract consumer gate rather than an invented companion IC.
+INCOMPATIBLE is terminal and never activates a capability. SINGLE_USE consumption is consumer-bound and replay-protected. That sentence describes the accepted v2 baseline only. The v3 milestone now proves the typed cross-contract path in a fresh deployment; see the section below.
 
 ## Contract verification
 
@@ -51,7 +51,7 @@ The v2 frontend is committed, locally verified and deployed to the existing Verc
 
 Tooling limitation: the installed genvm-linter 0.11.0 validator/schema path expects legacy genlayer.py; the pinned Studio Dev SDK uses the current package layout. Validation and schema use the documented disposable GENVMROOT shim.
 
-## Fresh Studio Dev lifecycle proof
+## Accepted v2 baseline lifecycle proof
 
 - Compatible/migration ID: handshake-v2-compatible-20260926-r1.
 - Capability: docs-migration-authorization.
@@ -78,3 +78,29 @@ POSITIONS -> SYNTHESIS -> DUAL ACCEPTANCE -> CAPABILITY ACTIVE -> CONSUMED
 ## Submission status
 
 The repository is public, the Studio Dev v2 contract facts are recorded, and the public v2 frontend and reviewer walkthrough are verified. No browser-wallet automation was available for a disposable frontend-originated write; the live CLI multi-wallet suite remains the production transaction proof. Portal submission was not performed automatically; manual Portal submission is the only remaining action.
+
+## Handshake v3 milestone proof
+
+Accepted baseline: single Handshake IC, in-contract consumer gate, accepted at 320 points. Milestone delta: second reusable Intelligent Contract, typed IC-to-IC integration, asynchronous finalized child consumption, external execution receipt, two-contract replay protection, fresh deployments, fresh live proof and /app/milestone.
+
+| Fact | Value |
+| --- | --- |
+| Fresh Handshake | 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491 |
+| Handshake deployment tx | 0x51ebaa3a9b5a46e38d5d6966c7149846637166c7c538a1b769e9826fa4394fc2 |
+| Handshake source SHA | 2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7 |
+| HandshakeExecutor | 0xe26A7dE75f31C0B111c5098973685DFC89875C9D |
+| Executor deployment tx | 0xa9e6671c2e7ef148834550b09e71ac30454045ffb2db5879e6f7d6f8cda9ed34 |
+| Executor source SHA | 73745f5f5cfe0d4993c5f6c50bbe397b58bab301df3392fce2a4e8701a974d3e |
+| Compatible ID | handshake-v3-cross-contract-20261004-r1 |
+| Incompatible ID | handshake-v3-incompatible-20261004-r1 |
+| Capability fingerprint | ad61206e7ae2afb11f35e49687c377845ee8012833390ddb5e4ef58f7d806fb4 |
+| External execution fingerprint | 59be0f7605b00ba62556676da6ae92d5482fedeb68f3091fd1bffa162012cc0d |
+| Live result | 12 successful writes, 8 expected failures, 25/25 assertions |
+
+The external executor records DOCS_MIGRATION_AUTHORIZATION only after a later Handshake view proves the finalized child consumed the SINGLE_USE capability. Wrong consumer, outsider, pre-acceptance, wrong fingerprint, incompatible and replay attempts all fail closed. The complete report is evidence/STUDIO_DEV_V3_CROSS_CONTRACT_REPORT.json; the frontend reviewer route is https://handshake-lake.vercel.app/app/milestone.
+
+Validation limitation: the local genvm-lint validator/schema path could not load the pinned runner archive from its cache. Static lint, Direct Mode, frontend regression, source-equivalent Pyright typecheck and production build passed; integrated genvm-lint validation/schema/typecheck require the missing pinned runner archive.
+
+## V3 production deployment
+
+Deployment dpl_ELeuD4BHrFs372Dud9en5DWwyLuL is READY and aliased at https://handshake-lake.vercel.app. Deployment URL: https://handshake-28m0ywdho-iniwura-akurus-projects.vercel.app. Anonymous HTTP 200 checks passed for /app/milestone, the fresh v3 detail route and the existing public routes.

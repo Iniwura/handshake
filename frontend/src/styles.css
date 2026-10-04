@@ -262,6 +262,10 @@ h1 em,h2 em { font-family:"Instrument Serif",Georgia,serif; font-weight:400; let
 .live-facts strong { display:block; font:12px "DM Mono",monospace; overflow-wrap:anywhere; }
 .live-proof-footer { border-top:1px solid var(--line); margin-top:24px; padding-top:18px; display:flex; justify-content:space-between; gap:16px; align-items:center; }
 .live-proof-footer>strong { color:var(--green); font:11px "DM Mono",monospace; }
+.cross-contract-panel { margin-top:24px; }
+.cross-contract-panel .lifecycle-proof { margin:22px 0; }
+.receipt-block { margin:0; padding:18px; background:var(--ink); color:#e7e7df; overflow:auto; font:11px/1.6 "DM Mono",monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+.milestone-page .live-case { margin-top:42px; }
 
 @media (max-width:850px) {
   .state-branch-grid { grid-template-columns:1fr; }

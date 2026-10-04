@@ -2,8 +2,8 @@ import { FormEvent, ReactNode, useEffect, useState } from "react";
 import { ArrowRight, Check, Copy, ExternalLink, Fingerprint, LockKeyhole, Menu, ShieldCheck, Sparkles, Wallet, X } from "lucide-react";
 import { Link, NavLink, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
-  CHAIN_ID, CONTRACT_ADDRESS, DEPLOYMENT_TX, SOURCE_SHA, type Capability, type Importance, type Negotiation, type Party, type PositionTerm, type Synthesis,
-  contractExplorerUrl, deploymentExplorerUrl, getWalletAddress, readCapability, readNegotiation, readSynthesis, requestWallet, switchToStudioDev, watchWallet, writeMethod
+  CHAIN_ID, CONTRACT_ADDRESS, DEPLOYMENT_TX, SOURCE_SHA, EXECUTOR_ADDRESS, EXECUTOR_DEPLOYMENT_TX, V3_HANDSHAKE_ADDRESS, V3_HANDSHAKE_DEPLOYMENT_TX, V3_HANDSHAKE_SOURCE_SHA, EXECUTOR_SOURCE_SHA, V3_NEGOTIATION_ID, V3_INCOMPATIBLE_ID, type Capability, type Execution, type Importance, type Negotiation, type Party, type PositionTerm, type Synthesis,
+  contractExplorerUrl, deploymentExplorerUrl, getWalletAddress, readCapability, readCapabilityAt, readExecution, readNegotiation, readNegotiationAt, readSynthesis, readSynthesisAt, requestWallet, switchToStudioDev, watchWallet, writeMethod
 } from "./genlayer";
 import { authoritativeStateConfirmed, canConsumeCapability, capabilityConsumed, transactionIsOpen, type TransactionStatus } from "./transaction-model";
 import { nextStepFor, TOUR_STORAGE_KEY, tourShouldOpen } from "./ux-model";
@@ -25,7 +25,7 @@ const DEMO_B: PositionTerm[] = [
   { term_id: "milestones", category: "payment", requirement: "Payment split into milestones.", importance: "PREFERENCE" },
 ];
 
-type LoadedNegotiation = { record: Negotiation; capability: Capability; synthesis: Synthesis | null };
+type LoadedNegotiation = { record: Negotiation; capability: Capability; synthesis: Synthesis | null; execution?: Execution | null };
 
 function short(value: string | null | undefined) { return value ? value.slice(0, 7) + "..." + value.slice(-5) : ""; }
 function same(a: string | null | undefined, b: string | null | undefined) { return Boolean(a && b && a.toLowerCase() === b.toLowerCase()); }
@@ -323,14 +323,17 @@ function Detail() {
   const [record, setRecord] = useState<Negotiation | null>(null);
   const [synthesis, setSynthesis] = useState<Synthesis | null>(null);
   const [capability, setCapability] = useState<Capability | null>(null);
+  const [execution, setExecution] = useState<Execution | null>(null);
   const [transaction, setTransaction] = useState<TransactionStatus | null>(null);
   const [error, setError] = useState("");
+  const isV3 = same(id, V3_NEGOTIATION_ID) || same(id, V3_INCOMPATIBLE_ID);
   const load = async (): Promise<LoadedNegotiation> => {
-    const next = await readNegotiation(id);
-    const nextCapability = await readCapability(id);
-    const nextSynthesis = next.synthesis_fingerprint ? await readSynthesis(id) : null;
-    setRecord(next); setCapability(nextCapability); setSynthesis(nextSynthesis);
-    return { record: next, capability: nextCapability, synthesis: nextSynthesis };
+    const next = isV3 ? await readNegotiationAt(V3_HANDSHAKE_ADDRESS, id) : await readNegotiation(id);
+    const nextCapability = isV3 ? await readCapabilityAt(V3_HANDSHAKE_ADDRESS, id) : await readCapability(id);
+    const nextSynthesis = next.synthesis_fingerprint ? (isV3 ? await readSynthesisAt(V3_HANDSHAKE_ADDRESS, id) : await readSynthesis(id)) : null;
+    const nextExecution = same(id, V3_NEGOTIATION_ID) ? await readExecution(id) : null;
+    setRecord(next); setCapability(nextCapability); setSynthesis(nextSynthesis); setExecution(nextExecution);
+    return { record: next, capability: nextCapability, synthesis: nextSynthesis, execution: nextExecution };
   };
   useEffect(() => { let active = true; void load().catch((e) => { if (active) setError(errorText(e)); }); return () => { active = false; }; }, [id]);
   const run = async (method: string, args: unknown[], expectedLabel: string, expected: (loaded: LoadedNegotiation) => boolean) => {
@@ -358,7 +361,7 @@ function Detail() {
   const canConsume = canConsumeCapability(capability, wallet.address, wallet.onTarget);
   const transactionBusy = transactionIsOpen(transaction);
   const nextStep = nextStepFor({ state: record.state, walletAddress: wallet.address, partyA: record.party_a, partyB: record.party_b, partyAPositionSubmitted: record.party_a_position.length > 0, partyBPositionSubmitted: record.party_b_position.length > 0, acceptedA: record.accepted_a, acceptedB: record.accepted_b, consumer: capability?.consumer || record.consumer });
-  return <main className="section dossier"><div className="section-index">NEGOTIATION / {record.negotiation_id}</div><div className="dossier-head"><div><p className="eyebrow">AUTHORITATIVE RECORD</p><h1>{record.negotiation_id}</h1><p className="mono">{record.fingerprint}</p></div><StateBadge state={record.state} /></div><StateRail state={record.state} /><section className={"next-step-panel next-step-" + nextStep.tone}><span>NEXT STEP</span><strong>{nextStep.message}</strong></section><div className="party-columns"><PositionPanel label="PARTY A" address={record.party_a} position={record.party_a_position} fingerprint={record.party_a_position_fingerprint} /><PositionPanel label="PARTY B" address={record.party_b} position={record.party_b_position} fingerprint={record.party_b_position_fingerprint} /></div>{error && <p className="form-error">{error}</p>}<div className="dossier-actions" data-tour="acceptance">{!hasBoth && <Link className="button button-quiet" to={"/app/negotiations/" + encodeURIComponent(id) + "/position"}>Submit a position <ArrowRight size={15} /></Link>}{hasBoth && !record.synthesis_fingerprint && <Button className="button-ink" disabled={transactionBusy} onClick={() => void run("synthesize", [id], "SYNTHESIS PERSISTED", (loaded) => Boolean(loaded.record.synthesis_fingerprint))}>{transactionBusy ? transaction?.stage : "Synthesize proposal"} <Sparkles size={15} /></Button>}{record.synthesis_fingerprint && record.state === "PENDING_ACCEPTANCE" && <Button className="button-ink" disabled={transactionBusy || !record.synthesis_fingerprint} onClick={() => void run("accept_synthesis", [id, record.synthesis_fingerprint], firstAcceptanceAlreadyStored ? "ACTIVE" : "PENDING_ACCEPTANCE", (loaded) => firstAcceptanceAlreadyStored ? authoritativeStateConfirmed(loaded.record.state, "ACTIVE") : authoritativeStateConfirmed(loaded.record.state, "PENDING_ACCEPTANCE"))}>{transactionBusy ? transaction?.stage : "Accept exact synthesis"} <Check size={15} /></Button>}{active && <span className="seal-stamp"><ShieldCheck size={16} /> CAPABILITY ACTIVE</span>}{consumed && <span className="seal-stamp"><LockKeyhole size={16} /> CAPABILITY CONSUMED</span>}{incompatible && <span className="seal-stamp conflict">NO CAPABILITY ISSUED</span>}</div><TransactionStatusPanel status={transaction} />{!incompatible && capability && <CapabilityPanel capability={capability} canConsume={canConsume} walletAddress={wallet.address} onTarget={wallet.onTarget} onConsume={() => void run("consume_capability", [id], "CONSUMED", (loaded) => capabilityConsumed(loaded.record, loaded.capability))} disabled={transactionBusy} />}{incompatible && capability && <NoCapabilityPanel capability={capability} />}{synthesis && <SynthesisPanel synthesis={synthesis} fingerprint={record.synthesis_fingerprint} />}</main>;
+  return <main className="section dossier"><div className="section-index">NEGOTIATION / {record.negotiation_id}</div><div className="dossier-head"><div><p className="eyebrow">AUTHORITATIVE RECORD</p><h1>{record.negotiation_id}</h1><p className="mono">{record.fingerprint}</p></div><StateBadge state={record.state} /></div><StateRail state={record.state} /><section className={"next-step-panel next-step-" + nextStep.tone}><span>NEXT STEP</span><strong>{nextStep.message}</strong></section><div className="party-columns"><PositionPanel label="PARTY A" address={record.party_a} position={record.party_a_position} fingerprint={record.party_a_position_fingerprint} /><PositionPanel label="PARTY B" address={record.party_b} position={record.party_b_position} fingerprint={record.party_b_position_fingerprint} /></div>{error && <p className="form-error">{error}</p>}<div className="dossier-actions" data-tour="acceptance">{!hasBoth && <Link className="button button-quiet" to={"/app/negotiations/" + encodeURIComponent(id) + "/position"}>Submit a position <ArrowRight size={15} /></Link>}{hasBoth && !record.synthesis_fingerprint && <Button className="button-ink" disabled={transactionBusy} onClick={() => void run("synthesize", [id], "SYNTHESIS PERSISTED", (loaded) => Boolean(loaded.record.synthesis_fingerprint))}>{transactionBusy ? transaction?.stage : "Synthesize proposal"} <Sparkles size={15} /></Button>}{record.synthesis_fingerprint && record.state === "PENDING_ACCEPTANCE" && <Button className="button-ink" disabled={transactionBusy || !record.synthesis_fingerprint} onClick={() => void run("accept_synthesis", [id, record.synthesis_fingerprint], firstAcceptanceAlreadyStored ? "ACTIVE" : "PENDING_ACCEPTANCE", (loaded) => firstAcceptanceAlreadyStored ? authoritativeStateConfirmed(loaded.record.state, "ACTIVE") : authoritativeStateConfirmed(loaded.record.state, "PENDING_ACCEPTANCE"))}>{transactionBusy ? transaction?.stage : "Accept exact synthesis"} <Check size={15} /></Button>}{active && <span className="seal-stamp"><ShieldCheck size={16} /> CAPABILITY ACTIVE</span>}{consumed && <span className="seal-stamp"><LockKeyhole size={16} /> CAPABILITY CONSUMED</span>}{incompatible && <span className="seal-stamp conflict">NO CAPABILITY ISSUED</span>}</div><TransactionStatusPanel status={transaction} />{!incompatible && capability && <CapabilityPanel capability={capability} canConsume={canConsume} walletAddress={wallet.address} onTarget={wallet.onTarget} onConsume={() => void run("consume_capability", [id], "CONSUMED", (loaded) => capabilityConsumed(loaded.record, loaded.capability))} disabled={transactionBusy} />}{incompatible && capability && <NoCapabilityPanel capability={capability} />}{execution && capability && <CrossContractExecutionPanel capability={capability} execution={execution} />}{synthesis && <SynthesisPanel synthesis={synthesis} fingerprint={record.synthesis_fingerprint} />}</main>;
 }
 
 function StateBadge({ state }: { state: string }) { return <span className={"state-badge " + state.toLowerCase()}>{state}</span>; }
@@ -381,6 +384,26 @@ function CapabilityPanel({ capability, canConsume, walletAddress, onTarget, onCo
 }
 
 function NoCapabilityPanel({ capability }: { capability: Capability }) { return <section className="no-capability-panel"><div className="panel-head"><span>DOWNSTREAM CONSEQUENCE</span><StateBadge state="INCOMPATIBLE" /></div><h2>NO CAPABILITY ISSUED</h2><p>No capability can be activated from this agreement. The HARD requirements do not overlap, so the contract issued no usable permission.</p><div className="no-capability-facts"><span>STATUS</span><strong>INCOMPATIBLE</strong><span>CURRENTLY ACTIVE</span><strong>NO</strong><span>CONSUMED</span><strong>NO</strong><span>CAPABILITY FINGERPRINT</span><strong className="mono">(empty)</strong></div></section>; }
+
+function CrossContractExecutionPanel({ capability, execution }: { capability: Capability; execution: Execution }) {
+  const receipt = execution.receipt;
+  const lifecycle = execution.state === "EXECUTED" && capability.activation_state === "CONSUMED";
+  const facts: Array<[string, string]> = [
+    ["HANDSHAKE CONTRACT", execution.handshake_address],
+    ["EXECUTOR CONTRACT", execution.executor_address],
+    ["CAPABILITY STATE", capability.activation_state],
+    ["EXECUTOR STATE", execution.state],
+    ["CAPABILITY FINGERPRINT", execution.capability_fingerprint],
+    ["ACTION", execution.action],
+    ["RESOURCE", execution.resource],
+    ["SCOPE", execution.scope],
+    ["MODE", execution.mode],
+    ["PREPARE STATE", execution.consumption_requested ? "REQUESTED" : "NOT REQUESTED"],
+    ["CONSUMPTION STATE", capability.consumed ? "FINALIZED / CONSUMED" : "PENDING"],
+    ["REPLAY PROTECTION", execution.replay_protected ? "ENABLED" : "PENDING EXECUTION"],
+  ];
+  return <section className="capability-panel cross-contract-panel"><div className="panel-head"><span>CROSS-CONTRACT EXECUTION / V3 PROOF</span><StateBadge state={execution.state} /></div><p className="synthesis-note">The external executor read Handshake through a typed IC view, stored a pending snapshot, emitted a finalized child consume message, then committed this receipt only after a later view proved consumption.</p><div className="lifecycle-proof"><span>LIVE TWO-PHASE TRANSITION</span><strong>HANDSHAKE ACTIVE → EXECUTOR PREPARED → HANDSHAKE CONSUMED → EXECUTOR EXECUTED</strong><p>{lifecycle ? "Complete. The downstream authorization receipt is committed and both contracts are replay-protected." : "The local execution record is waiting for the downstream Handshake state."}</p></div><div className="live-facts">{facts.map(([label, value]) => <div key={label}><span>{label}</span><strong className={label.includes("CONTRACT") || label.includes("FINGERPRINT") || label === "SCOPE" ? "mono" : ""}>{value}</strong></div>)}</div>{receipt && <><div className="panel-head"><span>FINAL EXTERNAL EXECUTION RECEIPT</span><span className="mono">{receipt.downstream_action}</span></div><pre className="receipt-block">{pretty(receipt)}</pre></>}</section>;
+}
 
 function PositionPanel({ label, address, position, fingerprint }: { label: string; address: string; position: PositionTerm[]; fingerprint: string }) { return <section className="position-panel"><div className="panel-head"><span>{label}</span><span className="mono">{short(address)}</span></div>{position.length ? position.map((term) => <div className="term-row" key={term.term_id}><div><strong>{term.term_id}</strong><span>{term.category}</span></div><p>{term.requirement}</p><b className={term.importance === "HARD" ? "hard" : "preference"}>{term.importance}</b></div>) : <p className="empty-panel">Position not submitted.</p>}<div className="fingerprint"><Fingerprint size={13} /> {fingerprint || "PENDING"}</div></section>; }
 function SynthesisPanel({ synthesis, fingerprint }: { synthesis: Synthesis; fingerprint: string }) { return <section className="synthesis-panel" data-tour="synthesis"><div className="panel-head"><span>GENLAYER SYNTHESIS</span><StateBadge state={synthesis.compatibility} /></div><p className="synthesis-note">Every item below is grounded in source party and term IDs. Independent validators check the semantic interpretation before persistence.</p>{synthesis.proposed_terms.length > 0 && <><h3>PROPOSED TERMS</h3>{synthesis.proposed_terms.map((item) => <div className="synthesis-row" key={item.synthesis_id}><strong>{item.synthesis_id}</strong><div><span>{item.category}</span><p>{item.agreement}</p><small>{item.source_terms.map((source) => source.party + " / " + source.term_id).join("  ")}</small></div></div>)}</>}{synthesis.conflicts.length > 0 && <><h3>CONFLICTS</h3>{synthesis.conflicts.map((item) => <div className="issue-row" key={item.synthesis_id}><strong>{item.synthesis_id}</strong><div><p>{item.description}</p><small>{item.source_terms.map((source) => source.party + " / " + source.term_id).join("  ")}</small></div></div>)}</>}{synthesis.unresolved_items.length > 0 && <><h3>UNRESOLVED ITEMS</h3>{synthesis.unresolved_items.map((item) => <div className="issue-row" key={item.synthesis_id}><strong>{item.synthesis_id}</strong><div><p>{item.description}</p><small>{item.source_terms.map((source) => source.party + " / " + source.term_id).join("  ")}</small></div></div>)}</>}<div className="fingerprint synthesis-fp"><Fingerprint size={13} /> exact synthesis / {fingerprint}</div></section>; }
@@ -427,6 +450,36 @@ function LiveDemoCase({ title, eyebrow, id, live, incompatible = false }: { titl
   return <article className={"live-case " + (incompatible ? "live-case-incompatible" : "")}><div className="live-case-head"><div><span>{eyebrow}</span><h2>{title}</h2><p className="mono">{id}</p></div><StateBadge state={data.record.state} /></div>{incompatible ? <div className="lifecycle-proof lifecycle-proof-terminal"><span>NO INTERSECTION</span><strong>INCOMPATIBLE</strong><p>Terminal branch. No capability can be activated from this negotiation.</p></div> : <div className="lifecycle-proof"><span>LIVE SEQUENCE</span><strong>DUAL ACCEPTANCE → ACTIVE → CONSUMED</strong><p>Current authoritative read: {data.record.state}. Both acceptance flags are true; the configured consumer completed the single-use operation and replay was rejected.</p></div>}<LiveFacts {...data} /><div className="party-columns"><PositionPanel label="PARTY A / IMMUTABLE" address={data.record.party_a} position={data.record.party_a_position} fingerprint={data.record.party_a_position_fingerprint} /><PositionPanel label="PARTY B / IMMUTABLE" address={data.record.party_b} position={data.record.party_b_position} fingerprint={data.record.party_b_position_fingerprint} /></div>{data.synthesis && <SynthesisPanel synthesis={data.synthesis} fingerprint={data.record.synthesis_fingerprint} />}{incompatible ? <NoCapabilityPanel capability={data.capability} /> : <div className="live-proof-footer"><strong>{currentConsumed ? "CONSUMED / REPLAY PROTECTED" : "ACTIVE / READY FOR CONFIGURED CONSUMER"}</strong><Link className="text-link" to={"/app/negotiations/" + encodeURIComponent(id)}>Open authoritative record <ArrowRight size={14} /></Link></div>}</article>;
 }
 
+function useV3Negotiation(id: string, withExecution: boolean) {
+  const [data, setData] = useState<LoadedNegotiation | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let active = true;
+    setLoading(true); setError("");
+    Promise.all([readNegotiationAt(V3_HANDSHAKE_ADDRESS, id), readCapabilityAt(V3_HANDSHAKE_ADDRESS, id)]).then(async ([record, capability]) => {
+      const synthesis = record.synthesis_fingerprint ? await readSynthesisAt(V3_HANDSHAKE_ADDRESS, id) : null;
+      const execution = withExecution ? await readExecution(id) : null;
+      if (active) { setData({ record, capability, synthesis, execution }); setLoading(false); }
+    }).catch((value) => { if (active) { setError(errorText(value)); setLoading(false); } });
+    return () => { active = false; };
+  }, [id, withExecution]);
+  return { data, error, loading };
+}
+
+function MilestoneCase({ title, id, live, incompatible = false }: { title: string; id: string; live: ReturnType<typeof useV3Negotiation>; incompatible?: boolean }) {
+  if (live.loading) return <article className="live-case"><div className="live-case-head"><strong>{title}</strong></div><p className="loading-inline">Reading fresh v3 Studio Dev records...</p></article>;
+  if (live.error || !live.data) return <article className="live-case"><div className="live-case-head"><strong>{title}</strong></div><p className="form-error">{live.error || "The v3 record could not be read."}</p></article>;
+  const { data } = live;
+  return <article className={"live-case " + (incompatible ? "live-case-incompatible" : "")}><div className="live-case-head"><div><span>FRESH V3 LIVE RECORD</span><h2>{title}</h2><p className="mono">{id}</p></div><StateBadge state={data.record.state} /></div><LiveFacts record={data.record} capability={data.capability} synthesis={data.synthesis} />{data.execution && <CrossContractExecutionPanel capability={data.capability} execution={data.execution} />}{incompatible ? <NoCapabilityPanel capability={data.capability} /> : data.synthesis && <SynthesisPanel synthesis={data.synthesis} fingerprint={data.record.synthesis_fingerprint} />}</article>;
+}
+
+function MilestonePage() {
+  const compatible = useV3Negotiation(V3_NEGOTIATION_ID, true);
+  const incompatible = useV3Negotiation(V3_INCOMPATIBLE_ID, false);
+  return <main className="section demo-page milestone-page"><div className="section-index">MILESTONE / HANDSHAKE V3 CROSS-CONTRACT PROOF</div><div className="demo-intro"><div><p className="eyebrow">FRESH STUDIO DEV RECORDS / CHAIN {CHAIN_ID}</p><h1>Agreement to<br /><em>execution.</em></h1><p className="demo-lede">This reviewer route reads the newly deployed Handshake and HandshakeExecutor contracts directly. It keeps the accepted v2 demo available at <Link className="text-link" to="/app/demo">/app/demo</Link> and exposes the asynchronous two-contract transition with no fixture state.</p></div><div className="demo-contract-mark"><span>HANDSHAKE V3</span><strong>{short(V3_HANDSHAKE_ADDRESS)}</strong><span>EXECUTOR</span><strong>{short(EXECUTOR_ADDRESS)}</strong></div></div><div className="live-facts"><div><span>HANDSHAKE DEPLOYMENT</span><strong className="mono">{V3_HANDSHAKE_DEPLOYMENT_TX}</strong></div><div><span>EXECUTOR DEPLOYMENT</span><strong className="mono">{EXECUTOR_DEPLOYMENT_TX}</strong></div><div><span>HANDSHAKE SOURCE SHA</span><strong className="mono">{V3_HANDSHAKE_SOURCE_SHA}</strong></div><div><span>EXECUTOR SOURCE SHA</span><strong className="mono">{EXECUTOR_SOURCE_SHA}</strong></div></div><MilestoneCase title="Two contracts. One consumed authorization." id={V3_NEGOTIATION_ID} live={compatible} /><MilestoneCase title="Incompatible means no execution." id={V3_INCOMPATIBLE_ID} live={incompatible} incompatible /></main>;
+}
+
 function DemoPage() {
   const compatible = useLiveNegotiation(COMPATIBLE_ID);
   const incompatible = useLiveNegotiation(INCOMPATIBLE_ID);
@@ -442,7 +495,7 @@ function SynthesisPage() { return <main className="section synthesis-route"><div
 function ContractPage() { return <main className="section contract-page"><div className="section-index">CONTRACT / DEPLOYMENT FACTS</div><div className="contract-head"><p className="eyebrow">SOURCE OF TRUTH</p><h1>Small surface.<br /><em>Hard edges.</em></h1><p>Handshake is contract-first. This site is a reader and transaction surface for the immutable record on GenLayer Studio Dev.</p></div><div className="facts-list">{[["CONTRACT", CONTRACT_ADDRESS],["DEPLOYMENT TX", DEPLOYMENT_TX],["RUNNER", "py-genlayer / " + "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng"],["SOURCE SHA", SOURCE_SHA],["LIFECYCLE", "OPEN -> READY -> PENDING_ACCEPTANCE -> ACTIVE -> CONSUMED (SINGLE_USE)" ]].map(([label,value]) => <div className="fact-line" key={label}><span>{label}</span><strong className="mono">{value}</strong><button onClick={() => void navigator.clipboard?.writeText(value)} aria-label={"Copy " + label}><Copy size={14} /></button></div>)}</div><div className="contract-actions"><Link className="button button-quiet" to="/app/demo">Open reviewer demo <ArrowRight size={14} /></Link><a className="external-line" href={contractExplorerUrl()} target="_blank" rel="noreferrer">Open contract in Studio Dev explorer <ExternalLink size={14} /></a><a className="external-line" href={deploymentExplorerUrl()} target="_blank" rel="noreferrer">Open deployment transaction <ExternalLink size={14} /></a></div></main>; }
 
 function App() {
-  return <Frame><Routes><Route path="/" element={<Home />} /><Route path="/app" element={<Workspace />} /><Route path="/app/new" element={<NewNegotiation />} /><Route path="/app/negotiations/:id" element={<Detail />} /><Route path="/app/negotiations/:id/position" element={<PositionPage />} /><Route path="/app/demo" element={<DemoPage />} /><Route path="/compare" element={<Compare />} /><Route path="/synthesis" element={<SynthesisPage />} /><Route path="/contract" element={<ContractPage />} /><Route path="*" element={<Home />} /></Routes></Frame>;
+  return <Frame><Routes><Route path="/" element={<Home />} /><Route path="/app" element={<Workspace />} /><Route path="/app/new" element={<NewNegotiation />} /><Route path="/app/negotiations/:id" element={<Detail />} /><Route path="/app/negotiations/:id/position" element={<PositionPage />} /><Route path="/app/demo" element={<DemoPage />} /><Route path="/app/milestone" element={<MilestonePage />} /><Route path="/compare" element={<Compare />} /><Route path="/synthesis" element={<SynthesisPage />} /><Route path="/contract" element={<ContractPage />} /><Route path="*" element={<Home />} /></Routes></Frame>;
 }
 
 export default App;

@@ -10,6 +10,16 @@ export const CHAIN_HEX = "0x" + CHAIN_ID.toString(16);
 export const DEPLOYMENT_TX = "0x9896fa2a9231a014c27370f20a98dab0d6d0d5f81be33ebc27da507b4e00506";
 export const SOURCE_SHA = "2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7";
 export const RUNNER_HASH = "5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng";
+export const V3_HANDSHAKE_ADDRESS = "0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491";
+export const EXECUTOR_ADDRESS = "0xe26A7dE75f31C0B111c5098973685DFC89875C9D";
+export const V3_WRONG_EXECUTOR_ADDRESS = "0x37Ce20770df11028054D0eDcF0fA99F3319FeA45";
+export const V3_HANDSHAKE_DEPLOYMENT_TX = "0x51ebaa3a9b5a46e38d5d6966c7149846637166c7c538a1b769e9826fa4394fc2";
+export const EXECUTOR_DEPLOYMENT_TX = "0xa9e6671c2e7ef148834550b09e71ac30454045ffb2db5879e6f7d6f8cda9ed34";
+export const V3_WRONG_EXECUTOR_DEPLOYMENT_TX = "0x4ff4a25571aa80d550ce252a07a09c8e46d1759d9d351859f230453c3be24fef";
+export const V3_HANDSHAKE_SOURCE_SHA = "2d10d11548d5b508c4087d7425d9aa02208e17821f8308e27fa695391bc24fe7";
+export const EXECUTOR_SOURCE_SHA = "73745f5f5cfe0d4993c5f6c50bbe397b58bab301df3392fce2a4e8701a974d3e";
+export const V3_NEGOTIATION_ID = "handshake-v3-cross-contract-20261004-r1";
+export const V3_INCOMPATIBLE_ID = "handshake-v3-incompatible-20261004-r1";
 export const RPC_URL = "https://studio-dev.genlayer.com/api";
 
 export type Provider = {
@@ -46,9 +56,13 @@ function parseValue<T>(value: unknown): T {
   return value as T;
 }
 
-export async function readMethod<T>(functionName: string, args: unknown[] = []): Promise<T> {
-  const value = await (readClient as any).readContract({ address: CONTRACT_ADDRESS, functionName, args: args as CalldataEncodable[], jsonSafeReturn: true, ...readConfig });
+export async function readMethodAt<T>(address: string, functionName: string, args: unknown[] = []): Promise<T> {
+  const value = await (readClient as any).readContract({ address, functionName, args: args as CalldataEncodable[], jsonSafeReturn: true, ...readConfig });
   return parseValue<T>(value);
+}
+
+export async function readMethod<T>(functionName: string, args: unknown[] = []): Promise<T> {
+  return readMethodAt<T>(CONTRACT_ADDRESS, functionName, args);
 }
 
 export async function readNegotiation(id: string): Promise<Negotiation> {
@@ -61,6 +75,26 @@ export async function readSynthesis(id: string): Promise<Synthesis> {
 
 export async function readCapability(id: string): Promise<Capability> {
   return readMethod<Capability>("get_capability", [id]);
+}
+
+export async function readNegotiationAt(address: string, id: string): Promise<Negotiation> {
+  return readMethodAt<Negotiation>(address, "get_negotiation", [id]);
+}
+
+export async function readSynthesisAt(address: string, id: string): Promise<Synthesis> {
+  return readMethodAt<Synthesis>(address, "get_synthesis", [id]);
+}
+
+export async function readCapabilityAt(address: string, id: string): Promise<Capability> {
+  return readMethodAt<Capability>(address, "get_capability", [id]);
+}
+
+export async function readExecution(id: string): Promise<Execution> {
+  return readMethodAt<Execution>(EXECUTOR_ADDRESS, "get_execution", [id]);
+}
+
+export async function readExecutionReceipt(id: string): Promise<ExecutionReceipt> {
+  return readMethodAt<ExecutionReceipt>(EXECUTOR_ADDRESS, "get_execution_receipt", [id]);
 }
 
 export async function readPositionFingerprint(id: string, party: Party): Promise<string> {
@@ -76,6 +110,40 @@ export type ProposedTerm = { synthesis_id: string; category: string; agreement: 
 export type Issue = { synthesis_id: string; description: string; source_terms: SourceRef[] };
 export type Synthesis = { compatibility: Compatibility; proposed_terms: ProposedTerm[]; conflicts: Issue[]; unresolved_items: Issue[] };
 export type Capability = { negotiation_id: string; capability_id: string; party_a: string; party_b: string; synthesis_fingerprint: string; capability_fingerprint: string; action: string; resource: string; scope: string; mode: "SINGLE_USE" | "REUSABLE"; consumer: string; activation_state: "INACTIVE" | "ACTIVE" | "CONSUMED"; active: boolean; consumed: boolean };
+export type ExecutionReceipt = {
+  receipt_type: string;
+  downstream_action: string;
+  handshake_address: string;
+  negotiation_id: string;
+  capability_id: string;
+  capability_fingerprint: string;
+  action: string;
+  resource: string;
+  scope: string;
+  mode: "SINGLE_USE" | "REUSABLE";
+  executor_address: string;
+  execution_id: string;
+  final_execution_state: "EXECUTED";
+  execution_fingerprint: string;
+};
+export type Execution = {
+  negotiation_id: string;
+  handshake_address: string;
+  executor_address: string;
+  prepared_by: string;
+  execution_id: string;
+  capability_id: string;
+  capability_fingerprint: string;
+  action: string;
+  resource: string;
+  scope: string;
+  mode: "SINGLE_USE" | "REUSABLE";
+  state: "PENDING_CONSUMPTION" | "EXECUTED";
+  consumption_requested: boolean;
+  execution_fingerprint: string;
+  receipt: ExecutionReceipt | null;
+  replay_protected: boolean;
+};
 export type Negotiation = {
   negotiation_id: string;
   party_a: string;

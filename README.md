@@ -1,4 +1,4 @@
-# Handshake v2
+# Handshake v2 baseline + v3 cross-contract milestone
 
 Handshake is a contract-first GenLayer semantic agreement and authorization primitive:
 
@@ -17,7 +17,7 @@ It turns two bounded immutable positions into a provenance-grounded proposal, th
 - consume_capability is the concrete downstream consequence. It is restricted to the configured consumer. SINGLE_USE moves to CONSUMED and rejects replay; REUSABLE remains ACTIVE.
 - Failed synthesis raises before persistence, so a READY negotiation remains READY. Persisted synthesis and capability definitions are immutable.
 
-The installed Studio Dev SDK exposes gl.evm.contract_interface for EVM ABI calls, but no proven typed GenLayer-to-GenLayer interface. Handshake therefore keeps the consequential authorization gate in one contract rather than inventing an unsupported companion IC.
+The accepted v2 deployment kept the consequential authorization gate in one contract because the cross-IC path was not yet proven. Handshake v3 adds the typed IC-to-IC executor and asynchronous consumption protocol documented in MILESTONE.md.
 
 ## Lifecycle
 
@@ -89,7 +89,7 @@ Current result: 54 Direct Mode tests passed; lint passed; validation passed; sch
 
 The installed genvm-linter 0.11.0 still imports the legacy genlayer.py path for validation/schema, while the pinned Studio Dev SDK exposes the current package layout. The final validation/schema gates use the documented disposable GENVMROOT compatibility shim. The contract header and deployed runner hash remain the pinned Studio Dev values.
 
-## Fresh live proof
+## Fresh v2 live proof (historical baseline)
 
 The committed report is evidence/STUDIO_DEV_LIVE_TEST_REPORT.json and was run against the v2 address.
 
@@ -129,3 +129,13 @@ The final UX pass makes Start a new agreement the primary entry point, adds a fo
 The frontend is an editorial reader and transaction surface; the contract remains authoritative. Routes include /, /app, /app/new, /app/negotiations/:id, /app/negotiations/:id/position, /app/demo, /compare, /synthesis, and /contract.
 
 No Portal submission was made automatically. No deployment or file change was made for Converge.
+
+## Handshake v3 cross-contract milestone
+
+The accepted v2 contract remains unchanged. The fresh v3 milestone adds a typed, reusable HandshakeExecutor, a finalized child consume_capability message, a later receipt-committing finalize_execution, and two-contract replay protection. Full facts and the fresh live report are in MILESTONE.md. The reviewer route is https://handshake-lake.vercel.app/app/milestone.
+
+Fresh Handshake: 0xeB16E25Ff5e5aD4E895Fd62cd9614298bD75f491; executor: 0xe26A7dE75f31C0B111c5098973685DFC89875C9D; compatible ID: handshake-v3-cross-contract-20261004-r1; incompatible ID: handshake-v3-incompatible-20261004-r1.
+
+## V3 production deployment
+
+Deployment dpl_ELeuD4BHrFs372Dud9en5DWwyLuL is READY and aliased at https://handshake-lake.vercel.app. The new reviewer route is /app/milestone; anonymous checks returned HTTP 200 for the existing routes and the fresh v3 detail route. The served bundle contains the fresh Handshake v3 address, executor address and compatible v3 ID.
